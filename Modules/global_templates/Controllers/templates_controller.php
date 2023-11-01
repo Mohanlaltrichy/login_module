@@ -83,7 +83,7 @@ class templates_controller extends BaseController
             'user_id' => session('Taguser_id'),                             
         ];
         
-        $user_details = $this->templates_model->GetTableValue('user_login_history', 'login_key', $user_whereConditions);
+        $user_details = $this->templates_model->GetTableValue('user_login_history', 'login_key', $user_whereConditions,'','','','id','desc');
 
         if(!empty($user_details))
         {

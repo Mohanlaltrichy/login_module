@@ -123,7 +123,8 @@ class login_controller extends BaseController
     public function logout()
     {
         // Destroy the user session on logout
-        session()->destroy();
+        $session = \Config\Services::session();
+        $session->destroy();
         return redirect()->route('login');
     }
 }
