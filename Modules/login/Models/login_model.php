@@ -5,14 +5,12 @@ use CodeIgniter\Model;
 
 class login_model extends Model
 {
-    public $mysqldb;
-    public $pgdb;
+    public $mysqldb; 
 
     public function __construct()
     {
         parent::__construct();
-        $this->mysqldb = \Config\Database::connect('mysqldb');
-        $this->pgdb = \Config\Database::connect('default');
+        $this->mysqldb = \Config\Database::connect('mysqldb');       
     }
        
     //GetTableValue
@@ -56,7 +54,7 @@ class login_model extends Model
    //Error Exception Stored Function
    public function error($module_name = '',$current_url = '', $function_name ='', $error_msg = '')
    {
-       $this->pgdb->transException(true)->transStart();
+       $this->mysqldb->transException(true)->transStart();
        $data = [
            
            'module_name' => $module_name,
@@ -65,11 +63,11 @@ class login_model extends Model
            'error_msg' => $error_msg,   
        ];         
                          
-       $builder = $this->pgdb->table('error_exception_log');
+       $builder = $this->mysqldb->table('error_exception_log');
        $builder->insert($data);
-       $this->pgdb->transComplete();
+       $this->mysqldb->transComplete();
 
-       if ($this->pgdb->transStatus() === true) {
+       if ($this->mysqldb->transStatus() === true) {
            return redirect()->route('global_catch_error');
        } 
    }

@@ -132,11 +132,31 @@ $base_url = rtrim(base_url(), '/');
                     <div id="navigation">
 
                         <!-- Navigation Menu-->
+
                         <ul class="navigation-menu">
+
+                            <!-- Dashboard Navbar Code Start -->
                             <li class="has-submenu">
                                 <a href="<?php echo $base_url.route_to('dashboard'); ?>"><i class="ti-home"></i> Dashboard</a>
                             </li>
-                        </ul>
+                            <!-- Dashboard Navbar Code End -->
+
+                            <!-- Role Navbar Code Start -->      
+                            <li class="has-submenu">
+                                <a href="javascript:void(0)"><i class="ti-shield"></i> Roles <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                <ul class="submenu megamenu">
+                                    <li>
+                                        <ul>
+                                            <li><a href="<?php echo $base_url.route_to('company_role')?>">Add</a></li>
+                                            <li><a href="<?php echo $base_url.route_to('company_role_list')?>">Edit And Delete</a></li>                                                                           
+                                        </ul>
+                                    </li>                                    
+                                </ul>
+                            </li>
+                            <!-- Role Navbar Code End -->
+
+                        </ul>          
+                        
                         <!-- End navigation menu -->
 
                     </div>

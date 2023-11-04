@@ -197,3 +197,22 @@
     color: #61D7C7;
   }
 
+  .margin-right-20px
+  {
+    margin-right: 20px !important;
+  }
+
+  .margin-right-30px
+  {
+    margin-right: 30px !important;
+  }
+
+  .margin-right-40px
+  {
+    margin-right: 40px !important;
+  }
+
+  .font-red
+  {
+    color: red;
+  }

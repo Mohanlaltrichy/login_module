@@ -36,7 +36,7 @@ class Filters extends BaseConfig
     public array $globals = [
         'before' => [
             // 'honeypot',
-            'csrf' =>['except' => ['']],
+            'csrf' =>['except' => ['company_role/company_role_duplicate_check','company_role/roledelete']],
             // 'invalidchars',
         ],
         'after' => [

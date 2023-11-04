@@ -45,6 +45,28 @@
     </div>
 <?php } ?>
 
+<?php if($type == 'custom_update_model_alert') { ?>
+    <div class="modal fade custom_update_model_alert" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                   <h4 class="modal-title m-0" id="mySmallModalLabel"><?php echo $message; ?></h4>
+                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <?php echo $message2 ?>
+                </div>             
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                    </button>
+                    <button type="button" class="btn btn-primary" id="update_save_changes">Save changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
 <?php if($type == 'custom_model_ok_alert') { ?>
     <div class="modal fade custom_model_ok_alert" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
