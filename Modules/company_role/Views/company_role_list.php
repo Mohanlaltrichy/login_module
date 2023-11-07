@@ -1,5 +1,6 @@
 <?php
-echo view('\Modules\global_templates\Views\global_header'); // Header File Included
+$data['page_title'] = 'Roles';
+echo view('\Modules\global_templates\Views\global_header',$data); // Header File Included
 use App\Libraries\customlibraries;
 $customlibraries = new customlibraries();
 echo $customlibraries->versioning('\Modules\company_role\Controllers\company_role_controller','company_role_custom_css'); //company_role Modules Custom CSS Files Included

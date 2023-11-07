@@ -1,5 +1,6 @@
 <?php
-echo view('\Modules\global_templates\Views\global_header'); // Header File Included
+$data['page_title'] = 'Dashboard';
+echo view('\Modules\global_templates\Views\global_header',$data); // Header File Included
 ?>
 <!-- Custom CSS -->
 <link href="<?php echo base_url(); ?>assets/css/custom_style.css" rel="stylesheet" type="text/css"> 

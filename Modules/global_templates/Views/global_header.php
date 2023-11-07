@@ -3,11 +3,19 @@
 
 <?php 
 $base_url = rtrim(base_url(), '/');
+if($page_title != '')
+{
+    $title = $page_title;
+}
+else
+{
+    $title = '';
+}
 ?>
 
 <head>
     <meta charset="utf-8" />
-    <title>OPC Client Configuration</title>
+    <title><?=$title;?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta content="Admin Dashboard" name="description" />
     <meta content="ThemeDesign" name="author" />
