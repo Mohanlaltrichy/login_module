@@ -9,7 +9,7 @@ echo view('\Modules\global_templates\Views\global_header'); // Header File Inclu
 <!-- Content here -->
 <!-- ============================================================== -->
 <div class="wrapper">
-    <div class="container-fluid container-fluid-custom">
+    <div class="container-fluid">
         <!-- Page-Title -->
         <div class="row">
             <div class="col-sm-12">
@@ -25,13 +25,11 @@ echo view('\Modules\global_templates\Views\global_header'); // Header File Inclu
 
         <div class="row">
             <div class="col-sm-6 col-xl-2">
-                <div class="card" style="border: 2px solid #61D7C7;">
+                <div class="card" style="background-color:#662483;">
                     <div onclick="open_cloudconnector()" target="_blank"> 
-                        <div class="card-heading1 p-4">                                     
-                            <center>               
-                            <i class="fas fa-cloud mb-3" style="font-size: 30px;"></i>                    
-                            <p>Cloud Connector</p>
-                            </center>
+                    <img src="<?php echo base_url(); ?>assets/images/cloud_logo.png" width='100px;' height='100px;' alt="user-img">
+                        <div class="card-heading1 text-right">                                               
+                            <b>Cloud Connector</b>                         
                         </div>                     
                     </div>
                 </div>

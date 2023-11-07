@@ -225,6 +225,23 @@
 
     });
 
+    //Status Role Update Script
+    $('#status').change(function(){
+
+        var status = $(this).val();
+        const errorMessageElement = document.getElementById('status-error-message');
+
+        if(status == 'inactive')
+        {       
+            errorMessageElement.textContent = 'user map to this role will be inactive';
+        }
+        else
+        {
+            errorMessageElement.textContent = '';            
+        }
+
+    });
+
     //Add Company Role
     $('#save_company_role').click(function(){
 

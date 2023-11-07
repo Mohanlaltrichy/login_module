@@ -60,7 +60,7 @@ $base_url = rtrim(base_url(), '/');
                             <!-- company_role Add Code Start -->
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="m-t-0 m-b-30">Roles</h4>
+                                    <h3 class="m-t-0 m-b-30">Roles</h3>
 
                                     <form class="form-horizontal" id="add_company_role_client_config" action="<?php echo $base_url.route_to('company_role_save'); ?>" method="post" data-parsley-validate>
                                         
@@ -85,12 +85,12 @@ $base_url = rtrim(base_url(), '/');
                                         <!-- Role Name Config Place Code End -->
                                             
                                         <!-- Setting Role Display Code Start -->
-                                        <h4 class="m-t-0 mb-3">Settings for pages access</h4>
+                                        <h3 class="m-t-0 mb-3">Settings for pages access</h3>                                      
                                         <div class="row">
 
                                             <!-- Roles Code Start -->                                                
                                             <div class="col-lg-12">                                                                                                      
-                                                <h5 class="m-b-15 m-t-0">Roles
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Roles</b>
                                                 <input name='roles_all_checkbox_value' id="roles_all_checkbox_value" value='0' type="hidden">
                                                 <span class="checkbox">
                                                 <input id="roles_all_checkbox" class="form-check-inline" type="checkbox">
@@ -107,7 +107,7 @@ $base_url = rtrim(base_url(), '/');
                                                         {                                                             
                                                     ?>
                                                     <div class="col-sm-6 mb-3">                                                   
-                                                        <label class="col-sm-3 font-red"><b><?= strtoupper(str_replace("_"," ",$roles_role['page_name'])); ?></b></label>
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$roles_role['page_name'])); ?></b></label>
                                                         <input name="roles_checkbox_id[]" value='<?=$roles_role['id'];?>' type="hidden"> 
                                                         <input name="roles_checkbox_view[]" id="checkbox_view_<?=$roles_role['id'];?>" class='roles_checkbox_value' value='0' type="hidden">
                                                         <input name="roles_checkbox_edit[]" id="checkbox_edit_<?=$roles_role['id'];?>" class='roles_checkbox_value' value='0' type="hidden">
@@ -135,9 +135,10 @@ $base_url = rtrim(base_url(), '/');
                                             </div>
                                             <!-- Roles Code End --> 
 
+                                            <h4 class="col-lg-12 mb-3">Cloud Connector</h4>
                                             <!-- OPC Role Code Start -->                                                
                                             <div class="col-lg-12">                                                                                                      
-                                                <h5 class="m-b-15 m-t-0">OPC
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">OPC</b>
                                                 <input name="opc_all_checkbox_value" id="opc_all_checkbox_value" value='0' type="hidden">
                                                 <span class="checkbox">
                                                 <input id="opc_all_checkbox" class="form-check-inline" type="checkbox">
@@ -154,7 +155,7 @@ $base_url = rtrim(base_url(), '/');
                                                         {                                                         
                                                     ?>
                                                     <div class="col-sm-6 mb-3">                                                   
-                                                        <label class="col-sm-3 font-red"><b><?= strtoupper(str_replace("_"," ",$opc_role['page_name'])); ?></b></label>
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$opc_role['page_name'])); ?></b></label>
                                                         <input name="opc_checkbox_id[]" value='<?=$opc_role['id'];?>' type="hidden">  
                                                         <input name="opc_checkbox_view[]" id="checkbox_view_<?=$opc_role['id'];?>" type="hidden" class='opc_checkbox_value' value='0'> 
                                                         <input name="opc_checkbox_edit[]" id="checkbox_edit_<?=$opc_role['id'];?>" type="hidden"  class='opc_checkbox_value'  value='0'> 
@@ -184,7 +185,7 @@ $base_url = rtrim(base_url(), '/');
 
                                             <!-- Tag Role Code Start -->                                                
                                             <div class="col-lg-12">                                                                                                      
-                                                <h5 class="m-b-15 m-t-0">Tag Config
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Tag Config</b>
                                                 <input name="tag_all_checkbox_value" id="tag_all_checkbox_value" value='0' type="hidden">
                                                 <span class="checkbox">
                                                 <input id="tag_all_checkbox" class="form-check-inline" type="checkbox">
@@ -201,7 +202,7 @@ $base_url = rtrim(base_url(), '/');
                                                         {                                                             
                                                     ?>
                                                     <div class="col-sm-6 mb-3">                                                   
-                                                        <label class="col-sm-3 font-red"><b><?= strtoupper(str_replace("_"," ",$tag_role['page_name'])); ?></b></label> 
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$tag_role['page_name'])); ?></b></label> 
                                                         <input name="tag_checkbox_id[]" value='<?=$tag_role['id'];?>' type="hidden">
                                                         <input name="tag_checkbox_view[]" id="checkbox_view_<?=$tag_role['id'];?>" class='tag_checkbox_value' value='0' type="hidden">
                                                         <input name="tag_checkbox_edit[]" id="checkbox_edit_<?=$tag_role['id'];?>" class='tag_checkbox_value' value='0' type="hidden">   
@@ -231,7 +232,7 @@ $base_url = rtrim(base_url(), '/');
 
                                             <!-- Mqtt Role Code Start -->                                                
                                             <div class="col-lg-12">                                                                                                      
-                                                <h5 class="m-b-15 m-t-0">MQTT
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">MQTT</b>
                                                 <input name="mqtt_all_checkbox_value" id="mqtt_all_checkbox_value" value='0' type="hidden">
                                                 <span class="checkbox">
                                                 <input id="mqtt_all_checkbox" class="form-check-inline" type="checkbox">
@@ -248,7 +249,7 @@ $base_url = rtrim(base_url(), '/');
                                                         {                                                            
                                                     ?>
                                                     <div class="col-sm-6 mb-3">                                                   
-                                                        <label class="col-sm-3 font-red"><b><?= strtoupper(str_replace("_"," ",$mqtt_role['page_name'])); ?></b></label>   
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$mqtt_role['page_name'])); ?></b></label>   
                                                         <input name="mqtt_checkbox_id[]" value='<?=$mqtt_role['id'];?>' type="hidden"> 
                                                         <input name="mqtt_checkbox_view[]" id="checkbox_view_<?=$mqtt_role['id'];?>" class='mqtt_checkbox_value' value='0' type="hidden">
                                                         <input name="mqtt_checkbox_edit[]" id="checkbox_edit_<?=$mqtt_role['id'];?>" class='mqtt_checkbox_value' value='0' type="hidden">
@@ -278,7 +279,7 @@ $base_url = rtrim(base_url(), '/');
 
                                             <!-- Bulk Import List View Role Code Start -->                                                
                                             <div class="col-lg-12">                                                                                                      
-                                                <h5 class="m-b-15 m-t-0">Bulk Import Status
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Bulk Import Status</b>
                                                 <input name="bulk_all_checkbox_value" id="bulk_all_checkbox_value" value='0' type="hidden">
                                                 <span class="checkbox">
                                                 <input id="bulk_all_checkbox" class="form-check-inline" type="checkbox">
@@ -295,7 +296,7 @@ $base_url = rtrim(base_url(), '/');
                                                         {                                                           
                                                     ?>
                                                     <div class="col-sm-6 mb-3">                                                   
-                                                        <label class="col-sm-3 font-red"><b><?= strtoupper(str_replace("_"," ",$bulk_list_role['page_name'])); ?></b></label> 
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$bulk_list_role['page_name'])); ?></b></label> 
                                                         <input name="bulk_checkbox_id[]" value='<?=$bulk_list_role['id'];?>' type="hidden">
                                                         <input name="bulk_checkbox_view[]" id="checkbox_view_<?=$bulk_list_role['id'];?>" class='bulk_checkbox_value' value='0' type="hidden">
                                                         <input name="bulk_checkbox_edit[]" id="checkbox_edit_<?=$bulk_list_role['id'];?>" class='bulk_checkbox_value' value='0' type="hidden">
@@ -328,13 +329,14 @@ $base_url = rtrim(base_url(), '/');
 
                                         <!-- Status Code Start -->
                                         <div class="form-group row d-flex justify-content-center">
-                                            <label class="col-sm-2 control-label" for="role_name">Status</label>
+                                            <label class="col-sm-2 control-label" for="role_name">Status<span>*</span></label>
                                             <div class="col-sm-3">
                                                 <select name="status" class="form-control form-control-custom mb-3" id="status" required>
                                                     <option value="" readonly>Select</option>
                                                     <option value="active" selected>Active</option>
                                                     <option value="inactive">Inactive</option>
                                                 </select>
+                                                <div id='status-error-message'></div>
                                             </div>
                                         </div>
                                         <!-- Status Code End -->

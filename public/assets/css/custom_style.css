@@ -151,6 +151,14 @@
     color: #ef5c6a;
     margin-top: 5px;
   }
+
+  #status-error-message
+  {
+    font-size: 12px;
+    list-style: none;
+    color: #ef5c6a;
+    margin-top: 5px;
+  }
     
   /*Model Scroll Enabled*/
    .model-scroll-enabled {
@@ -193,8 +201,9 @@
 
   .card .card-heading1 {
     border: none !important;
-    padding: 30px 60px !important;
-    color: #61D7C7;
+    padding: 10px 20px !important;
+    color: white;
+    font-size: 16px;
   }
 
   .margin-right-20px
@@ -215,4 +224,15 @@
   .font-red
   {
     color: red;
+  }
+
+  .font-orange
+  {
+    color: #D54026;
+  }
+
+  .font-grey
+  {
+    color: #686B73;
+   
   }

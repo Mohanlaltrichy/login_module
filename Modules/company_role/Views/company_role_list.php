@@ -49,7 +49,7 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
             <div class="col-sm-12">
                 <div class="card">               
                     <div class="card-body">
-                    <div id="heading1"><h4 class="m-0">Roles Status</h4></div>
+                    <div id="heading1"><h3 class="m-0">Roles</h3></div>
                         <div class="row" style="margin-top:20px;margin-left:-10px;">
                             <div class="col-sm-12">
                                 <table id="datatable-fixed-header" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; width: 100%;">
@@ -119,9 +119,27 @@ echo $customlibraries->versioning('\Modules\company_role\Controllers\company_rol
 <!-- Custom Js File Include Code End -->
 
 <!--update_model_alert-->
-<?php
-echo $customlibraries->global_alert_msg('custom_model_alert', 'Roles', 'Are you sure delete the data?');
-?>
+<div class="modal fade custom_model_alert" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title m-0" id="mySmallModalLabel">Roles</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                Are you sure delete the role?
+                </br><span class='font-red'>user map to this role will be inactive</span>
+            </div>           
+            <input type="hidden" id="this_id" value="">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                </button>
+                <button type="button" class="btn btn-primary" id="save_changes">Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--update_model_alert-->
 
 <script>
