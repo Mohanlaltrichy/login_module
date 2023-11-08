@@ -28,7 +28,7 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
             <div class="col-sm-6 col-xl-2">
                 <div class="card" style="background-color:#662483;">
                     <div onclick="open_cloudconnector()" target="_blank"> 
-                    <img src="<?php echo base_url(); ?>assets/images/cloud_logo.png" width='100px;' height='100px;' alt="user-img">
+                    <img src="<?php echo base_url(); ?>assets/images/cloud_logo.png" style='padding: 10px 10px;' width='100px;' height='100px;' alt="user-img">
                         <div class="card-heading1 text-right">                                               
                             <b>Cloud Connector</b>                         
                         </div>                     

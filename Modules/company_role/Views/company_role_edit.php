@@ -145,7 +145,7 @@ $this->company_role_model = new company_role_model();
                                             </div>
                                             <!-- Roles Code End --> 
 
-                                            <h4 class="col-lg-12 mb-3">Cloud Connector</h4>
+                                            <h3 class="col-lg-12 mb-3">Cloud Connector</h3>
                                             <!-- OPC Role Code Start -->                                                
                                             <div class="col-lg-12">                                                                                                      
                                                 <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">OPC</b>
