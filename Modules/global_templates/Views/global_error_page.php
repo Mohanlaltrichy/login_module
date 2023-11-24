@@ -21,14 +21,17 @@
     <body>
         <!-- Begin page -->
         <div class="accountbg"></div>
-        <div class="wrapper-page">
-            <div class="ex-page-content text-center">
+        <div class="wrapper-page card col-sm-12 row">
+            <div class="card-body ex-page-content text-center">
 
                 <?php if($error == "catch_error") { ?>
-                    <h2 class="text-white">Sorry, something went wrong</h2><br>                    
+                    <h1 style='color:darkorange;'><i class="mdi mdi-cloud-alert"></i></h1>
+                    <h2 style='color:darkorange;'>Ooops...</h2>
+                    <h4 style='color:#413C3E;'>something went wrong</h4><br>                    
                 <?php } else if($error == "404_error") {  ?>
-                    <h1 class="text-white">404!</h1>
-                    <h2 class="text-white">Sorry, page not found</h2><br>
+                    <h1 style='color:darkorange;'>4<i class="mdi mdi-cloud-off-outline"></i>4</h1>
+                    <h2 style='color:#413C3E;'>OPPS! PAGE NOT FOUND</h2>
+                    <h4 style='color:#413C3E;'>Sorry, the page you're looking for doesn't exist. if yoy think something is broken, report a problem</h4><br>
                 <?php }?>
 
                 <?php

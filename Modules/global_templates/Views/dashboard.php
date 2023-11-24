@@ -3,7 +3,7 @@ $data['page_title'] = 'Dashboard';
 echo view('\Modules\global_templates\Views\global_header',$data); // Header File Included
 ?>
 <!-- Custom CSS -->
-<link href="<?php echo base_url(); ?>assets/css/custom_style.css" rel="stylesheet" type="text/css"> 
+<link href="<?php echo base_url(); ?>assets/css/custom_style.css?v=1.1" rel="stylesheet" type="text/css"> 
 <!-- Custom CSS -->
 
 <!-- ============================================================== -->

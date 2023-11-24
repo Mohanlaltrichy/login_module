@@ -21,10 +21,12 @@
     <body>
         <!-- Begin page -->
         <div class="accountbg"></div>
-        <div class="wrapper-page">
-            <div class="ex-page-content text-center">
+        <div class="wrapper-page card col-sm-12 row">
+            <div class="card-body ex-page-content text-center">
               
-                <h2 class="text-white">Sorry, something went wrong</h2><br>       
+                <h1 style='color:darkorange;'><i class="mdi mdi-cloud-alert"></i></h1>
+                <h2 style='color:darkorange;'>Ooops...</h2>
+                <h4 style='color:#413C3E;'>something went wrong</h4><br>    
 
                 <?php
                 if(!empty(session('Taglogged_in')))

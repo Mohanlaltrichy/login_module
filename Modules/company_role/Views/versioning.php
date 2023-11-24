@@ -11,7 +11,7 @@ if($page_type=='company_role')
 
 <?php if($page_type == 'company_role_custom_css') { ?>
 <!-- company_role Modules Custom CSS -->
-<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/custom_style.css">
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/custom_style.css?v=1.1">
 <!-- company_role Modules Custom CSS -->
 <?php } ?>
 
