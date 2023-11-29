@@ -67,9 +67,9 @@ class login_controller extends BaseController
                     $data = array(
                         'user_id' => $userData['id'],
                         'login_key' => $randomUid,
-                        'key_valid_start_time' => $key_valid_start_time,
-                        'key_expiry_time' => $key_expiry_time,
-                        'login_time' => time(),
+                        'key_valid_start_time' => date('Y-m-d H:m:s', $key_valid_start_time),
+                        'key_expiry_time' => date('Y-m-d H:m:s',$key_expiry_time),
+                        'login_time' => date('Y-m-d H:m:s',time()),
                     );
 
                     $this->loginModel->insertData('user_login_history',$data);
