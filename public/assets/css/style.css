@@ -3173,12 +3173,14 @@ File: Pages
   Account Pages
 ===================*/
 .accountbg {
-  /* background: url("../images/restaurant.png"); */
-  background: linear-gradient(#9CC2D5,#77B1D9);
+  background: url(../images/global_bg.jpg);
+  /* background: linear-gradient(#9CC2D5,#77B1D9); */
   position: absolute;
   height: 100%;
   width: 100%;
   top: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .wrapper-page {

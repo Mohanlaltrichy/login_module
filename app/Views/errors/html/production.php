@@ -3,7 +3,7 @@
 
     <head>
     <meta charset="utf-8" />
-    <title>OPC Client Configuration</title>
+    <title>Error</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta content="Admin Dashboard" name="description" />
     <meta content="ThemeDesign" name="author" />
@@ -24,8 +24,8 @@
         <div class="wrapper-page card col-sm-12 row">
             <div class="card-body ex-page-content text-center">
               
-                <h1 style='color:darkorange;'><i class="mdi mdi-cloud-alert"></i></h1>
-                <h2 style='color:darkorange;'>Ooops...</h2>
+                <h1 style='color:#6CBAFA;'><i class="mdi mdi-cloud-alert"></i></h1>
+                <h2 style='color:#6CBAFA;'>Ooops...</h2>
                 <h4 style='color:#413C3E;'>something went wrong</h4><br>    
 
                 <?php
