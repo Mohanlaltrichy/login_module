@@ -197,60 +197,7 @@ $this->company_role_model = new company_role_model();
                                                     ?>                                                    
                                                 </div>
                                             </div>
-                                            <!-- OPC Role Code End --> 
-
-                                            <!-- Tag Role Code Start -->                                                
-                                            <div class="col-lg-12">                                                                                                      
-                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Tag Config</b>
-                                                <input name="tag_all_checkbox_value" id="tag_all_checkbox_value" value='<?=($roles_details[0]['tag_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
-                                                <span class="checkbox">
-                                                <input id="tag_all_checkbox" class="form-check-inline" type="checkbox" <?=($roles_details[0]['tag_all_pages'] == 'Y') ? 'checked' : ''?>>
-                                                    <label for="tag_all_checkbox">
-                                                        Select all pages
-                                                    </label>
-                                                </span>
-                                                </h5> 
-                                                    
-                                                <div class="form-group row">
-                                                    <?php if(!empty($tag_module_data)) 
-                                                    {                                                       
-                                                        foreach($tag_module_data as $tag_role)
-                                                        {          
-                                                            $tag_data_whereConditions = [                                  
-                                                                'role_id' => $roles_details[0]['id'],
-                                                                'page_id' => $tag_role['id'],                                
-                                                            ];
-                                                
-                                                            $tag_result = $this->company_role_model->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $tag_data_whereConditions);                                                   
-                                                    ?>
-                                                    <div class="col-sm-6 mb-3">                                                   
-                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$tag_role['page_name'])); ?></b></label> 
-                                                        <input name="tag_checkbox_id[]" value='<?=$tag_role['id'];?>' type="hidden">
-                                                        <input name="tag_checkbox_view[]" id="checkbox_view_<?=$tag_role['id'];?>" class='tag_checkbox_value' value='<?=($tag_result[0]['can_view'] == 'Y') ? '1' : '0'; ?>' type="hidden">
-                                                        <input name="tag_checkbox_edit[]" id="checkbox_edit_<?=$tag_role['id'];?>" class='tag_checkbox_value' value='<?=($tag_result[0]['can_edit'] == 'Y') ? '1' : '0'; ?>' type="hidden">   
-                                                        <input name="tag_checkbox_delete[]" id="checkbox_delete_<?=$tag_role['id'];?>" class='tag_checkbox_value' value='<?=($tag_result[0]['can_delete'] == 'Y') ? '1' : '0'; ?>' type="hidden">                                                                                                                             
-                                                        <span class="checkbox tag_checkbox_div">                                                           
-                                                            <input data-name='can_view' data-id='<?=$tag_role['id'];?>' class="col-sm-2 tag_checkbox" type="checkbox" <?=($tag_result[0]['can_view'] == 'Y') ? 'checked' : ''; ?>>                                                            
-                                                            <label for="checkbox_view_<?=$tag_role['id'];?>">
-                                                                Can View
-                                                            </label>
-                                                            <input data-name='can_edit' data-id='<?=$tag_role['id'];?>' class="col-sm-2 tag_checkbox" type="checkbox" <?=($tag_result[0]['can_edit'] == 'Y') ? 'checked' : ''; ?>>                                                            
-                                                            <label for="checkbox_edit_<?=$tag_role['id'];?>">
-                                                                Can Edit
-                                                            </label>
-                                                            <input data-name='can_delete' data-id='<?=$tag_role['id'];?>' class="col-sm-2 tag_checkbox" type="checkbox" <?=($tag_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                           
-                                                            <label for="checkbox_delete_<?=$tag_role['id'];?>">
-                                                                Can Delete
-                                                            </label>
-                                                        </span>                                              
-                                                    </div>
-                                                    <?php                                                        
-                                                        }
-                                                    }
-                                                    ?>                                                    
-                                                </div>
-                                            </div>
-                                            <!-- Tag Role Code End -->
+                                            <!-- OPC Role Code End -->                                            
 
                                             <!-- Mqtt Role Code Start -->                                                
                                             <div class="col-lg-12">                                                                                                      
@@ -304,6 +251,112 @@ $this->company_role_model = new company_role_model();
                                                 </div>
                                             </div>
                                             <!-- Mqtt Role Code End -->
+
+                                            <!-- http Role Code Start -->
+                                            <div class="col-lg-12">                                                                                                      
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Http(s)</b>
+                                                <input name="http_all_checkbox_value" id="http_all_checkbox_value" value='<?=($roles_details[0]['http_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
+                                                <span class="checkbox">
+                                                <input id="http_all_checkbox" class="form-check-inline" type="checkbox" <?=($roles_details[0]['http_all_pages'] == 'Y') ? 'checked' : ''?>>
+                                                    <label for="http_all_checkbox">
+                                                        Select all pages
+                                                    </label>
+                                                </span>
+                                                </h5> 
+                                                    
+                                                <div class="form-group row">
+                                                    <?php if(!empty($http_module_data))
+                                                    {                                                      
+                                                        foreach($http_module_data as $http_role)
+                                                        {   
+                                                            $http_data_whereConditions = [                                  
+                                                                'role_id' => $roles_details[0]['id'], 
+                                                                'page_id' => $http_role['id'],                                 
+                                                            ];
+                                                
+                                                            $http_result = $this->company_role_model->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $http_data_whereConditions);                                                                                  
+                                                    ?>
+                                                    <div class="col-sm-6 mb-3">                                                   
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$http_role['page_name'])); ?></b></label>
+                                                        <input name="http_checkbox_id[]" value='<?=$http_role['id'];?>' type="hidden">  
+                                                        <input name="http_checkbox_view[]" id="checkbox_view_<?=$http_role['id'];?>" type="hidden" class='http_checkbox_value' value='<?=($http_result[0]['can_view'] == 'Y') ? '1' : '0'; ?>'>
+                                                        <input name="http_checkbox_edit[]" id="checkbox_edit_<?=$http_role['id'];?>" type="hidden"  class='http_checkbox_value'  value='<?=($http_result[0]['can_edit'] == 'Y') ? '1' : '0'; ?>'>
+                                                        <input name="http_checkbox_delete[]" id="checkbox_delete_<?=$http_role['id'];?>" type="hidden"  class='http_checkbox_value'  value='<?=($http_result[0]['can_delete'] == 'Y') ? '1' : '0'; ?>'>                                                                             
+                                                        <span class="checkbox http_checkbox_div">                                                 
+                                                            <input data-name='can_view' data-id='<?=$http_role['id'];?>' class="col-sm-2 http_checkbox" type="checkbox" <?=($http_result[0]['can_view'] == 'Y') ? 'checked' : ''; ?>>                                                   
+                                                            <label for="checkbox_view_<?=$http_role['id'];?>">
+                                                                Can View
+                                                            </label>
+                                                            <input data-name='can_edit' data-id='<?=$http_role['id'];?>' class="col-sm-2 http_checkbox" type="checkbox" <?=($http_result[0]['can_edit'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_edit_<?=$http_role['id'];?>">
+                                                                Can Edit
+                                                            </label>
+                                                            <input data-name='can_delete' data-id='<?=$http_role['id'];?>' class="col-sm-2 http_checkbox" type="checkbox" <?=($http_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_delete_<?=$http_role['id'];?>">
+                                                                Can Delete
+                                                            </label>
+                                                        </span>                                              
+                                                    </div>
+                                                    <?php                                                        
+                                                        }
+                                                    }
+                                                    ?>                                                    
+                                                </div>
+                                            </div>
+                                            <!-- http Role Code End -->   
+
+                                            <!-- Tag Role Code Start -->                                                
+                                            <div class="col-lg-12">                                                                                                      
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Historian Config</b>
+                                                <input name="tag_all_checkbox_value" id="tag_all_checkbox_value" value='<?=($roles_details[0]['tag_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
+                                                <span class="checkbox">
+                                                <input id="tag_all_checkbox" class="form-check-inline" type="checkbox" <?=($roles_details[0]['tag_all_pages'] == 'Y') ? 'checked' : ''?>>
+                                                    <label for="tag_all_checkbox">
+                                                        Select all pages
+                                                    </label>
+                                                </span>
+                                                </h5> 
+                                                    
+                                                <div class="form-group row">
+                                                    <?php if(!empty($tag_module_data)) 
+                                                    {                                                       
+                                                        foreach($tag_module_data as $tag_role)
+                                                        {          
+                                                            $tag_data_whereConditions = [                                  
+                                                                'role_id' => $roles_details[0]['id'],
+                                                                'page_id' => $tag_role['id'],                                
+                                                            ];
+                                                
+                                                            $tag_result = $this->company_role_model->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $tag_data_whereConditions);                                                   
+                                                    ?>
+                                                    <div class="col-sm-6 mb-3">                                                   
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$tag_role['page_name'])); ?></b></label> 
+                                                        <input name="tag_checkbox_id[]" value='<?=$tag_role['id'];?>' type="hidden">
+                                                        <input name="tag_checkbox_view[]" id="checkbox_view_<?=$tag_role['id'];?>" class='tag_checkbox_value' value='<?=($tag_result[0]['can_view'] == 'Y') ? '1' : '0'; ?>' type="hidden">
+                                                        <input name="tag_checkbox_edit[]" id="checkbox_edit_<?=$tag_role['id'];?>" class='tag_checkbox_value' value='<?=($tag_result[0]['can_edit'] == 'Y') ? '1' : '0'; ?>' type="hidden">   
+                                                        <input name="tag_checkbox_delete[]" id="checkbox_delete_<?=$tag_role['id'];?>" class='tag_checkbox_value' value='<?=($tag_result[0]['can_delete'] == 'Y') ? '1' : '0'; ?>' type="hidden">                                                                                                                             
+                                                        <span class="checkbox tag_checkbox_div">                                                           
+                                                            <input data-name='can_view' data-id='<?=$tag_role['id'];?>' class="col-sm-2 tag_checkbox" type="checkbox" <?=($tag_result[0]['can_view'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_view_<?=$tag_role['id'];?>">
+                                                                Can View
+                                                            </label>
+                                                            <input data-name='can_edit' data-id='<?=$tag_role['id'];?>' class="col-sm-2 tag_checkbox" type="checkbox" <?=($tag_result[0]['can_edit'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_edit_<?=$tag_role['id'];?>">
+                                                                Can Edit
+                                                            </label>
+                                                            <input data-name='can_delete' data-id='<?=$tag_role['id'];?>' class="col-sm-2 tag_checkbox" type="checkbox" <?=($tag_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                           
+                                                            <label for="checkbox_delete_<?=$tag_role['id'];?>">
+                                                                Can Delete
+                                                            </label>
+                                                        </span>                                              
+                                                    </div>
+                                                    <?php                                                        
+                                                        }
+                                                    }
+                                                    ?>                                                    
+                                                </div>
+                                            </div>
+                                            <!-- Tag Role Code End -->
 
                                             <!-- Bulk Import List View Role Code Start -->                                                
                                             <div class="col-lg-12">                                                                                                      
