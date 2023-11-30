@@ -1,0 +1,87 @@
+-- Adminer 4.8.1 MySQL 8.0.35-0ubuntu0.20.04.1 dump
+
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+DROP TABLE IF EXISTS `tbl_role_permissions`;
+CREATE TABLE `tbl_role_permissions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role_id` int unsigned NOT NULL,
+  `page_id` bigint NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `can_view` char(1) NOT NULL DEFAULT 'N' COMMENT 'Y/N - Yes/No',
+  `can_edit` char(1) NOT NULL DEFAULT 'N',
+  `can_delete` char(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`),
+  CONSTRAINT `tbl_role_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `tbl_roles` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+INSERT INTO `tbl_role_permissions` (`id`, `role_id`, `page_id`, `type`, `can_view`, `can_edit`, `can_delete`) VALUES
+(1,	1,	1,	'page',	'Y',	'Y',	'Y'),
+(2,	1,	2,	'page',	'Y',	'Y',	'Y'),
+(3,	1,	3,	'page',	'Y',	'Y',	'Y'),
+(4,	1,	4,	'page',	'Y',	'Y',	'Y'),
+(5,	1,	5,	'page',	'Y',	'Y',	'Y'),
+(6,	1,	6,	'page',	'Y',	'Y',	'Y'),
+(7,	1,	7,	'page',	'Y',	'Y',	'Y'),
+(8,	1,	8,	'page',	'Y',	'Y',	'Y'),
+(9,	1,	9,	'page',	'Y',	'Y',	'Y'),
+(10,	1,	10,	'page',	'Y',	'Y',	'Y'),
+(11,	1,	11,	'page',	'Y',	'Y',	'Y'),
+(12,	1,	12,	'page',	'Y',	'Y',	'Y'),
+(13,	1,	13,	'page',	'Y',	'Y',	'Y'),
+(14,	1,	14,	'page',	'Y',	'Y',	'Y'),
+(15,	1,	15,	'page',	'Y',	'Y',	'Y'),
+(16,	2,	7,	'page',	'Y',	'Y',	'Y'),
+(17,	2,	8,	'page',	'Y',	'Y',	'Y'),
+(18,	2,	9,	'page',	'Y',	'Y',	'Y'),
+(19,	2,	10,	'page',	'Y',	'Y',	'Y'),
+(20,	2,	11,	'page',	'Y',	'Y',	'Y'),
+(21,	2,	12,	'page',	'Y',	'Y',	'Y'),
+(22,	2,	13,	'page',	'Y',	'Y',	'Y'),
+(23,	2,	14,	'page',	'Y',	'Y',	'Y'),
+(24,	2,	15,	'page',	'Y',	'Y',	'Y'),
+(25,	3,	7,	'page',	'Y',	'Y',	'N'),
+(26,	3,	8,	'page',	'Y',	'Y',	'N'),
+(27,	3,	9,	'page',	'Y',	'Y',	'N'),
+(28,	3,	10,	'page',	'Y',	'Y',	'N'),
+(29,	3,	11,	'page',	'Y',	'Y',	'N'),
+(30,	3,	12,	'page',	'Y',	'Y',	'N'),
+(31,	3,	13,	'page',	'Y',	'Y',	'N'),
+(32,	3,	14,	'page',	'Y',	'Y',	'N'),
+(33,	3,	15,	'page',	'Y',	'Y',	'N'),
+(34,	4,	28,	'page',	'Y',	'N',	'N'),
+(35,	4,	16,	'page',	'Y',	'N',	'N'),
+(36,	4,	17,	'page',	'Y',	'N',	'N'),
+(37,	4,	18,	'page',	'Y',	'N',	'N'),
+(38,	4,	19,	'page',	'Y',	'N',	'N'),
+(39,	4,	20,	'page',	'Y',	'N',	'N'),
+(40,	4,	21,	'page',	'Y',	'N',	'N'),
+(41,	4,	22,	'page',	'Y',	'N',	'N'),
+(42,	4,	23,	'page',	'Y',	'N',	'N'),
+(43,	4,	24,	'page',	'Y',	'N',	'N'),
+(44,	4,	25,	'page',	'Y',	'N',	'N'),
+(45,	4,	26,	'page',	'Y',	'N',	'N'),
+(46,	4,	27,	'page',	'Y',	'N',	'N'),
+(64,	5,	28,	'page',	'Y',	'Y',	'Y'),
+(65,	5,	16,	'page',	'Y',	'Y',	'Y'),
+(66,	5,	17,	'page',	'Y',	'Y',	'Y'),
+(67,	5,	18,	'page',	'Y',	'Y',	'Y'),
+(68,	5,	19,	'page',	'Y',	'Y',	'Y'),
+(69,	5,	20,	'page',	'Y',	'Y',	'Y'),
+(70,	5,	21,	'page',	'Y',	'Y',	'Y'),
+(71,	5,	22,	'page',	'Y',	'Y',	'Y'),
+(72,	5,	23,	'page',	'Y',	'Y',	'Y'),
+(73,	5,	24,	'page',	'Y',	'Y',	'Y'),
+(74,	5,	25,	'page',	'Y',	'Y',	'Y'),
+(75,	5,	26,	'page',	'Y',	'Y',	'Y'),
+(76,	5,	29,	'page',	'Y',	'Y',	'Y'),
+(77,	5,	30,	'page',	'Y',	'Y',	'Y'),
+(78,	5,	31,	'page',	'Y',	'Y',	'Y'),
+(79,	5,	32,	'page',	'Y',	'Y',	'Y'),
+(80,	5,	27,	'page',	'Y',	'Y',	'Y');
+
+-- 2023-11-30 06:37:06
