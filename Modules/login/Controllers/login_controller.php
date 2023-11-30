@@ -4,6 +4,7 @@ namespace Modules\login\Controllers;
 
 use App\Controllers\BaseController;
 use Modules\login\Models\login_model;
+use Ramsey\Uuid\Uuid;
 
 class login_controller extends BaseController
 {
@@ -99,18 +100,13 @@ class login_controller extends BaseController
     }
 
     //Random UID Gen
-    function generateRandomUid($length = 10) {
+    function generateRandomUid() {
 
         try{
 
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $uid = '';
-        
-            for ($i = 0; $i < $length; $i++) {
-                $uid .= $characters[rand(0, strlen($characters) - 1)];
-            }
-        
-            return $uid;
+            $uuid = Uuid::uuid4();
+            $randomId = str_replace('-', '',$uuid->toString());
+            return $randomId;
 
         } catch(\Exception $e){
             $currentURL = current_url();            
