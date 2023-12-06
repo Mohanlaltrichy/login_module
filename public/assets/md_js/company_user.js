@@ -1,5 +1,19 @@
 (function($){
-    
+
+    $(document).ready(function(){
+        var ttt =  document.getElementById("phone"); 
+        ttt.trigger("change");
+        //  $("#phone").trigger("change");
+        //  $("#phone").trigger();
+    });
+
+    // $(document).on('change','#phone', function(){
+    //     var ccc = $("#phone_code").val();
+    //     // var vvv = $("#mob_code").val();
+    //     $("#phone").val(ccc);
+    //     // $("#mobile").val(vvv);
+    // });
+
     $(document).on('click','#save_user', function(){
 
         $('#message').html('');
@@ -23,6 +37,8 @@
             $('form#company_user_form').submit();
         } 
 });
+
+
 
      //Update Company Role
      $(document).on('click','#update_user', function(){

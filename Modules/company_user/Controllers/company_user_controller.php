@@ -198,11 +198,11 @@ class company_user_controller extends BaseController
             $user_id = $this->request->getPost("user_id");
             $fullname = $this->request->getPost("fullname");
             $email = $this->request->getPost("email");
-            $phone_old = $this->request->getPost("phone");
+            $phone = $this->request->getPost("phone");
             $password = $this->request->getPost('password');
             $conf_password = $this->request->getPost("conf_password");
             $designation = $this->request->getPost("designation");
-            $mobile_old = $this->request->getPost("mobile");
+            $mobile = $this->request->getPost("mobile");
             $address = trim($this->request->getPost("address"));
             $role = $this->request->getPost("role");
             $status = $this->request->getPost("status");
@@ -231,8 +231,8 @@ class company_user_controller extends BaseController
           $data = [
               'name' => $fullname,
               'email' => $email,
-              'phone' => ($phone_code != '') ? $phone_code : null,
-              'mobile' => ($mobile_code != '') ? $mobile_code : null,
+              'phone' => ($phone != '') ? $phone : null,
+              'mobile' => ($mobile != '') ? $mobile : null,
               'address' => ($address != '') ? $address : null,
               'role_id' => $role,
               'designation' => ($designation != '') ? $designation : null,

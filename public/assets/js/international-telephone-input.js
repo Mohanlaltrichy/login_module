@@ -15152,13 +15152,13 @@ for (var i = 0; i < intlTelInput.countries.length; i++) {
     } else {
         countryCodes[ element.dialCode ] = intlTelInput.countryCodes[ element.dialCode ];
     }
+
 }
-
-
 /**  
  International Telephone Input Initialize 
 */
 function intlTelInputInit(elements) {
+
     var preferredCountries = [];
 
     if( typeof intlTelInput.preferredCountries !== 'undefined'  || intlTelInput.preferredCountries === null ) {

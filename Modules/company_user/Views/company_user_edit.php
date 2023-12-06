@@ -99,14 +99,14 @@ height: 35px;
 
                                             <label class="col-sm-1 control-label" for="phone">Phone</label>
                                             <div class="iti col-sm-3">
-                                            <input type="tel" name="phone" id="phone" value='<?=$user_details[0]['phone'];?>'>
+                                            <input type="tel" name="phone" id="phone" value=" ">
                                             </div>
                                         </div>
                                             
                                         <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="zone">Mobile</label>
                                             <div class="iti col-sm-3">
-                                            <input type="tel" name="mobile" value='<?=$user_details[0]['mobile'];?>' id="mobile">
+                                            <input type="tel" name="mobile" value=" " id="mobile">
                                             </div>
 
                                             <label class="col-sm-1 control-label" for="zone">Password</label>
@@ -191,7 +191,16 @@ height: 35px;
 <?php
 echo view('\Modules\global_templates\Views\global_footer'); // Footer File Included
 ?>
-
+<script>
+    $(document).ready(function(){
+    var ccc = $("#phone_code").val();
+    var vvv = $("#mob_code").val();
+     $("#phone").val(ccc);
+     $("#mobile").val(vvv);
+     $("#mobile").trigger("change");
+     $("#phone").trigger("change");
+});
+</script>
 <script src="<?php echo base_url(); ?>assets/js/international-telephone-input.js"></script>
 
 <?php
