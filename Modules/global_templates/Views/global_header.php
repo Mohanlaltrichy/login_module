@@ -105,6 +105,20 @@ else
                             </li>
                             <!-- Dashboard Navbar Code End -->
 
+                            <!-- users Navbar Code Start -->      
+                            <li class="has-submenu">
+                                <a href="javascript:void(0)"><i class="ti-user"></i> Users <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                <ul class="submenu megamenu">
+                                    <li>
+                                        <ul>
+                                            <li><a href="<?php echo $base_url.route_to('company_user_add')?>">Add</a></li>
+                                            <li><a href="<?php echo $base_url.route_to('company_user_list')?>">View and Edit</a></li>                                                                           
+                                        </ul>
+                                    </li>                                    
+                                </ul>
+                            </li>
+                            <!-- users Navbar Code End -->
+
                             <!-- Role Navbar Code Start -->      
                             <li class="has-submenu">
                                 <a href="javascript:void(0)"><i class="ti-shield"></i> Roles <i class="mdi mdi-chevron-down mdi-drop"></i></a>
