@@ -39,6 +39,12 @@ class templates_controller extends BaseController
         return view("\Modules\global_templates\Views\global_error_page",$data);
     }
 
+    //Global Forbidden Page
+    public function global_forbidden_page()
+    {        
+        return view("\Modules\global_templates\Views\global_forbidden_page");
+    }
+
     //Global Catch Error Page
     public function global_catch_error()
     {

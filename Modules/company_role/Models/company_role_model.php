@@ -50,7 +50,7 @@ class company_role_model extends Model
     }
 
     //Add Tag Data Configuration
-    public function add_page_roles_details($role_name = '', $description = '', $status = '', $roles_checkbox_id = array(), $roles_all_checkbox_value = '', $roles_checkbox_view = array(), $roles_checkbox_edit = array(), $roles_checkbox_delete = array(), $opc_checkbox_id = array(), $opc_all_checkbox_value = '', $opc_checkbox_view = array(), $opc_checkbox_edit = array(), $opc_checkbox_delete = array(), $tag_checkbox_id = array(), $tag_all_checkbox_value = '', $tag_checkbox_view = array(), $tag_checkbox_edit = array(), $tag_checkbox_delete = array(), $mqtt_checkbox_id = array(), $mqtt_all_checkbox_value = '', $mqtt_checkbox_view = array(), $mqtt_checkbox_edit = array(), $mqtt_checkbox_delete = array(), $http_checkbox_id = array(), $http_all_checkbox_value = '', $http_checkbox_view = array(), $http_checkbox_edit = array(), $http_checkbox_delete = array(), $bulk_checkbox_id = array(), $bulk_all_checkbox_value = '', $bulk_checkbox_view = array(), $bulk_checkbox_edit = array(), $bulk_checkbox_delete = array())
+    public function add_page_roles_details($role_name = '', $description = '', $status = '', $roles_checkbox_id = array(), $roles_all_checkbox_value = '', $roles_checkbox_view = array(), $roles_checkbox_edit = array(), $roles_checkbox_delete = array(), $users_checkbox_id = array(), $users_all_checkbox_value = '', $users_checkbox_view = array(), $users_checkbox_edit = array(), $users_checkbox_delete = array(),$opc_checkbox_id = array(), $opc_all_checkbox_value = '', $opc_checkbox_view = array(), $opc_checkbox_edit = array(), $opc_checkbox_delete = array(), $tag_checkbox_id = array(), $tag_all_checkbox_value = '', $tag_checkbox_view = array(), $tag_checkbox_edit = array(), $tag_checkbox_delete = array(), $mqtt_checkbox_id = array(), $mqtt_all_checkbox_value = '', $mqtt_checkbox_view = array(), $mqtt_checkbox_edit = array(), $mqtt_checkbox_delete = array(), $http_checkbox_id = array(), $http_all_checkbox_value = '', $http_checkbox_view = array(), $http_checkbox_edit = array(), $http_checkbox_delete = array(), $bulk_checkbox_id = array(), $bulk_all_checkbox_value = '', $bulk_checkbox_view = array(), $bulk_checkbox_edit = array(), $bulk_checkbox_delete = array())
     {
         try {
 
@@ -61,6 +61,7 @@ class company_role_model extends Model
             'description' => $description,
             'company_id' => $this->customer_id,
             'roles_all_pages' => ($roles_all_checkbox_value == '1') ? 'Y' : 'N',
+            'users_all_pages' => ($users_all_checkbox_value == '1') ? 'Y' : 'N',
             'opc_all_pages' => ($opc_all_checkbox_value == '1') ? 'Y' : 'N',
             'tag_all_pages' => ($tag_all_checkbox_value == '1') ? 'Y' : 'N',
             'mqtt_all_pages' => ($mqtt_all_checkbox_value == '1') ? 'Y' : 'N',
@@ -86,6 +87,22 @@ class company_role_model extends Model
                         'can_view' => ($roles_checkbox_view[$i] == '1') ? 'Y' : 'N',
                         'can_edit' => ($roles_checkbox_edit[$i] == '1') ? 'Y' : 'N',
                         'can_delete' => ($roles_checkbox_delete[$i] == '1') ? 'Y' : 'N',
+                    );
+                }             
+            }
+
+            $users_data_insert_data[] = '';
+            if(!empty($users_checkbox_id))
+            {
+                for($i=0; $i < count($users_checkbox_id); $i++)
+                {
+                    $users_data_insert_data[] = array(
+                        'role_id'=> $role_id,
+                        'page_id' => $users_checkbox_id[$i],
+                        'type' => 'page',
+                        'can_view' => ($users_checkbox_view[$i] == '1') ? 'Y' : 'N',
+                        'can_edit' => ($users_checkbox_edit[$i] == '1') ? 'Y' : 'N',
+                        'can_delete' => ($users_checkbox_delete[$i] == '1') ? 'Y' : 'N',
                     );
                 }             
             }
@@ -171,6 +188,7 @@ class company_role_model extends Model
             }
             
             $roles_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($roles_data_insert_data));
+            $users_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($users_data_insert_data));
             $opc_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($opc_data_insert_data));
             $tag_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($tag_data_insert_data));
             $mqtt_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($mqtt_data_insert_data));
@@ -179,7 +197,7 @@ class company_role_model extends Model
              
             $this->mysqldb->transComplete();
 
-            if($roles_data_insert_data_id || $opc_data_insert_data_id || $tag_data_insert_data_id ||  $mqtt_data_insert_data_id || $http_data_insert_data_id || $bulk_data_insert_data_id)
+            if($roles_data_insert_data_id || $users_data_insert_data_id || $opc_data_insert_data_id || $tag_data_insert_data_id ||  $mqtt_data_insert_data_id || $http_data_insert_data_id || $bulk_data_insert_data_id)
             {
                 return true;
             }            
@@ -191,7 +209,7 @@ class company_role_model extends Model
     }
 
     //Update Tag Data Configuration
-    public function update_page_roles_details($role_id = 0, $role_name = '', $description = '', $status = '', $roles_checkbox_id = array(), $roles_all_checkbox_value = '', $roles_checkbox_view = array(), $roles_checkbox_edit = array(), $roles_checkbox_delete = array(), $opc_checkbox_id = array(), $opc_all_checkbox_value = '', $opc_checkbox_view = array(), $opc_checkbox_edit = array(), $opc_checkbox_delete = array(), $tag_checkbox_id = array(), $tag_all_checkbox_value = '', $tag_checkbox_view = array(), $tag_checkbox_edit = array(), $tag_checkbox_delete = array(), $mqtt_checkbox_id = array(), $mqtt_all_checkbox_value = '', $mqtt_checkbox_view = array(), $mqtt_checkbox_edit = array(), $mqtt_checkbox_delete = array(), $http_checkbox_id = array(), $http_all_checkbox_value = '', $http_checkbox_view = array(), $http_checkbox_edit = array(), $http_checkbox_delete = array(), $bulk_checkbox_id = array(), $bulk_all_checkbox_value = '', $bulk_checkbox_view = array(), $bulk_checkbox_edit = array(), $bulk_checkbox_delete = array())
+    public function update_page_roles_details($role_id = 0, $role_name = '', $description = '', $status = '', $roles_checkbox_id = array(), $roles_all_checkbox_value = '', $roles_checkbox_view = array(), $roles_checkbox_edit = array(), $roles_checkbox_delete = array(), $users_checkbox_id = array(), $users_all_checkbox_value = '', $users_checkbox_view = array(), $users_checkbox_edit = array(), $users_checkbox_delete = array(), $opc_checkbox_id = array(), $opc_all_checkbox_value = '', $opc_checkbox_view = array(), $opc_checkbox_edit = array(), $opc_checkbox_delete = array(), $tag_checkbox_id = array(), $tag_all_checkbox_value = '', $tag_checkbox_view = array(), $tag_checkbox_edit = array(), $tag_checkbox_delete = array(), $mqtt_checkbox_id = array(), $mqtt_all_checkbox_value = '', $mqtt_checkbox_view = array(), $mqtt_checkbox_edit = array(), $mqtt_checkbox_delete = array(), $http_checkbox_id = array(), $http_all_checkbox_value = '', $http_checkbox_view = array(), $http_checkbox_edit = array(), $http_checkbox_delete = array(), $bulk_checkbox_id = array(), $bulk_all_checkbox_value = '', $bulk_checkbox_view = array(), $bulk_checkbox_edit = array(), $bulk_checkbox_delete = array())
     {
         try {
 
@@ -206,6 +224,7 @@ class company_role_model extends Model
             $role_data_update = [
             'description' => $description,           
             'roles_all_pages' => ($roles_all_checkbox_value == '1') ? 'Y' : 'N',
+            'users_all_pages' => ($users_all_checkbox_value == '1') ? 'Y' : 'N',
             'opc_all_pages' => ($opc_all_checkbox_value == '1') ? 'Y' : 'N',
             'tag_all_pages' => ($tag_all_checkbox_value == '1') ? 'Y' : 'N',
             'mqtt_all_pages' => ($mqtt_all_checkbox_value == '1') ? 'Y' : 'N',
@@ -241,6 +260,22 @@ class company_role_model extends Model
                 }             
             }
 
+            $users_data_insert_data[] = '';
+            if(!empty($users_checkbox_id))
+            {
+                for($i=0; $i < count($users_checkbox_id); $i++)
+                {
+                    $users_data_insert_data[] = array(
+                        'role_id'=> $role_id,
+                        'page_id' => $users_checkbox_id[$i],
+                        'type' => 'page',
+                        'can_view' => ($users_checkbox_view[$i] == '1') ? 'Y' : 'N',
+                        'can_edit' => ($users_checkbox_edit[$i] == '1') ? 'Y' : 'N',
+                        'can_delete' => ($users_checkbox_delete[$i] == '1') ? 'Y' : 'N',
+                    );
+                }             
+            }
+
             $opc_data_insert_data[] = '';
             if(!empty($opc_checkbox_id))
             {
@@ -322,6 +357,7 @@ class company_role_model extends Model
             }
             
             $roles_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($roles_data_insert_data));
+            $users_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($users_data_insert_data));
             $opc_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($opc_data_insert_data));
             $tag_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($tag_data_insert_data));
             $mqtt_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($mqtt_data_insert_data));
@@ -330,7 +366,7 @@ class company_role_model extends Model
             
             $this->mysqldb->transComplete();
 
-            if($roles_data_insert_data_id || $opc_data_insert_data_id || $tag_data_insert_data_id ||  $mqtt_data_insert_data_id || $http_data_insert_data_id || $bulk_data_insert_data_id)
+            if($roles_data_insert_data_id || $users_data_insert_data_id || $opc_data_insert_data_id || $tag_data_insert_data_id ||  $mqtt_data_insert_data_id || $http_data_insert_data_id || $bulk_data_insert_data_id)
             {
                 return true;
             }            

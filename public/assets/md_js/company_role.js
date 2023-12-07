@@ -16,7 +16,25 @@
             $('#roles_all_checkbox_value').val('0');
             $('.roles_checkbox_value').val('0');
         }
-    });    
+    }); 
+    
+    $('#users_all_checkbox').change(function()
+    {             
+        var isChecked = $(this).prop("checked");       
+        
+        if(isChecked == true)
+        {
+            $('.users_checkbox').prop("checked",true);
+            $('#users_all_checkbox_value').val('1');
+            $('.users_checkbox_value').val('1');
+        }   
+        else
+        {
+            $('.users_checkbox').prop("checked",false);
+            $('#users_all_checkbox_value').val('0');
+            $('.users_checkbox_value').val('0');
+        }
+    }); 
 
     $('#opc_all_checkbox').change(function()
     {             
@@ -106,7 +124,7 @@
         }
     });
 
-    $('.roles_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox').change(function()
+    $('.roles_checkbox, .users_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox').change(function()
     {
         var isChecked = $(this).prop("checked"); 
         var data_name = $(this).data('name');
@@ -160,6 +178,25 @@
             {               
                 $('#roles_all_checkbox').prop("checked", false);
                 $('#roles_all_checkbox_value').val('0');
+            }
+        }
+        else if($(this).hasClass('users_checkbox'))
+        {
+            var users_checkboxes = document.querySelectorAll('.users_checkbox_div input[type="checkbox"]');
+
+            var user_allChecked = Array.from(users_checkboxes).every(function(usercheckbox) {
+            return usercheckbox.checked;
+            });
+
+            if(user_allChecked == true)
+            {              
+                $('#users_all_checkbox').prop("checked", true);
+                $('#users_all_checkbox_value').val('1');
+            }
+            else
+            {               
+                $('#users_all_checkbox').prop("checked", false);
+                $('#users_all_checkbox_value').val('0');
             }
         }
         else if($(this).hasClass('opc_checkbox'))

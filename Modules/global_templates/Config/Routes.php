@@ -7,6 +7,9 @@ $routes->group('templates', ['namespace' => '\Modules\global_templates\Controlle
 	//Global 404 Error Page
 	$routes->get('error', 'templates_controller::global_error_page', ['as' => 'global_error_page']);
 
+	//Global Forbidden Page
+	$routes->get('forbidden_error', 'templates_controller::global_forbidden_page', ['as' => 'forbidden_error']);
+
 	//Global Catch Error Page
 	$routes->get('error_catch', 'templates_controller::global_catch_error', ['as' => 'global_catch_error']);
 	

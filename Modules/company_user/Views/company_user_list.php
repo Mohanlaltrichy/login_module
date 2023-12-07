@@ -24,6 +24,21 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
             }
             session()->removeTempdata('company_user_deleted_success');
             ?>
+
+            <?php if (session()->getFlashdata('msg')) : ?>
+            <div class="alert alert-danger">
+                <center>
+                <?php if (is_array(session()->getFlashdata('msg'))) : ?>
+                    <?php foreach (session()->getFlashdata('msg') as $item) : ?>
+                        <?= $item . '<br/>' ?>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <?= session()->getFlashdata('msg') ?>
+                <?php endif; ?>
+                </center>
+            </div>
+            <?php endif; ?> 
+
         </div>
         <!-- Custom Error Alert Message -->
 
@@ -82,9 +97,11 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                                                     <td><?= $item['designation']; ?></td>
                                                     <td><?= ucfirst($item['status']); ?></td>
                                                     <td>
-                                                        <?php if($item['status'] != 'deleted')  { ?>
-                                                        <a href="<?=route_to('company_user_edit',$item['id']);?>"><i style="font-size: x-large;color: #6CBAFA;" class="mdi mdi-square-edit-outline"></i></a>
+                                                        <?php if($item['status'] != 'deleted')  { ?>                                                        
+                                                        <a href="<?=$base_url.route_to('company_user_edit',$item['id']);?>"><i style="font-size: x-large;color: #6CBAFA;" class="mdi mdi-square-edit-outline"></i></a>                                                        
+                                                        <?php if(session('user_view_and_edit_delete') == '1') { ?>
                                                         <a href="javascript:void(0);" data-id='<?php echo $item['id']; ?>' id="delete_user"><i style="font-size: x-large;color: #ef5c6a;" class="mdi mdi-delete"></i></a>
+                                                        <?php } ?>
                                                         <?php } ?>
                                                     </td>                                                   
                                                 </tr>

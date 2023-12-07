@@ -30,6 +30,10 @@ class company_user_controller extends BaseController
         //   try 
         //   {
 
+            if(session('user_add_view') != '1') {
+                return redirect()->route('forbidden_error');
+            }
+
             $role_data_whereConditions = [
                 'company_id' => $this->customer_id,                                    
                 'status' => 'active',                                    
@@ -53,86 +57,95 @@ class company_user_controller extends BaseController
       {
           try 
           {
-              $fullname = $this->request->getPost("fullname");
-              $email = $this->request->getPost("email");
-              $phone = $this->request->getPost("phone");
-              $password = $this->request->getPost('password');
-              $conf_password = $this->request->getPost("conf_password");
-              $designation = $this->request->getPost("designation");
-              $mobile = $this->request->getPost("mobile");
-              $address = trim($this->request->getPost("address"));
-              $role = $this->request->getPost("role");
-              $status = $this->request->getPost("status");
-              $phone_code = $this->request->getPost("phone_code");
-              $mobile_code = $this->request->getPost("mobile_code");
+              if(session('user_add_edit') == '1')
+              {
+                $fullname = $this->request->getPost("fullname");
+                $email = $this->request->getPost("email");
+                $phone = $this->request->getPost("phone");
+                $password = $this->request->getPost('password');
+                $conf_password = $this->request->getPost("conf_password");
+                $designation = $this->request->getPost("designation");
+                $mobile = $this->request->getPost("mobile");
+                $address = trim((string)$this->request->getPost("address"));
+                $role = $this->request->getPost("role");
+                $status = $this->request->getPost("status");
+                $phone_code = $this->request->getPost("phone_code");
+                $mobile_code = $this->request->getPost("mobile_code");
 
-   //   $validation =  \Config\Services::validation();
+    //   $validation =  \Config\Services::validation();
 
-            //   $rules = [
-            //     "fullname" => [
-            //         "label" => "Name", 
-            //         "rules" => "required"
-            //     ],
-            //     "email" => [
-            //         "label" => "Email", 
-            //         "rules" => "required"
-            //     ],
-            //     "role" => [
-            //         "label" => "Role", 
-            //         "rules" => "required"
-            //     ]
-            // ];
-            
-            // if (!$this->validate($rules) || $password !== $conf_password) {
-            //     session()->setFlashdata('msg', $validation->getErrors());
-            //     return redirect()->route('company_user_add');
-            // }
-            
-              $user_email_whereConditions = [
-                  'email' => $email,                    
-              ];
-              $user_or_whereConditions = [
-                  'mobile' => $mobile_code,                    
-              ];
-  
-              $email_check = $this->company_user_model->GetTableValue('users', 'id', $user_email_whereConditions); 
-              $mob_check = $this->company_user_model->GetTableValue('users', 'id',$user_or_whereConditions); 
-  
-              if (!empty($email_check)) {
-                session()->setFlashdata('duplicate_record_found', 'Email ID already exists');
+                //   $rules = [
+                //     "fullname" => [
+                //         "label" => "Name", 
+                //         "rules" => "required"
+                //     ],
+                //     "email" => [
+                //         "label" => "Email", 
+                //         "rules" => "required"
+                //     ],
+                //     "role" => [
+                //         "label" => "Role", 
+                //         "rules" => "required"
+                //     ]
+                // ];
+                
+                // if (!$this->validate($rules) || $password !== $conf_password) {
+                //     session()->setFlashdata('msg', $validation->getErrors());
+                //     return redirect()->route('company_user_add');
+                // }
+                
+                $user_email_whereConditions = [
+                    'email' => $email,                    
+                ];
+                $user_or_whereConditions = [
+                    'mobile' => $mobile_code,                    
+                ];
+    
+                $email_check = $this->company_user_model->GetTableValue('users', 'id', $user_email_whereConditions); 
+                $mob_check = $this->company_user_model->GetTableValue('users', 'id',$user_or_whereConditions); 
+    
+                if (!empty($email_check)) {
+                    session()->setFlashdata('duplicate_record_found', 'Email ID already exists');
+                    return redirect()->route('company_user_add');
+                }
+                if (!empty($mob_check)) {
+                    session()->setFlashdata('duplicate_record_found', 'Mobile Number already exists');
+                    return redirect()->route('company_user_add');
+                }
+
+                $hashed_password = ($password) ? password_hash((string)$password, PASSWORD_DEFAULT) : $password;
+                $randomUid = $this->generateRandomUid();
+
+                $data = [
+                    'uuid' => $randomUid,
+                    'name' => $fullname,
+                    'email' => $email,
+                    'address' => ($address != '') ? $address : null,
+                    'mobile' => ($mobile != '') ? $mobile : null,
+                    'phone' => ($phone != '') ? $phone : null,
+                    'designation' => ($designation != '') ? $designation : null,
+                    'role_id' => $role,
+                    'company_id' => $this->customer_id, //
+                    'email_verified_at' => null, //
+                    'password' => $hashed_password,
+                    'status' => $status,
+                    'remember_token' => null, //
+                    'utc_created_at' => date('Y-m-d H:i:s'),
+                    'local_created_at' => $this->local_date_time, //
+                    'created_by'  => $this->logged_user_id,
+                ];
+    
+                $this->company_user_model->saveUsersConfiguration($data);
+                session()->setFlashdata('success', 'Data Updated Successfully.');
                 return redirect()->route('company_user_add');
+                exit;
             }
-              if (!empty($mob_check)) {
-                session()->setFlashdata('duplicate_record_found', 'Mobile Number already exists');
+            else
+            {
+                session()->setFlashdata('duplicate_record_found', 'Data Not Updated Access Denied.');
                 return redirect()->route('company_user_add');
+                exit;
             }
-
-            $hashed_password = ($password) ? password_hash((string)$password, PASSWORD_DEFAULT) : $password;
-            $randomUid = $this->generateRandomUid();
-
-            $data = [
-                'uuid' => $randomUid,
-                'name' => $fullname,
-                'email' => $email,
-                'address' => ($address != '') ? $address : null,
-                'mobile' => ($mobile != '') ? $mobile : null,
-                'phone' => ($phone != '') ? $phone : null,
-                'designation' => ($designation != '') ? $designation : null,
-                'role_id' => $role,
-                'company_id' => $this->customer_id, //
-                'email_verified_at' => null, //
-                'password' => $hashed_password,
-                'status' => $status,
-                'remember_token' => null, //
-                'utc_created_at' => date('Y-m-d H:i:s'),
-                'local_created_at' => $this->local_date_time, //
-                'created_by'  => $this->logged_user_id,
-            ];
-  
-            $this->company_user_model->saveUsersConfiguration($data);
-            session()->setFlashdata('success', 'Data Updated Successfully.');
-            return redirect()->route('company_user_add');
-            exit;
   
           } catch (\Exception $e) {
               $currentURL = current_url();
@@ -146,7 +159,11 @@ class company_user_controller extends BaseController
           try 
           {
 
-          $result = $this->company_user_model->get_data_using_join($this->customer_id);
+            if(session('user_view_and_edit_view') != '1') {
+                return redirect()->route('forbidden_error');
+            }
+
+            $result = $this->company_user_model->get_data_using_join($this->customer_id);
 
             $data = array('result' => $result);
 
@@ -195,58 +212,67 @@ class company_user_controller extends BaseController
     {
         // try 
         // {
-            $user_id = $this->request->getPost("user_id");
-            $fullname = $this->request->getPost("fullname");
-            $email = $this->request->getPost("email");
-            $phone = $this->request->getPost("phone");
-            $password = $this->request->getPost('password');
-            $conf_password = $this->request->getPost("conf_password");
-            $designation = $this->request->getPost("designation");
-            $mobile = $this->request->getPost("mobile");
-            $address = trim($this->request->getPost("address"));
-            $role = $this->request->getPost("role");
-            $status = $this->request->getPost("status");
-            $phone_code = $this->request->getPost("phone_code");
-            $mobile_code = $this->request->getPost("mobile_code");
+            if(session('user_view_and_edit_edit') == '1') {
 
-                $user_email_whereConditions = [
-                    'email' => $email,  
-                    'id !=' => $user_id                  
-                ];
+                $user_id = $this->request->getPost("user_id");
+                $fullname = $this->request->getPost("fullname");
+                $email = $this->request->getPost("email");
+                $phone = $this->request->getPost("phone");
+                $password = $this->request->getPost('password');
+                $conf_password = $this->request->getPost("conf_password");
+                $designation = $this->request->getPost("designation");
+                $mobile = $this->request->getPost("mobile");
+                $address = trim((string)$this->request->getPost("address"));
+                $role = $this->request->getPost("role");
+                $status = $this->request->getPost("status");
+                $phone_code = $this->request->getPost("phone_code");
+                $mobile_code = $this->request->getPost("mobile_code");
 
-                $email_check = $this->company_user_model->GetTableValue('users', 'id', $user_email_whereConditions); 
+                    $user_email_whereConditions = [
+                        'email' => $email,  
+                        'id !=' => $user_id                  
+                    ];
 
-                if (!empty($email_check)) {
-                session()->setFlashdata('duplicate_record_found', 'Email ID already exists');
-                return redirect()->route('company_user_edit',array($user_id));
+                    $email_check = $this->company_user_model->GetTableValue('users', 'id', $user_email_whereConditions); 
+
+                    if (!empty($email_check)) {
+                    session()->setFlashdata('duplicate_record_found', 'Email ID already exists');
+                    return redirect()->route('company_user_edit',array($user_id));
+                }
+
+                $updt_password = '';
+                if($password != ''){
+                $hashed_password = ($password) ? password_hash((string)$password, PASSWORD_DEFAULT) : $password;
+                
+            $updt_password = $hashed_password;
             }
 
-            $updt_password = '';
-            if($password != ''){
-            $hashed_password = ($password) ? password_hash((string)$password, PASSWORD_DEFAULT) : $password;
-            
-           $updt_password = $hashed_password;
+            $data = [
+                'name' => $fullname,
+                'email' => $email,
+                'phone' => ($phone != '') ? $phone : null,
+                'mobile' => ($mobile != '') ? $mobile : null,
+                'address' => ($address != '') ? $address : null,
+                'role_id' => $role,
+                'designation' => ($designation != '') ? $designation : null,
+                'password' => ($updt_password != '') ? $updt_password : null,
+                'status' => $status,
+                'utc_updated_at' => date('Y-m-d H:i:s'),
+                'local_updated_at' => $this->local_date_time,
+                'updated_by'  => $this->logged_user_id,
+            ];
+
+            $this->company_user_model->updateUsersConfiguration($data,$user_id,$updt_password);
+            session()->setFlashdata('success', 'Data Updated Successfully.');
+            return redirect()->route('company_user_list');
+            exit;
         }
-
-          $data = [
-              'name' => $fullname,
-              'email' => $email,
-              'phone' => ($phone != '') ? $phone : null,
-              'mobile' => ($mobile != '') ? $mobile : null,
-              'address' => ($address != '') ? $address : null,
-              'role_id' => $role,
-              'designation' => ($designation != '') ? $designation : null,
-              'password' => ($updt_password != '') ? $updt_password : null,
-              'status' => $status,
-              'utc_updated_at' => date('Y-m-d H:i:s'),
-              'local_updated_at' => $this->local_date_time,
-              'updated_by'  => $this->logged_user_id,
-          ];
-
-          $this->company_user_model->updateUsersConfiguration($data,$user_id,$updt_password);
-          session()->setFlashdata('success', 'Data Updated Successfully.');
-          return redirect()->route('company_user_list');
-          exit;
+        else
+        {
+            session()->setFlashdata('msg', 'Data Not Updated Access Denied.');
+            return redirect()->route('company_user_list');
+            exit;
+        }
 
         // } catch (\Exception $e) {
         //     $currentURL = current_url();
@@ -260,28 +286,35 @@ class company_user_controller extends BaseController
     {
         try{
             if ($this->request->isAJAX()) {
+
+                if(session('user_view_and_edit_delete') == '1') {
                
-                $id = $this->request->getGet("id");
+                    $id = $this->request->getGet("id");
 
-                $role_whereConditions = [
-                    'id' => $id,                                
-                ];
-                        
-                $data = [
-                    'status' => 'deleted',
-                    'utc_updated_at' => date('Y-m-d H:i:s'), 
-                    'local_updated_at' => $this->local_date_time, 
-                    'updated_by' => $this->logged_user_id,               
-                ];
+                    $role_whereConditions = [
+                        'id' => $id,                                
+                    ];
+                            
+                    $data = [
+                        'status' => 'deleted',
+                        'utc_updated_at' => date('Y-m-d H:i:s'), 
+                        'local_updated_at' => $this->local_date_time, 
+                        'updated_by' => $this->logged_user_id,               
+                    ];
 
-                $this->company_user_model->updateData('users', $role_whereConditions, $data);
+                    $this->company_user_model->updateData('users', $role_whereConditions, $data);
 
-                session()->removeTempdata('company_user_deleted_success');     
-                session()->setTempdata('company_user_deleted_success', 'User Deleted Successfully');
+                    session()->removeTempdata('company_user_deleted_success');     
+                    session()->setTempdata('company_user_deleted_success', 'User Deleted Successfully');
 
-                $result = array('success' => 'success');
-
-                echo json_encode($result);
+                    $result = array('success' => 'success');
+                    echo json_encode($result);
+                }
+                else
+                {
+                    $result = array('failed' => 'failed');
+                    echo json_encode($result);
+                }
             }
 
         }catch(\Exception $e){

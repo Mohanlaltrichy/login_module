@@ -24,8 +24,23 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
             }
             session()->removeTempdata('company_role_deleted_success');
             ?>
+
+        <?php if (session()->getFlashdata('msg')) : ?>
+        <div class="alert alert-danger">
+            <center>
+            <?php if (is_array(session()->getFlashdata('msg'))) : ?>
+                <?php foreach (session()->getFlashdata('msg') as $item) : ?>
+                    <?= $item . '<br/>' ?>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <?= session()->getFlashdata('msg') ?>
+            <?php endif; ?>
+            </center>
         </div>
-        <!-- Custom Error Alert Message -->
+        <?php endif; ?> 
+
+        </div>
+        <!-- Custom Error Alert Message -->        
 
         <!-- Data After Successfully Insert Alert -->
         <div id="custom_success_alert_controller_message">
@@ -76,9 +91,11 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                                                     <td></td>
                                                     <td><?= $item['utc_created_at']; ?></td>
                                                     <td>
-                                                        <?php if($item['status'] != 'deleted')  { ?>
-                                                        <a href="<?=$base_url.route_to('company_role_edit',$item['id']);?>"><i style="font-size: x-large;color: #6CBAFA;" class="mdi mdi-square-edit-outline"></i></a>
+                                                        <?php if($item['status'] != 'deleted')  { ?>                                                        
+                                                        <a href="<?=$base_url.route_to('company_role_edit',$item['id']);?>"><i style="font-size: x-large;color: #6CBAFA;" class="mdi mdi-square-edit-outline"></i></a>                                                      
+                                                        <?php if(session('roles_view_and_edit_delete') == '1') { ?>
                                                         <a href="javascript:void(0);" data-id='<?php echo $item['id']; ?>' id="delete_role_list"><i style="font-size: x-large;color: #ef5c6a;" class="mdi mdi-delete"></i></a>
+                                                        <?php } ?>
                                                         <?php } ?>
                                                     </td>                                                   
                                                 </tr>

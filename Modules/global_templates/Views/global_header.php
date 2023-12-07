@@ -105,32 +105,44 @@ else
                             </li>
                             <!-- Dashboard Navbar Code End -->
 
-                            <!-- users Navbar Code Start -->      
+                            <!-- users Navbar Code Start -->  
+                            <?php if(session('user_add_view') == '1' || session('user_view_and_edit_view') == '1') { ?>   
                             <li class="has-submenu">
                                 <a href="javascript:void(0)"><i class="ti-user"></i> Users <i class="mdi mdi-chevron-down mdi-drop"></i></a>
                                 <ul class="submenu megamenu">
                                     <li>
                                         <ul>
+                                            <?php if(session('user_add_view') == '1') { ?>
                                             <li><a href="<?php echo $base_url.route_to('company_user_add')?>">Add</a></li>
-                                            <li><a href="<?php echo $base_url.route_to('company_user_list')?>">View and Edit</a></li>                                                                           
+                                            <?php } ?>  
+                                            <?php if(session('user_view_and_edit_view') == '1') { ?>
+                                            <li><a href="<?php echo $base_url.route_to('company_user_list')?>">View and Edit</a></li>
+                                            <?php } ?>                                                                           
                                         </ul>
                                     </li>                                    
                                 </ul>
                             </li>
+                            <?php } ?> 
                             <!-- users Navbar Code End -->
 
-                            <!-- Role Navbar Code Start -->      
+                            <!-- Role Navbar Code Start --> 
+                            <?php if(session('roles_add_view') == '1' || session('roles_view_and_edit_view') == '1') { ?>     
                             <li class="has-submenu">
                                 <a href="javascript:void(0)"><i class="ti-shield"></i> Roles <i class="mdi mdi-chevron-down mdi-drop"></i></a>
                                 <ul class="submenu megamenu">
                                     <li>
                                         <ul>
+                                            <?php if(session('roles_add_view') == '1') { ?>
                                             <li><a href="<?php echo $base_url.route_to('company_role')?>">Add</a></li>
-                                            <li><a href="<?php echo $base_url.route_to('company_role_list')?>">Edit And Delete</a></li>                                                                           
+                                            <?php } ?> 
+                                            <?php if(session('roles_view_and_edit_view') == '1') { ?>
+                                            <li><a href="<?php echo $base_url.route_to('company_role_list')?>">Edit And Delete</a></li> 
+                                            <?php } ?>                                                                           
                                         </ul>
                                     </li>                                    
                                 </ul>
                             </li>
+                            <?php } ?> 
                             <!-- Role Navbar Code End -->
 
                         </ul>          

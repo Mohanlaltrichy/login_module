@@ -51,6 +51,28 @@ class login_model extends Model
         }
     }
 
+    //User Session Details Get
+    public function get_user_roles_details($role_id = 0)
+    {
+        try{
+            $this->mysqldb->transException(true)->transStart();
+ 
+            $builder = $this->mysqldb->table('tbl_roles as tr');    
+            $builder->select('trp.page_id,trp.can_view,trp.can_edit,trp.can_delete');
+            $builder->join('tbl_role_permissions as trp', 'trp.role_id = tr.id','inner'); 
+            $builder->where('tr.id',$role_id);
+            $builder->orderBy('tr.id','asc');         
+            $result = $builder->get()->getResultArray();
+            
+            $this->mysqldb->transComplete();
+ 
+            return $result; 
+        } catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->error('login\login_Model',$currentURL,'get_user_roles_details',$e->getMessage());
+        }
+    }
+
    //Error Exception Stored Function
    public function error($module_name = '',$current_url = '', $function_name ='', $error_msg = '')
    {

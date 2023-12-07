@@ -143,7 +143,60 @@ $this->company_role_model = new company_role_model();
                                                     ?>                                                    
                                                 </div>
                                             </div>
-                                            <!-- Roles Code End --> 
+                                            <!-- Roles Code End -->
+
+                                            <!-- Users Code Start -->                                                
+                                            <div class="col-lg-12">                                                                                                      
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Users</b>
+                                                <input name='users_all_checkbox_value' id="users_all_checkbox_value" value='<?=($roles_details[0]['users_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
+                                                <span class="checkbox">
+                                                <input id="users_all_checkbox" class="form-check-inline" type="checkbox" <?=($roles_details[0]['users_all_pages'] == 'Y') ? 'checked' : ''?>>
+                                                    <label for="users_all_checkbox">
+                                                        Select all pages
+                                                    </label>
+                                                </span>
+                                                </h5> 
+                                                    
+                                                <div class="form-group row">
+                                                    <?php if(!empty($users_module_data))
+                                                    {                                                        
+                                                        foreach($users_module_data as $users_role)
+                                                        {                                                     
+                                                            $users_data_whereConditions = [                                  
+                                                                'role_id' => $roles_details[0]['id'], 
+                                                                'page_id' => $users_role['id'],                                  
+                                                            ];
+                                                
+                                                            $users_result = $this->company_role_model->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $users_data_whereConditions);
+                                                    ?>
+                                                    <div class="col-sm-6 mb-3">                                                   
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$users_role['page_name'])); ?></b></label>
+                                                        <input name="users_checkbox_id[]" value='<?=$users_role['id'];?>' type="hidden"> 
+                                                        <input name="users_checkbox_view[]" id="checkbox_view_<?=$users_role['id'];?>" class='users_checkbox_value' value='<?=($users_result[0]['can_view'] == 'Y') ? '1' : '0'; ?>' type="hidden">
+                                                        <input name="users_checkbox_edit[]" id="checkbox_edit_<?=$users_role['id'];?>" class='users_checkbox_value' value='<?=($users_result[0]['can_edit'] == 'Y') ? '1' : '0'; ?>' type="hidden">
+                                                        <input name="users_checkbox_delete[]" id="checkbox_delete_<?=$users_role['id'];?>" class='users_checkbox_value' value='<?=($users_result[0]['can_delete'] == 'Y') ? '1' : '0'; ?>' type="hidden">                                                                                                                      
+                                                        <span class="checkbox users_checkbox_div">                                                            
+                                                            <input data-name='can_view' data-id='<?=$users_role['id'];?>' class="col-sm-2 users_checkbox" type="checkbox" <?=($users_result[0]['can_view'] == 'Y') ? 'checked' : ''; ?>>                                                          
+                                                            <label for="checkbox_view_<?=$users_role['id'];?>">
+                                                                Can View
+                                                            </label>
+                                                            <input data-name='can_edit' data-id='<?=$users_role['id'];?>' class="col-sm-2 users_checkbox" type="checkbox" <?=($users_result[0]['can_edit'] == 'Y') ? 'checked' : ''; ?>>                                                           
+                                                            <label for="checkbox_edit_<?=$users_role['id'];?>">
+                                                                Can Edit
+                                                            </label>
+                                                            <input data-name='can_delete' data-id='<?=$users_role['id'];?>' class="col-sm-2 users_checkbox"  type="checkbox" <?=($users_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_delete_<?=$users_role['id'];?>">
+                                                                Can Delete
+                                                            </label>
+                                                        </span>                                             
+                                                    </div>
+                                                    <?php                                                       
+                                                        }
+                                                    }
+                                                    ?>                                                    
+                                                </div>
+                                            </div>
+                                            <!-- Users Code End -->
 
                                             <h3 class="col-lg-12 mb-3">Cloud Connector</h3>
                                             <!-- OPC Role Code Start -->                                                
@@ -430,7 +483,7 @@ $this->company_role_model = new company_role_model();
 
                                         <!-- -->
                                         <div class="text-center">                                           
-                                            <button type="button" id="update_company_role" class="btn btn-primary waves-effect waves-light">Update</button>                                         
+                                            <button type="button" id="update_company_role" class="btn btn-primary waves-effect waves-light" <?=(session('roles_view_and_edit_edit') != '1') ? 'disabled' : '';?>>Update</button>                                         
                                             <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="window.location='<?php echo $base_url.route_to('company_role'); ?>'">Cancel</button>                                            
                                         </div> 
                                         <!-- -->

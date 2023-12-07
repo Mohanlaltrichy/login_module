@@ -168,7 +168,7 @@ height: 35px;
                                         <input type='hidden' id='remove_content' value=''>
                                         <input type='hidden' id='phone_code' name="phone_code" value=''>
                                         <input type='hidden' id='mob_code' name="mobile_code"  value=''>
-                                            <button type="button" id="save_user" class="btn btn-primary waves-effect waves-light">Save</button>
+                                            <button type="button" id="save_user" class="btn btn-primary waves-effect waves-light" <?=(session('user_add_edit') != '1') ? 'disabled' : '';?>>Save</button>
                                             <button type="reset" id="reset" class="btn btn-danger" >Reset</button>
                                             <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="window.location='<?php echo $base_url.route_to('company_user_add'); ?>'">Cancel</button>
                                         </div> 
