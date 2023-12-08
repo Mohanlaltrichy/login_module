@@ -121,8 +121,8 @@ class company_user_controller extends BaseController
                     'name' => $fullname,
                     'email' => $email,
                     'address' => ($address != '') ? $address : null,
-                    'mobile' => ($mobile != '') ? $mobile : null,
-                    'phone' => ($phone != '') ? $phone : null,
+                    'mobile' => ($mobile_code != '') ? $mobile_code : null,
+                    'phone' => ($phone_code != '') ? $phone_code : null,
                     'designation' => ($designation != '') ? $designation : null,
                     'role_id' => $role,
                     'company_id' => $this->customer_id, //
@@ -210,8 +210,8 @@ class company_user_controller extends BaseController
 
     public function update_company_user()
     {
-        // try 
-        // {
+        try 
+        {
             if(session('user_view_and_edit_edit') == '1') {
 
                 $user_id = $this->request->getPost("user_id");
@@ -250,8 +250,8 @@ class company_user_controller extends BaseController
             $data = [
                 'name' => $fullname,
                 'email' => $email,
-                'phone' => ($phone != '') ? $phone : null,
-                'mobile' => ($mobile != '') ? $mobile : null,
+                'phone' => ($phone != '') ? $phone_code : null,
+                'mobile' => ($mobile != '') ? $mobile_code : null,
                 'address' => ($address != '') ? $address : null,
                 'role_id' => $role,
                 'designation' => ($designation != '') ? $designation : null,
@@ -274,11 +274,11 @@ class company_user_controller extends BaseController
             exit;
         }
 
-        // } catch (\Exception $e) {
-        //     $currentURL = current_url();
-        //     $this->company_user_model->error('company_user\company_user_controller', $currentURL, 'update_company_user', $e->getMessage());
-        //     return redirect()->route('global_catch_error');
-        // }
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->company_user_model->error('company_user\company_user_controller', $currentURL, 'update_company_user', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
     }
 
     //Deleted Code

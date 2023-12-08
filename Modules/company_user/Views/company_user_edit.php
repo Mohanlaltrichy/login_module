@@ -6,7 +6,7 @@ $customlibraries = new customlibraries();
 echo $customlibraries->versioning('\Modules\company_user\Controllers\company_user_controller','company_user_custom_css'); //company_user Modules Custom CSS Files Included
 $base_url = rtrim(base_url(), '/');
 ?>
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/international-telephone-input.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
 
 <style>
     #phone,#mobile{
@@ -99,14 +99,14 @@ height: 35px;
 
                                             <label class="col-sm-1 control-label" for="phone">Phone</label>
                                             <div class="iti col-sm-3">
-                                            <input type="tel" name="phone" id="phone" value=" ">
+                                            <input type="tel" name="phone" id="phone" value='<?=$user_details[0]['phone'];?>' onblur="phone_check(event)">
                                             </div>
                                         </div>
                                             
                                         <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="zone">Mobile</label>
                                             <div class="iti col-sm-3">
-                                            <input type="tel" name="mobile" value=" " id="mobile">
+                                            <input type="tel" name="mobile" value='<?=$user_details[0]['mobile'];?>' id="mobile" onblur="process(event)">
                                             </div>
 
                                             <label class="col-sm-1 control-label" for="zone">Password</label>
@@ -191,18 +191,45 @@ height: 35px;
 <?php
 echo view('\Modules\global_templates\Views\global_footer'); // Footer File Included
 ?>
-<script>
-    $(document).ready(function(){
-    var ccc = $("#phone_code").val();
-    var vvv = $("#mob_code").val();
-     $("#phone").val(ccc);
-     $("#mobile").val(vvv);
-     $("#mobile").trigger("change");
-     $("#phone").trigger("change");
-});
-</script>
-<script src="<?php echo base_url(); ?>assets/js/international-telephone-input.js"></script>
 
+<script src="<?php echo base_url(); ?>assets/js/intlTelInput.min.js"></script>
+
+<script>
+    const phoneInputField = document.querySelector("#phone");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+    initialCountry: "in",
+      utilsScript: "<?php echo base_url(); ?>assets/js/utils.js",
+    });
+    const mobileInputField = document.querySelector("#mobile");
+    const mobileInput = window.intlTelInput(mobileInputField, {
+    initialCountry: "in",
+      utilsScript: "<?php echo base_url(); ?>assets/js/utils.js",
+    });
+    </script>
+
+    <script>
+    function phone_check(event) {
+        event.preventDefault();
+      const phoneNumber = phoneInput.getNumber();
+  $("#phone_code").val(phoneNumber)
+    }
+
+    const error = document.querySelector("#error-message");
+    error.style.display = "none";
+</script>
+<script>
+    function process(event) { 
+      event.preventDefault();
+      const mobileNumber = mobileInput.getNumber();
+      if (mobileInput.isValidNumber()) {
+   error.style.display = "none";
+   error.innerHTML = "ok";
+ } else {
+   error.style.display = "";
+   error.innerHTML = "Invalid Mobile number.";
+ }   $("#mob_code").val(mobileNumber);
+    }
+  </script>
 <?php
 echo $customlibraries->versioning('\Modules\company_user\Controllers\company_user_controller','company_user'); // Modules Custom Js File Included
 ?>
