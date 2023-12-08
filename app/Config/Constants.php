@@ -94,3 +94,9 @@ define('EVENT_PRIORITY_NORMAL', 100);
 define('EVENT_PRIORITY_HIGH', 10);
 
 define('EXCEL_IMPORT_ROW_LIMIT_COUNT', 1000);
+
+define('EDIT_PERMISSION', 'Edit Permission Not Available');
+
+define('DELETE_PERMISSION', 'Delete Permission Not Available');
+
+define('EDIT_AND_DELETE_PERMISSION', 'Edit And Delete Permission Not Available');

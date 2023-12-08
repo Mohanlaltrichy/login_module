@@ -63,7 +63,15 @@ $this->company_role_model = new company_role_model();
                             <!-- company_role Add Code Start -->
                             <div class="card">
                                 <div class="card-body">
-                                    <h3 class="m-t-0 m-b-30">Roles</h3>
+                                    <div class="m-t-0 m-b-30"><h3>Roles <span class="float-right" style="font-size:12px;color:red;">
+                                    <?php
+                                    if(session('roles_view_and_edit_edit') != '1')
+                                    { 
+                                        echo EDIT_PERMISSION;
+                                    } 
+                                    ?></span>
+                                    </h3>
+                                    </div>
 
                                     <form class="form-horizontal" id="update_company_role_client_config" action="<?php echo $base_url.route_to('company_role_update'); ?>" method="post" data-parsley-validate>
                                         

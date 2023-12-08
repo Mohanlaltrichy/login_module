@@ -81,7 +81,14 @@ height: 35px;
                             <!-- mqtt Add Code Start -->
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="m-t-0 m-b-30">Create User</h4>
+                                    <div class="m-t-0 m-b-30"><h3>Create User <span class="float-right" style="font-size:12px;color:red;">
+                                    <?php
+                                    if(session('user_add_edit') != '1')
+                                    {
+                                        echo EDIT_PERMISSION;
+                                    } 
+                                    ?></span>
+                                    </h3></div>
 
                                     <form class="form-horizontal" id="company_user_form" action="<?php echo $base_url.route_to('save_company_user'); ?>" method="post" data-parsley-validate>
                                         <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />

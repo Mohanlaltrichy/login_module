@@ -65,7 +65,26 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
             <div class="col-sm-12">
                 <div class="card">               
                     <div class="card-body">
-                    <div id="heading1"><h3 class="m-0">Users</h3></div>
+                    <div id="heading1">
+                        <h3 class="m-0">Users
+                            <span class="float-right" style="font-size:12px;color:red;">
+                            <?php
+                            if(session('user_view_and_edit_edit') != '1' && session('user_view_and_edit_delete') != '1')
+                            {
+                                echo EDIT_AND_DELETE_PERMISSION;
+                            }
+                            else if(session('user_view_and_edit_edit') != '1')
+                            {
+                                echo EDIT_PERMISSION;
+                            }
+                            else if(session('user_view_and_edit_delete') != '1')
+                            {
+                                echo DELETE_PERMISSION;
+                            }
+                            ?>
+                            </span>
+                        </h3>
+                    </div>
                         <div class="row" style="margin-top:20px;margin-left:-10px;">
                             <div class="col-sm-12">
                                 <table id="datatable-fixed-header" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; width: 100%;">
