@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                © 2023 Unfold Technologies
+                © <?=date('Y');?> Unfold Technologies
             </div>
         </div>
     </div>
