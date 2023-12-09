@@ -361,20 +361,21 @@
      //Update Company Role
      $('#update_company_role').click(function(){
 
-        var form =$('#update_company_role_client_config').parsley();        
+        var form =$('#update_company_role_client_config').parsley();     
         form.validate();
 
         if (form.isValid()) {
-            $('.custom_update_model_alert').modal('show');        
+            $('form#update_company_role_client_config').submit();
+            // $('.custom_update_model_alert').modal('show');        
         }
     });
 
     //Update Rrigger
-    $(document).on('click','#update_save_changes', function()
-    {
-        $('.custom_update_model_alert').modal('hide');
-        $('form#update_company_role_client_config').submit();
-    });
+    // $(document).on('click','#update_save_changes', function()
+    // {
+    //     $('.custom_update_model_alert').modal('hide');
+    //     $('form#update_company_role_client_config').submit();
+    // });
 
     //Delete Role            
     $(document).on('click','#delete_role_list', function()

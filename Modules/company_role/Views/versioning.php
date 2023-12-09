@@ -3,7 +3,7 @@ if($page_type=='company_role')
 {     
 ?>
 <!--- company_role Modules Custom Js File -->
-<script src="<?php echo base_url(); ?>assets/md_js/company_role.js?v=1.5"></script>
+<script src="<?php echo base_url(); ?>assets/md_js/company_role.js?v=1.6"></script>
 <!--- company_role Modules Custom Js File -->
 <?php 
 } 
