@@ -86,7 +86,7 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
 
         //Open Alert And Notification
         function open_alert_and_notify() {
-            window.open('http://localhost:8000/user_login_key_validation/<?=$login_key;?>', '_blank');
+            window.open('http://localhost:8001/user_login_key_validation/<?=$login_key;?>', '_blank');
         }
     </script>
 
