@@ -25,7 +25,7 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'loginfilter'   => loginfilter::class,
-        'isloggedfilter'=> isloggedfilter::class,
+        'isloggedfilter' => isloggedfilter::class,
         'exception'     => exceptionhook::class,
     ];
 
@@ -36,7 +36,7 @@ class Filters extends BaseConfig
     public array $globals = [
         'before' => [
             // 'honeypot',
-            'csrf' =>['except' => ['company_role/company_role_duplicate_check','company_role/roledelete']],
+            'csrf' => ['except' => ['company_role/company_role_duplicate_check', 'company_role/roledelete', 'group/groupdelete', 'group/group_user_update', 'group/group_duplicate_check']],
             // 'invalidchars',
         ],
         'after' => [

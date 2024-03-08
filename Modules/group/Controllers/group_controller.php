@@ -1,0 +1,355 @@
+<?php
+
+namespace Modules\group\Controllers;
+
+use App\Controllers\BaseController;
+use Modules\group\Models\group_model;
+use App\Libraries\customlibraries;
+
+class group_controller extends BaseController
+{
+    protected $group_model;
+    protected $customer_id;
+    protected $logged_user_id;
+    protected $local_date_time;
+
+    public function __construct()
+    {
+        $this->group_model = new group_model();
+        $this->customer_id = session('Taguser_company');
+        $this->logged_user_id = session('Taguser_id');
+        $customlibraries = new customlibraries();
+        $this->local_date_time = $customlibraries->local_date_time();
+    }
+
+    //Group add View
+    public function index()
+    {
+        try {
+            return view("\Modules\group\Views\group_add");
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'index', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    //Group Save
+    public function group_save()
+    {
+        try {
+
+            $group_name = $this->request->getPost("group_name");
+            $description = $this->request->getPost("description");
+            $reports_dashboard = $this->request->getPost("reports_dashboard");
+            $status = $this->request->getPost("status");
+
+
+            $group_data_whereConditions = [
+                'grp_name' => $group_name,
+                'company_id' => $this->customer_id,
+            ];
+
+            $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_data_whereConditions);
+
+            if (empty($result)) {
+
+                $data = array(
+                    'company_id' => $this->customer_id,
+                    'grp_name' => $group_name,
+                    'grp_desc' => $description,
+                    'reports_dashboard' => ($reports_dashboard == 'reports_dashboard') ? 1 : 0,
+                    'active_status' => $status,
+                    'utc_created_at' => date('Y-m-d H:i:s'),
+                    'local_created_at' => $this->local_date_time,
+                    'created_by' => $this->logged_user_id,
+                );
+
+                $group_add = $this->group_model->insertData('tbl_group', $data);
+
+                if ($group_add) {
+                    session()->setFlashdata('success', 'Group Successfully Added.');
+                }
+            } else {
+                session()->setFlashdata('duplicate_record_found', 'Group name already exists');
+            }
+
+            return redirect()->route('group');
+
+            exit();
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'group_save', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    //Get Group Name Available Check
+    public function group_duplicate_check()
+    {
+        try {
+            if ($this->request->isAJAX()) {
+
+                $group_name = $this->request->getGet("group_name");
+
+                $role_data_whereConditions = [
+                    'grp_name' => $group_name,
+                    'company_id' => $this->customer_id,
+                ];
+
+                $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $role_data_whereConditions);
+
+                if (!empty($result)) {
+                    $group_name = $result[0]['grp_name'];
+                } else {
+                    $group_name = '';
+                }
+
+                $data = array('group_name' => $group_name);
+
+                return $this->response->setJSON($data);
+            }
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'group_duplicate_check', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    //Company Group List View
+    public function group_list()
+    {
+        try {
+
+            $group_data_whereConditions = [
+                'company_id' => $this->customer_id,
+            ];
+
+            $result = $this->group_model->GetTableValue('tbl_group', 'id,grp_name,grp_desc,reports_dashboard,active_status,local_created_at', $group_data_whereConditions, '', '', '', 'id', 'desc');
+
+            $data = array('result' => $result);
+
+            return view("\Modules\group\Views\group_list", $data);
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'group_list', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    public function group_user_view($id = 0)
+    {
+        try {
+
+            $group_whereConditions = [
+                'id' => $id
+            ];
+
+            $group_details = $this->group_model->GetTableValue('tbl_group', 'grp_name,grp_desc', $group_whereConditions);
+
+            $group_mapped_user_data_whereConditions = [
+                'company_id' => $this->customer_id,
+                'status' => 'active'
+            ];
+            $result = $this->group_model->GetTableValue('users', 'id,name,city,designation,mobile,email', $group_mapped_user_data_whereConditions, '', '', '', 'id', 'desc');
+
+            $data = array('group_details' => $group_details, 'result' => $result, 'group_id' => $id);
+
+            return view("\Modules\group\Views\group_user_view", $data);
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'group_user_view', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    public function group_user_edit($id = 0)
+    {
+        try {
+
+            $group_whereConditions = [
+                'id' => $id
+            ];
+
+            $group_details = $this->group_model->GetTableValue('tbl_group', 'grp_name,grp_desc', $group_whereConditions);
+
+            $group_mapped_user_data_whereConditions = [
+                'company_id' => $this->customer_id,
+                'status' => 'active'
+            ];
+            $result = $this->group_model->GetTableValue('users', 'id,name,city,designation,mobile,email', $group_mapped_user_data_whereConditions, '', '', '', 'id', 'desc');
+
+            $data = array('group_details' => $group_details, 'result' => $result, 'group_id' => $id);
+
+            return view("\Modules\group\Views\group_user_edit", $data);
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'group_user_edit', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    //Group Edit Code
+    public function group_edit($id = 0)
+    {
+        try {
+
+            $group_edit_where = [
+                'id' => $id,
+            ];
+
+            $group_details = $this->group_model->GetTableValue('tbl_group', '*', $group_edit_where);
+
+            $data = array(
+                'group_details' => $group_details,
+            );
+
+            return view("\Modules\group\Views\group_edit", $data);
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'group_edit', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    //Update Group
+    public function group_update()
+    {
+        try {
+
+
+            $group_id = $this->request->getPost("group_id");
+            $grp_name = $this->request->getPost("grp_name");
+            $description = $this->request->getPost("description");
+            $reports_dashboard = $this->request->getPost("reports_dashboard");
+            $status = $this->request->getPost("status");
+
+            $group_data_whereConditions = [
+                'id' => $group_id,
+                'grp_name' => $grp_name,
+                'company_id' => $this->customer_id,
+            ];
+
+            $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_data_whereConditions);
+
+            if (!empty($result)) {
+                $update_whereConditions = [
+                    'id' => $group_id,
+                    'company_id' => $this->customer_id,
+                ];
+
+
+                $data = array(
+                    'company_id' => $this->customer_id,
+                    'grp_desc' => $description,
+                    'reports_dashboard' => ($reports_dashboard == 'reports_dashboard') ? 1 : 0,
+                    'active_status' => $status,
+                    'utc_updated_at' => date('Y-m-d H:i:s'),
+                    'local_updated_at' => $this->local_date_time,
+                    'updated_by' => $this->logged_user_id,
+                );
+
+                $group_update = $this->group_model->updateData('tbl_group', $update_whereConditions, $data);
+
+                session()->setFlashdata('success', 'Group Successfully Updated.');
+            } else {
+                session()->setFlashdata('msg', 'Group Name Not Exists');
+            }
+
+            return redirect()->route('group_list');
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'group_update', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    //Deleted Code
+    public function groupdelete()
+    {
+        try {
+
+            if ($this->request->isAJAX()) {
+
+                $id = $this->request->getGet("id");
+
+                $group_whereConditions = [
+                    'id' => $id,
+                ];
+
+                $data = [
+                    'active_status' => 'inactive',
+                    'utc_updated_at' => date('Y-m-d H:i:s'),
+                    'local_updated_at' => $this->local_date_time,
+                    'updated_by' => $this->logged_user_id,
+                ];
+
+                $this->group_model->updateData('tbl_group', $group_whereConditions, $data);
+
+                session()->removeTempdata('group_deleted_success');
+                session()->setTempdata('group_deleted_success', 'group Successfully Deleted');
+
+                $result = array('success' => 'success');
+                echo json_encode($result);
+            }
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'groupdelete', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    //User Update
+    public function group_user_update()
+    {
+        try {
+
+            if ($this->request->isAJAX()) {
+
+                $group_id = $this->request->getGet("group_id");
+                $user_checkedIds = $this->request->getGet("user_checkedIds");
+
+                $group_user_mapped_delete_whereConditions = [
+                    'grpid' => $group_id,
+                ];
+
+                $this->group_model->deleteData('tbl_user_mapping', $group_user_mapped_delete_whereConditions);
+
+                $data = [];
+                if (!empty($user_checkedIds)) {
+                    foreach ($user_checkedIds as $user_id) {
+                        $data[] = array(
+                            'grpid' => $group_id,
+                            'user_id' => $user_id,
+                            'active' => '0',
+                        );
+                    }
+                }
+
+                $this->group_model->insertBatchData('tbl_user_mapping', $data);
+
+                session()->removeTempdata('group_user_success');
+                session()->setTempdata('group_user_success', 'Group User Successfully Updated');
+
+                $result = array('success' => 'success');
+                echo json_encode($result);
+            }
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->group_model->error('group\group_controller', $currentURL, 'groupdelete', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+
+
+    //JS Vesrioning File Get
+    public function versioning($page_type = '')
+    {
+        $data = [
+            'page_type' => $page_type,
+        ];
+
+        return view('\Modules\group\Views\versioning', $data);
+    }
+}
