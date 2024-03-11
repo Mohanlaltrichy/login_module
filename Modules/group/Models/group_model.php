@@ -162,7 +162,8 @@ class group_model extends Model
             $builder = $this->mysqldb->table($table);
             $result = $builder->insert($data);
             $this->mysqldb->transComplete();
-            return $this->mysqldb->insertID();
+            return $result;
+            // return $this->mysqldb->insertID();
         } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error('group\group_model', $currentURL, 'insertData', $e->getMessage());

@@ -100,11 +100,13 @@ $this->group_model = new group_model();
                                             <label class="col-sm-2 control-label" for="modules">Modules<span>*</span>
                                             </label>
                                             <div class="col-sm-5">
-                                                <input name='reports_dashboard' class="reports_dashboard_checkbox" value='reports_dashboard' <?= ($group_details[0]['reports_dashboard'] == '1') ? 'checked' : ''; ?> data-parsley-errors-container="#reports_dashboard_req_errors" type="checkbox" required>
-                                                <label for="reports_dashboard">
-                                                    Report & Dasboard
-                                                </label>
-                                                <div id="reports_dashboard_req_errors"></div>
+                                                <?php foreach ($modules as $m) { ?>
+                                                    <input name='modules[]' class="modules_checkbox" value='<?= $m['modules_option_name'] ?>' <?= ($group_details[0][$m['modules_option_name']] == '1') ? 'checked' : ''; ?> data-parsley-errors-container="#modules_req_errors" type="checkbox" required>
+                                                    <label for="modules">
+                                                        <?= $m['modules'] ?> &nbsp;
+                                                    </label>
+                                                <?php } ?>
+                                                <div id="modules_req_errors"></div>
                                             </div>
                                         </div>
                                         <!-- Modules Code End -->

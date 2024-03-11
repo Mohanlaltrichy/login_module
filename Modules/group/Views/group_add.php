@@ -95,11 +95,13 @@ $base_url = rtrim(base_url(), '/');
                                             <label class="col-sm-2 control-label" for="modules">Modules<span>*</span>
                                             </label>
                                             <div class="col-sm-5">
-                                                <input name='reports_dashboard' class="reports_dashboard_checkbox" value='reports_dashboard' data-parsley-errors-container="#reports_dashboard_req_errors" type="checkbox" required>
-                                                <label for="reports_dashboard">
-                                                    Report & Dasboard
-                                                </label>
-                                                <div id="reports_dashboard_req_errors"></div>
+                                                <?php foreach ($modules as $m) { ?>
+                                                    <input name='modules[]' class="modules_checkbox" value='<?= $m['modules_option_name'] ?>' data-parsley-errors-container="#modules_req_errors" type="checkbox" required>
+                                                    <label for="modules">
+                                                        <?= $m['modules'] ?> &nbsp;
+                                                    </label>
+                                                <?php } ?>
+                                                <div id="modules_req_errors"></div>
                                             </div>
                                         </div>
                                         <!-- Modules Code End -->

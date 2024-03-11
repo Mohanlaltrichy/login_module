@@ -26,7 +26,18 @@ class group_controller extends BaseController
     public function index()
     {
         try {
-            return view("\Modules\group\Views\group_add");
+
+            $group_modules_whereConditions = [
+                'active' => 'Y',
+            ];
+
+            $modules = $this->group_model->GetTableValue('group_modules', 'modules_option_name,modules', $group_modules_whereConditions);
+
+            $data = array(
+                'modules' => $modules,
+            );
+
+            return view("\Modules\group\Views\group_add", $data);
         } catch (\Exception $e) {
             $currentURL = current_url();
             $this->group_model->error('group\group_controller', $currentURL, 'index', $e->getMessage());
@@ -41,9 +52,8 @@ class group_controller extends BaseController
 
             $group_name = $this->request->getPost("group_name");
             $description = $this->request->getPost("description");
-            $reports_dashboard = $this->request->getPost("reports_dashboard");
+            $modules = $this->request->getPost("modules");
             $status = $this->request->getPost("status");
-
 
             $group_data_whereConditions = [
                 'grp_name' => $group_name,
@@ -52,18 +62,24 @@ class group_controller extends BaseController
 
             $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_data_whereConditions);
 
+
             if (empty($result)) {
 
                 $data = array(
                     'company_id' => $this->customer_id,
                     'grp_name' => $group_name,
                     'grp_desc' => $description,
-                    'reports_dashboard' => ($reports_dashboard == 'reports_dashboard') ? 1 : 0,
                     'active_status' => $status,
                     'utc_created_at' => date('Y-m-d H:i:s'),
                     'local_created_at' => $this->local_date_time,
                     'created_by' => $this->logged_user_id,
                 );
+
+                if (!empty($modules)) {
+                    foreach ($modules as $m) {
+                        $data[$m] = '1';
+                    }
+                }
 
                 $group_add = $this->group_model->insertData('tbl_group', $data);
 
@@ -125,9 +141,15 @@ class group_controller extends BaseController
                 'company_id' => $this->customer_id,
             ];
 
-            $result = $this->group_model->GetTableValue('tbl_group', 'id,grp_name,grp_desc,reports_dashboard,active_status,local_created_at', $group_data_whereConditions, '', '', '', 'id', 'desc');
+            $result = $this->group_model->GetTableValue('tbl_group', '*', $group_data_whereConditions, '', '', '', 'id', 'desc');
 
-            $data = array('result' => $result);
+            $group_modules_whereConditions = [
+                'active' => 'Y',
+            ];
+
+            $modules = $this->group_model->GetTableValue('group_modules', 'modules_option_name,modules', $group_modules_whereConditions);
+
+            $data = array('result' => $result, 'modules' => $modules);
 
             return view("\Modules\group\Views\group_list", $data);
         } catch (\Exception $e) {
@@ -200,8 +222,15 @@ class group_controller extends BaseController
 
             $group_details = $this->group_model->GetTableValue('tbl_group', '*', $group_edit_where);
 
+            $group_modules_whereConditions = [
+                'active' => 'Y',
+            ];
+
+            $modules = $this->group_model->GetTableValue('group_modules', 'modules_option_name,modules', $group_modules_whereConditions);
+
             $data = array(
                 'group_details' => $group_details,
+                'modules' => $modules,
             );
 
             return view("\Modules\group\Views\group_edit", $data);
@@ -221,7 +250,7 @@ class group_controller extends BaseController
             $group_id = $this->request->getPost("group_id");
             $grp_name = $this->request->getPost("grp_name");
             $description = $this->request->getPost("description");
-            $reports_dashboard = $this->request->getPost("reports_dashboard");
+            $modules = $this->request->getPost("modules");
             $status = $this->request->getPost("status");
 
             $group_data_whereConditions = [
@@ -233,21 +262,39 @@ class group_controller extends BaseController
             $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_data_whereConditions);
 
             if (!empty($result)) {
+
+                $group_modules_whereConditions = [
+                    'active' => 'Y',
+                ];
+
+                $modules_update = $this->group_model->GetTableValue('group_modules', 'modules_option_name', $group_modules_whereConditions);
+
                 $update_whereConditions = [
                     'id' => $group_id,
                     'company_id' => $this->customer_id,
                 ];
 
+                foreach ($modules_update as $mu) {
+                    $mu_update_data = array(
+                        $mu['modules_option_name'] => '0'
+                    );
+                    $this->group_model->updateData('tbl_group', $update_whereConditions, $mu_update_data); //All Modules First '0' Set
+                }
 
                 $data = array(
                     'company_id' => $this->customer_id,
                     'grp_desc' => $description,
-                    'reports_dashboard' => ($reports_dashboard == 'reports_dashboard') ? 1 : 0,
                     'active_status' => $status,
                     'utc_updated_at' => date('Y-m-d H:i:s'),
                     'local_updated_at' => $this->local_date_time,
                     'updated_by' => $this->logged_user_id,
                 );
+
+                if (!empty($modules)) {
+                    foreach ($modules as $m) {
+                        $data[$m] = '1';
+                    }
+                }
 
                 $group_update = $this->group_model->updateData('tbl_group', $update_whereConditions, $data);
 
@@ -321,7 +368,7 @@ class group_controller extends BaseController
                         $data[] = array(
                             'grpid' => $group_id,
                             'user_id' => $user_id,
-                            'active' => '0',
+                            'active' => 'Y',
                         );
                     }
                 }

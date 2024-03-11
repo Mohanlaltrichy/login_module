@@ -94,7 +94,7 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                                                 $user_check_where = [
                                                     'grpid' => $group_id,
                                                     'user_id' => $item['id'],
-                                                    'active' => '0'
+                                                    'active' => 'Y'
                                                 ];
                                                 $user_mapped_check = $this->group_model->GetTableValue('tbl_user_mapping', 'id', $user_check_where);
                                             ?>

@@ -77,7 +77,9 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                                         <tr>
                                             <th>Group name</th>
                                             <th data-orderable="false">Description</th>
-                                            <th>Report & Dashboard</th>
+                                            <?php foreach ($modules as $m) { ?>
+                                                <th><?= $m['modules'] ?></th>
+                                            <?php } ?>
                                             <th>Group Details</th>
                                             <th>Map User</th>
                                             <th>Status</th>
@@ -93,7 +95,9 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                                                 <tr>
                                                     <td><?= $item['grp_name']; ?></td>
                                                     <td><?= $item['grp_desc']; ?></td>
-                                                    <td><?= ($item['reports_dashboard'] == 1) ? 'yes' : 'no'; ?></td>
+                                                    <?php foreach ($modules as $m) { ?>
+                                                        <td><?= ($item[$m['modules_option_name']] == '1') ? 'yes' : 'no'; ?></td>
+                                                    <?php } ?>
                                                     <th><a href="<?= $base_url . route_to('group_user_view', $item['id']); ?>" class="badge badge-primary"><i class="fa fa-eye"></i> &nbsp; View </a></th>
                                                     <th><a href="<?= $base_url . route_to('group_user_edit', $item['id']); ?>" class="badge badge-primary"> Edit User <i class="fa fa-edit">
                                                             </i></a></th>
