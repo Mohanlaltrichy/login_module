@@ -72,6 +72,12 @@ class company_role_controller extends BaseController
             ];
 
             $bulk_import_list_module_data = $this->company_role_model->get_page_details($bulk_import_status_module_like);
+
+            $dashboard_status_module_like = [
+                'tcp.page_name' => 'dashboard'
+            ];
+
+            $dashboard_module_data = $this->company_role_model->get_page_details($dashboard_status_module_like);
             
             $data = array(
                 'roles_module_data' => $roles_module_data,
@@ -81,6 +87,7 @@ class company_role_controller extends BaseController
                 'http_module_data' => $http_module_data,
                 'tag_module_data' => $tag_module_data,               
                 'bulk_import_list_module_data' => $bulk_import_list_module_data,
+                'dashboard_module_data' => $dashboard_module_data
             );
 
             return view("\Modules\company_role\Views\company_role",$data);
@@ -137,6 +144,11 @@ class company_role_controller extends BaseController
                 $bulk_checkbox_view = $this->request->getPost("bulk_checkbox_view");          
                 $bulk_checkbox_edit = $this->request->getPost("bulk_checkbox_edit");            
                 $bulk_checkbox_delete = $this->request->getPost("bulk_checkbox_delete");
+                $dashboard_checkbox_id = $this->request->getPost("dashboard_checkbox_id");     
+                $dashboard_all_checkbox_value = $this->request->getPost("dashboard_all_checkbox_value");
+                $dashboard_checkbox_view = $this->request->getPost("dashboard_checkbox_view");          
+                $dashboard_checkbox_edit = $this->request->getPost("dashboard_checkbox_edit");            
+                $dashboard_checkbox_delete = $this->request->getPost("dashboard_checkbox_delete");
 
                 $role_data_whereConditions = [
                     'role_name' => $role_name,                    
@@ -147,7 +159,7 @@ class company_role_controller extends BaseController
 
                 if(empty($result))
                 {
-                    $roles_add = $this->company_role_model->add_page_roles_details($role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete);
+                    $roles_add = $this->company_role_model->add_page_roles_details($role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete);
 
                     if($roles_add)
                     {
@@ -246,7 +258,7 @@ class company_role_controller extends BaseController
                 'company_id' => $this->customer_id,                                        
             ];
 
-            $roles_details = $this->company_role_model->GetTableValue('tbl_roles', 'id,role_name,description,roles_all_pages,users_all_pages,opc_all_pages,mqtt_all_pages,http_all_pages,tag_all_pages,bulk_import_status_all_pages,status', $role_data_whereConditions);
+            $roles_details = $this->company_role_model->GetTableValue('tbl_roles', 'id,role_name,description,roles_all_pages,users_all_pages,opc_all_pages,mqtt_all_pages,http_all_pages,tag_all_pages,bulk_import_status_all_pages,dashboard_status_all_pages,status', $role_data_whereConditions);
 
             if(empty($roles_details))
             {
@@ -294,6 +306,12 @@ class company_role_controller extends BaseController
             ];
 
             $bulk_import_list_module_data = $this->company_role_model->get_page_details($bulk_import_status_module_like);
+
+            $dashboard_status_module_like = [
+                'tcp.page_name' => 'dashboard'
+            ];
+
+            $dashboard_module_data = $this->company_role_model->get_page_details($dashboard_status_module_like);
             
             $data = array(
                 'roles_details' => $roles_details,
@@ -304,6 +322,7 @@ class company_role_controller extends BaseController
                 'http_module_data' => $http_module_data,
                 'tag_module_data' => $tag_module_data,             
                 'bulk_import_list_module_data' => $bulk_import_list_module_data,
+                'dashboard_module_data' => $dashboard_module_data,
             );
 
             return view("\Modules\company_role\Views\company_role_edit",$data);
@@ -361,6 +380,11 @@ class company_role_controller extends BaseController
                 $bulk_checkbox_view = $this->request->getPost("bulk_checkbox_view");          
                 $bulk_checkbox_edit = $this->request->getPost("bulk_checkbox_edit");            
                 $bulk_checkbox_delete = $this->request->getPost("bulk_checkbox_delete");
+                $dashboard_checkbox_id = $this->request->getPost("dashboard_checkbox_id");     
+                $dashboard_all_checkbox_value = $this->request->getPost("dashboard_all_checkbox_value");
+                $dashboard_checkbox_view = $this->request->getPost("dashboard_checkbox_view");          
+                $dashboard_checkbox_edit = $this->request->getPost("dashboard_checkbox_edit");            
+                $dashboard_checkbox_delete = $this->request->getPost("dashboard_checkbox_delete");
 
                 $role_data_whereConditions = [
                     'id' => $role_id,
@@ -372,7 +396,7 @@ class company_role_controller extends BaseController
 
                 if(!empty($result))
                 {
-                    $roles_update = $this->company_role_model->update_page_roles_details($role_id, $role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete);
+                    $roles_update = $this->company_role_model->update_page_roles_details($role_id, $role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete);
                 
                     session()->setFlashdata('success', 'Roles Successfully Updated.');             
                 }

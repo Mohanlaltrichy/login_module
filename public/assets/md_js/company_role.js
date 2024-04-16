@@ -124,7 +124,25 @@
         }
     });
 
-    $('.roles_checkbox, .users_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox').change(function()
+    $('#dashboard_all_checkbox').change(function()
+    {
+        var isChecked = $(this).prop("checked");
+
+        if(isChecked == true)
+        {
+            $('.dashboard_checkbox').prop("checked",true);
+            $('#dashboard_all_checkbox_value').val('1');
+            $('.dashboard_checkbox_value').val('1');
+        }
+        else
+        {
+            $('.dashboard_checkbox').prop("checked",false);
+            $('#dashboard_all_checkbox_value').val('0');
+            $('.dashboard_checkbox_value').val('0');
+        }
+    });
+
+    $('.roles_checkbox, .users_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox').change(function()
     {
         var isChecked = $(this).prop("checked"); 
         var data_name = $(this).data('name');
@@ -143,7 +161,7 @@
             else if(data_name == 'can_delete')
             {
                 $('#checkbox_delete_'+data_id).val('1');
-            }
+            }            
         }
         else
         {
@@ -158,7 +176,7 @@
             else if(data_name == 'can_delete')
             {
                 $('#checkbox_delete_'+data_id).val('0');
-            }
+            }            
         }
 
         if($(this).hasClass('roles_checkbox'))
@@ -292,6 +310,25 @@
             {               
                 $('#bulk_all_checkbox').prop("checked", false);
                 $('#bulk_all_checkbox_value').val('0');
+            }
+        }
+        else if($(this).hasClass('dashboard_checkbox'))
+        {
+            var dashboard_checkboxes = document.querySelectorAll('.dashboard_checkbox_div input[type="checkbox"]');
+
+            var dashboard_allChecked = Array.from(dashboard_checkboxes).every(function(dashboardcheckbox) {
+            return dashboardcheckbox.checked;
+            });
+
+            if(dashboard_allChecked == true)
+            {              
+                $('#dashboard_all_checkbox').prop("checked", true);
+                $('#dashboard_all_checkbox_value').val('1');
+            }
+            else
+            {               
+                $('#dashboard_all_checkbox').prop("checked", false);
+                $('#dashboard_all_checkbox_value').val('0');
             }
         }
 

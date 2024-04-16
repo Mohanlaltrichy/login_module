@@ -424,7 +424,55 @@ $base_url = rtrim(base_url(), '/');
                                                     ?>                                                    
                                                 </div>
                                             </div>
-                                            <!-- Bulk Import List View Role Code End -->                                            
+                                            <!-- Bulk Import List View Role Code End -->                                     
+
+                                             <!-- Dashboard Role Code Start -->
+                                             <h3 class="col-lg-12 mb-3">Dashboard</h3>                                                
+                                             <div class="col-lg-12">                                                                                                      
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Dashboard</b>
+                                                <input name="dashboard_all_checkbox_value" id="dashboard_all_checkbox_value" value='0' type="hidden">
+                                                <span class="checkbox">
+                                                <input id="dashboard_all_checkbox" class="form-check-inline" type="checkbox">
+                                                    <label for="dashboard_all_checkbox">
+                                                        Select all pages
+                                                    </label>
+                                                </span>
+                                                </h5> 
+                                                    
+                                                <div class="form-group row">
+                                                    <?php if(!empty($dashboard_module_data))
+                                                    {                                                        
+                                                        foreach($dashboard_module_data as $dashboard_role)
+                                                        {                                                           
+                                                    ?>
+                                                    <div class="col-sm-6 mb-3">                                                   
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$dashboard_role['page_name'])); ?></b></label> 
+                                                        <input name="dashboard_checkbox_id[]" value='<?=$dashboard_role['id'];?>' type="hidden">
+                                                        <input name="dashboard_checkbox_view[]" id="checkbox_view_<?=$dashboard_role['id'];?>" class='dashboard_checkbox_value' value='0' type="hidden">
+                                                        <input name="dashboard_checkbox_edit[]" id="checkbox_edit_<?=$dashboard_role['id'];?>" class='dashboard_checkbox_value' value='0' type="hidden">
+                                                        <input name="dashboard_checkbox_delete[]" id="checkbox_delete_<?=$dashboard_role['id'];?>" class='dashboard_checkbox_value' value='0' type="hidden">                                                                                                                                     
+                                                        <span class="checkbox dashboard_checkbox_div">                                                            
+                                                            <input data-name='can_view' data-id='<?=$dashboard_role['id'];?>' class="col-sm-2 dashboard_checkbox" type="checkbox">                                                            
+                                                            <label for="checkbox_view_<?=$dashboard_role['id'];?>">
+                                                                Can View
+                                                            </label>
+                                                            <input data-name='can_edit' data-id='<?=$dashboard_role['id'];?>' class="col-sm-2 dashboard_checkbox" type="checkbox">                                                            
+                                                            <label for="checkbox_edit_<?=$dashboard_role['id'];?>">
+                                                                Can Edit
+                                                            </label>
+                                                            <input data-name='can_delete' data-id='<?=$dashboard_role['id'];?>' class="col-sm-2 dashboard_checkbox" type="checkbox">                                                            
+                                                            <label for="checkbox_delete_<?=$dashboard_role['id'];?>">
+                                                                Can Delete
+                                                            </label>                                                            
+                                                        </span>                                              
+                                                    </div>                                                    
+                                                    <?php                                                        
+                                                        }
+                                                    }
+                                                    ?>                                                    
+                                                </div>
+                                            </div>                                            
+                                            <!-- Dashboard Role Code End -->  
 
                                         </div>
                                         <!--  Setting Role Display Code End -->
