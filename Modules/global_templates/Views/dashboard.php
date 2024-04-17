@@ -55,6 +55,26 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
                     </div>
                 </div>
             </div>
+            <div class="col-sm-6 col-xl-2">
+                <div class="card" style="background-color:#E6007E;">
+                    <div onclick="open_dashboard()" target="_blank"> 
+                    <img src="<?php echo base_url(); ?>assets/images/dashboard.png" style='padding: 10px 10px;' width='100px;' height='100px;' alt="user-img">
+                        <div class="card-heading1 text-right" style="font-size: 15px;">                                               
+                            <b>Dashboard</b>                     
+                        </div>                     
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-2">
+                <div class="card" style="background-color:#164194;">
+                    <div onclick="open_reports()" target="_blank"> 
+                    <img src="<?php echo base_url(); ?>assets/images/reports.png" style='padding: 10px 10px;' width='100px;' height='100px;' alt="user-img">
+                        <div class="card-heading1 text-right" style="font-size: 15px;">                                               
+                            <b>Reports</b>                     
+                        </div>                     
+                    </div>
+                </div>
+            </div>
         </div>    
                  
     </div>
@@ -87,6 +107,14 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
         //Open Alert And Notification
         function open_alert_and_notify() {
             window.open('http://localhost:8001/user_login_key_validation/<?=$login_key;?>', '_blank');
+        }
+
+        function open_dashboard() {
+            window.open('http://localhost:9002/login/user_login_key_validation/<?=$login_key;?>', '_blank');
+        }
+
+        function open_reports() {
+            window.open('http://localhost:3000/dashboard/report_login/<?=$login_key;?>', '_blank');
         }
     </script>
 

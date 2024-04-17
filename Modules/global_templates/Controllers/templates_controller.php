@@ -95,12 +95,14 @@ class templates_controller extends BaseController
         {
             $data = array(
                 'login_key' => ($user_details[0]['login_key']) ? $user_details[0]['login_key'] : '',
+                'user_id' => session('Taguser_id'), 
             );
         }
         else
         {
             $data = array(
                 'login_key' => '',
+                'user_id' => session('Taguser_id'), 
             );
         }
 
