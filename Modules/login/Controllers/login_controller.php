@@ -157,18 +157,18 @@ class login_controller extends BaseController
                         'roles_view_and_edit_delete' => $roles_view_and_edit_delete
                     );
                 }  
-                else if($roles['page_id'] == '37')
-                {
-                    $login_module_dashboard_view = ($roles['can_view'] == 'Y') ? '1' : '0';
-                    $login_module_dashboard_edit = ($roles['can_edit'] == 'Y') ? '1' : '0';
-                    $login_module_dashboard_delete = ($roles['can_delete'] == 'Y') ? '1' : '0';
+                // else if($roles['page_id'] == '37')
+                // {
+                //     $login_module_dashboard_view = ($roles['can_view'] == 'Y') ? '1' : '0';
+                //     $login_module_dashboard_edit = ($roles['can_edit'] == 'Y') ? '1' : '0';
+                //     $login_module_dashboard_delete = ($roles['can_delete'] == 'Y') ? '1' : '0';
 
-                    $roles_details[] = array(
-                        'login_module_dashboard_view' => $login_module_dashboard_view,
-                        'login_module_dashboard_edit' => $login_module_dashboard_edit,
-                        'login_module_dashboard_delete' => $login_module_dashboard_delete
-                    );
-                }   
+                //     $roles_details[] = array(
+                //         'login_module_dashboard_view' => $login_module_dashboard_view,
+                //         'login_module_dashboard_edit' => $login_module_dashboard_edit,
+                //         'login_module_dashboard_delete' => $login_module_dashboard_delete
+                //     );
+                // }   
             }
 
             $roles_mergedArray = [];
