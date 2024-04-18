@@ -426,7 +426,7 @@ $base_url = rtrim(base_url(), '/');
                                             </div>
                                             <!-- Bulk Import List View Role Code End -->                                     
 
-                                             <!-- Dashboard Role Code Start -->
+                                            <!-- Dashboard Role Code Start -->
                                              <h3 class="col-lg-12 mb-3">Dashboard</h3>                                                
                                              <div class="col-lg-12">                                                                                                      
                                                 <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Dashboard</b>
@@ -473,6 +473,54 @@ $base_url = rtrim(base_url(), '/');
                                                 </div>
                                             </div>                                            
                                             <!-- Dashboard Role Code End -->  
+
+                                             <!-- Reports Role Code Start -->
+                                             <h3 class="col-lg-12 mb-3">Reports</h3>                                                
+                                             <div class="col-lg-12">                                                                                                      
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Reports</b>
+                                                <input name="reports_all_checkbox_value" id="reports_all_checkbox_value" value='0' type="hidden">
+                                                <span class="checkbox">
+                                                <input id="reports_all_checkbox" class="form-check-inline" type="checkbox">
+                                                    <label for="reports_all_checkbox">
+                                                        Select all pages
+                                                    </label>
+                                                </span>
+                                                </h5> 
+                                                    
+                                                <div class="form-group row">
+                                                    <?php if(!empty($reports_module_data))
+                                                    {                                                        
+                                                        foreach($reports_module_data as $reports_role)
+                                                        {                                                           
+                                                    ?>
+                                                    <div class="col-sm-6 mb-3">                                                   
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$reports_role['page_name'])); ?></b></label> 
+                                                        <input name="reports_checkbox_id[]" value='<?=$reports_role['id'];?>' type="hidden">
+                                                        <input name="reports_checkbox_view[]" id="checkbox_view_<?=$reports_role['id'];?>" class='reports_checkbox_value' value='0' type="hidden">
+                                                        <input name="reports_checkbox_edit[]" id="checkbox_edit_<?=$reports_role['id'];?>" class='reports_checkbox_value' value='0' type="hidden">
+                                                        <input name="reports_checkbox_delete[]" id="checkbox_delete_<?=$reports_role['id'];?>" class='reports_checkbox_value' value='0' type="hidden">                                                                                                                                     
+                                                        <span class="checkbox reports_checkbox_div">                                                            
+                                                            <input data-name='can_view' data-id='<?=$reports_role['id'];?>' class="col-sm-2 reports_checkbox" type="checkbox">                                                            
+                                                            <label for="checkbox_view_<?=$reports_role['id'];?>">
+                                                                Can View
+                                                            </label>
+                                                            <input data-name='can_edit' data-id='<?=$reports_role['id'];?>' class="col-sm-2 reports_checkbox" type="checkbox">                                                            
+                                                            <label for="checkbox_edit_<?=$reports_role['id'];?>">
+                                                                Can Edit
+                                                            </label>
+                                                            <input data-name='can_delete' data-id='<?=$reports_role['id'];?>' class="col-sm-2 reports_checkbox" type="checkbox">                                                            
+                                                            <label for="checkbox_delete_<?=$reports_role['id'];?>">
+                                                                Can Delete
+                                                            </label>                                                            
+                                                        </span>                                              
+                                                    </div>                                                    
+                                                    <?php                                                        
+                                                        }
+                                                    }
+                                                    ?>                                                    
+                                                </div>
+                                            </div>                                            
+                                            <!-- Reports Role Code End -->  
 
                                         </div>
                                         <!--  Setting Role Display Code End -->

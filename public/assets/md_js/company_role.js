@@ -142,7 +142,25 @@
         }
     });
 
-    $('.roles_checkbox, .users_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox').change(function()
+    $('#reports_all_checkbox').change(function()
+    {
+        var isChecked = $(this).prop("checked");
+
+        if(isChecked == true)
+        {
+            $('.reports_checkbox').prop("checked",true);
+            $('#reports_all_checkbox_value').val('1');
+            $('.reports_checkbox_value').val('1');
+        }
+        else
+        {
+            $('.reports_checkbox').prop("checked",false);
+            $('#reports_all_checkbox_value').val('0');
+            $('.reports_checkbox_value').val('0');
+        }
+    });
+
+    $('.roles_checkbox, .users_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox').change(function()
     {
         var isChecked = $(this).prop("checked"); 
         var data_name = $(this).data('name');
@@ -329,6 +347,25 @@
             {               
                 $('#dashboard_all_checkbox').prop("checked", false);
                 $('#dashboard_all_checkbox_value').val('0');
+            }
+        }
+        else if($(this).hasClass('reports_checkbox'))
+        {
+            var reports_checkboxes = document.querySelectorAll('.reports_checkbox_div input[type="checkbox"]');
+
+            var reports_allChecked = Array.from(reports_checkboxes).every(function(reportscheckbox) {
+            return reportscheckbox.checked;
+            });
+
+            if(reports_allChecked == true)
+            {              
+                $('#reports_all_checkbox').prop("checked", true);
+                $('#reports_all_checkbox_value').val('1');
+            }
+            else
+            {               
+                $('#reports_all_checkbox').prop("checked", false);
+                $('#reports_all_checkbox_value').val('0');
             }
         }
 
