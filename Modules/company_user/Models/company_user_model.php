@@ -39,7 +39,7 @@ class company_user_model extends Model
 
     }
 
-    public function updateUsersConfiguration(array $data,$user_id,$updt_password){
+    public function updateUsersConfiguration(array $data,$user_id){
         
         try{
             $this->mysqldb->transException(true)->transStart();

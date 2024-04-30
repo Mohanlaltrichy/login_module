@@ -240,13 +240,6 @@ class company_user_controller extends BaseController
                     return redirect()->route('company_user_edit',array($user_id));
                 }
 
-                $updt_password = '';
-                if($password != ''){
-                $hashed_password = ($password) ? password_hash((string)$password, PASSWORD_DEFAULT) : $password;
-                
-            $updt_password = $hashed_password;
-            }
-
             $data = [
                 'name' => $fullname,
                 'email' => $email,
@@ -255,14 +248,19 @@ class company_user_controller extends BaseController
                 'address' => ($address != '') ? $address : null,
                 'role_id' => $role,
                 'designation' => ($designation != '') ? $designation : null,
-                'password' => ($updt_password != '') ? $updt_password : null,
                 'status' => $status,
                 'utc_updated_at' => date('Y-m-d H:i:s'),
                 'local_updated_at' => $this->local_date_time,
                 'updated_by'  => $this->logged_user_id,
             ];
 
-            $this->company_user_model->updateUsersConfiguration($data,$user_id,$updt_password);
+            if($password != ''){
+            $hashed_password = ($password) ? password_hash((string)$password, PASSWORD_DEFAULT) : $password;
+            
+            $data['password'] = $hashed_password;
+            }
+
+            $this->company_user_model->updateUsersConfiguration($data,$user_id);
             session()->setFlashdata('success', 'Data Updated Successfully.');
             return redirect()->route('company_user_list');
             exit;

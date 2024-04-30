@@ -1,10 +1,7 @@
 (function($){
 
     $(document).ready(function(){
-        var ttt =  document.getElementById("phone"); 
-        ttt.trigger("change");
-        //  $("#phone").trigger("change");
-        //  $("#phone").trigger();
+        $("phone").trigger("change");
     });
 
     // $(document).on('change','#phone', function(){
@@ -44,7 +41,6 @@
      $(document).on('click','#update_user', function(){
 
         var form =$('#update_company_user_client_config').parsley();        
-        form.validate();
         $('#c_pwd').prop('required',false);
 
         var pwd = $('#pwd').val();
@@ -62,6 +58,7 @@
             }
         }
         var ccheckval = $('#ccheck').val();
+        form.validate();
         if (form.isValid() && ccheckval == 1 ) {
             $('.custom_update_model_alert').modal('show');        
         }
