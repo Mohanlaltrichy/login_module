@@ -174,7 +174,7 @@ height: 35px;
                                         <input type='hidden' id='mob_code' value='<?=$user_details[0]['mobile'];?>' name="mobile_code">
                                         <button type="button" id="update_user" class="btn btn-primary waves-effect waves-light" <?=(session('user_view_and_edit_edit') != '1') ? 'disabled' : '';?>>Update</button>                                         
                                             <!-- <button type="reset" id="reset" class="btn btn-danger" >Reset</button> -->
-                                            <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="window.location='<?=$base_url.route_to('company_user_edit',$user_details[0]['id']);?>'">Cancel</button>
+                                            <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="window.location='<?php echo $base_url.route_to('company_user_list'); ?>'">Cancel</button>
                                         </div> 
 
                                     </form>

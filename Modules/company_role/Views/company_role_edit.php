@@ -664,7 +664,7 @@ $this->company_role_model = new company_role_model();
                                         <!-- -->
                                         <div class="text-center">                                           
                                             <button type="button" id="update_company_role" class="btn btn-primary waves-effect waves-light" <?=(session('roles_view_and_edit_edit') != '1') ? 'disabled' : '';?>>Update</button>                                         
-                                            <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="window.location='<?php echo $base_url.route_to('company_role'); ?>'">Cancel</button>                                            
+                                            <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="window.location='<?php echo $base_url.route_to('company_role_list'); ?>'">Cancel</button>                                            
                                         </div> 
                                         <!-- -->
 
