@@ -160,7 +160,25 @@
         }
     });
 
-    $('.roles_checkbox, .users_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox').change(function()
+    $('#notification_all_checkbox').change(function()
+    {
+        var isChecked = $(this).prop("checked");
+
+        if(isChecked == true)
+        {
+            $('.notification_checkbox').prop("checked",true);
+            $('#notification_all_checkbox_value').val('1');
+            $('.notification_checkbox_value').val('1');
+        }
+        else
+        {
+            $('.notification_checkbox').prop("checked",false);
+            $('#notification_all_checkbox_value').val('0');
+            $('.notification_checkbox_value').val('0');
+        }
+    });
+
+    $('.roles_checkbox, .users_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox').change(function()
     {
         var isChecked = $(this).prop("checked"); 
         var data_name = $(this).data('name');
@@ -366,6 +384,25 @@
             {               
                 $('#reports_all_checkbox').prop("checked", false);
                 $('#reports_all_checkbox_value').val('0');
+            }
+        }
+        else if($(this).hasClass('notification_checkbox'))
+        {
+            var notification_checkboxes = document.querySelectorAll('.notification_checkbox_div input[type="checkbox"]');
+
+            var notification_allChecked = Array.from(notification_checkboxes).every(function(notificationscheckbox) {
+            return notificationscheckbox.checked;
+            });
+
+            if(notification_allChecked == true)
+            {              
+                $('#notification_all_checkbox').prop("checked", true);
+                $('#notification_all_checkbox_value').val('1');
+            }
+            else
+            {               
+                $('#notification_all_checkbox').prop("checked", false);
+                $('#notification_all_checkbox_value').val('0');
             }
         }
 

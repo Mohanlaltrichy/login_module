@@ -641,6 +641,107 @@ $this->company_role_model = new company_role_model();
                                                 </div>
                                             </div>
                                             <!-- Reports Role Code End --> 
+
+                                             <!-- Notification Code Start -->                                                
+                                             <div class="col-lg-12">                                                                                                      
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Notification</b>
+                                                <input name="notification_all_checkbox_value" id="notification_all_checkbox_value" value='<?=($roles_details[0]['notify_all_checkbox_value'] == 'Y') ? '1' : '0'?>' type="hidden">
+                                                <span class="checkbox">
+                                                <input id="notification_all_checkbox" class="form-check-inline" type="checkbox" <?=($roles_details[0]['notify_all_checkbox_value'] == 'Y') ? 'checked' : ''?>>
+                                                    <label for="notification_all_checkbox">
+                                                        Select all pages
+                                                    </label>
+                                                </span>
+                                                </h5> 
+                                                    
+                                                <div class="form-group row">
+                                                    <?php if(!empty($notification_data))
+                                                    {                                                        
+                                                        foreach($notification_data as $notification)
+                                                        {              
+                                                            $notification_data_whereConditions = [                                  
+                                                                'role_id' => $roles_details[0]['id'],
+                                                                'page_id' => $notification['id'],                                
+                                                            ];
+                                                
+                                                            $notification_result = $this->company_role_model->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $notification_data_whereConditions); 
+                                                            
+                                                            if(empty($notification_result))
+                                                            {
+                                                                $notification_result[0]['can_view'] = 'N';
+                                                                $notification_result[0]['can_edit'] = 'N';
+                                                                $notification_result[0]['can_delete'] = 'N';
+                                                            }
+
+                                                            if($notification['page_name'] == 'notification_group_list')
+                                                            {
+                                                                $notify_page_name = 'group_list';
+                                                            }
+                                                            else if($notification['page_name'] == 'notification_user_list')
+                                                            {
+                                                                $notify_page_name = 'user_list';
+                                                            }
+                                                            else if($notification['page_name'] == 'notification_user_role')
+                                                            {
+                                                                $notify_page_name = 'user_roles';
+                                                            }
+                                                            else if($notification['page_name'] == 'notification_template_list')
+                                                            {
+                                                                $notify_page_name = 'template_list';
+                                                            }
+                                                            else if($notification['page_name'] == 'notification_trigger_tag_configuration')
+                                                            {
+                                                                $notify_page_name = 'trigger_tag';
+                                                            }
+                                                            else if($notification['page_name'] == 'notification_configuration')
+                                                            {
+                                                                $notify_page_name = 'notification';
+                                                            }
+                                                            else if($notification['page_name'] == 'notification_bulk_import')
+                                                            {
+                                                                $notify_page_name = 'bulk_import';
+                                                            }
+                                                            else if($notification['page_name'] == 'notification_uom')
+                                                            {
+                                                                $notify_page_name = 'uom';
+                                                            }
+                                                            else if($notification['page_name'] == 'notification_alert_notification')
+                                                            {
+                                                                $notify_page_name = 'alert_notification';
+                                                            }
+                                                    ?>
+                                                    <div class="col-sm-6 mb-3">                                                   
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$notify_page_name)); ?></b></label> 
+                                                        <input name="notification_checkbox_id[]" value='<?=$notification['id'];?>' type="hidden">
+                                                        <input name="notification_checkbox_view[]" id="checkbox_view_<?=$notification['id'];?>" class='notification_checkbox_value' value='<?=($notification_result[0]['can_view'] == 'Y') ? '1' : '0'; ?>' type="hidden">
+                                                        <input name="notification_checkbox_edit[]" id="checkbox_edit_<?=$notification['id'];?>" class='notification_checkbox_value' value='<?=($notification_result[0]['can_edit'] == 'Y') ? '1' : '0'; ?>' type="hidden">
+                                                        <input name="notification_checkbox_delete[]" id="checkbox_delete_<?=$notification['id'];?>" class='notification_checkbox_value' value='<?=($notification_result[0]['can_delete'] == 'Y') ? '1' : '0'; ?>' type="hidden">                                                                                                                                     
+                                                        <span class="checkbox notification_checkbox_div">   
+                                                            <?php if($notification['page_name'] != 'notification_user_role') {  ?>                                                         
+                                                            <input data-name='can_view' data-id='<?=$notification['id'];?>' class="col-sm-2 notification_checkbox" type="checkbox" <?=($notification_result[0]['can_view'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_view_<?=$notification['id'];?>">
+                                                                Can View
+                                                            </label>
+                                                            <?php } ?>
+                                                            <input data-name='can_edit' data-id='<?=$notification['id'];?>' class="col-sm-2 notification_checkbox" type="checkbox" <?=($notification_result[0]['can_edit'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_edit_<?=$notification['id'];?>">
+                                                                Can Edit
+                                                            </label>
+                                                            <?php if($notification['page_name'] != 'notification_user_role' && $notification['page_name'] != 'notification_trigger_tag_configuration') { ?>
+                                                            <input data-name='can_delete' data-id='<?=$notification['id'];?>' class="col-sm-2 notification_checkbox" type="checkbox" <?=($notification_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_delete_<?=$notification['id'];?>">
+                                                                Can Delete
+                                                            </label>
+                                                            <?php } ?>
+                                                        </span>                                              
+                                                    </div>
+                                                    <?php                                                        
+                                                        }
+                                                    }
+                                                    ?>                                                    
+                                                </div>
+                                            </div>
+                                            <!-- Notification Code End --> 
                                             
                                             
 
