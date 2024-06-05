@@ -727,7 +727,7 @@ $this->company_role_model = new company_role_model();
                                                             <label for="checkbox_edit_<?=$notification['id'];?>">
                                                                 Can Edit
                                                             </label>
-                                                            <?php if($notification['page_name'] != 'notification_user_role' && $notification['page_name'] != 'notification_trigger_tag_configuration') { ?>
+                                                            <?php if($notification['page_name'] != 'notification_user_role' && $notification['page_name'] != 'notification_trigger_tag_configuration' && $notification['page_name'] != 'notification_alert_notification') { ?>
                                                             <input data-name='can_delete' data-id='<?=$notification['id'];?>' class="col-sm-2 notification_checkbox" type="checkbox" <?=($notification_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
                                                             <label for="checkbox_delete_<?=$notification['id'];?>">
                                                                 Can Delete

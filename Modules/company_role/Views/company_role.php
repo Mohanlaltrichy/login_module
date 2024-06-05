@@ -577,7 +577,7 @@ $base_url = rtrim(base_url(), '/');
                                                                     <label for="checkbox_edit_<?= $notify['id']; ?>">
                                                                         Can Edit
                                                                     </label>
-                                                                    <?php if($notify['page_name'] != 'notification_user_role' && $notify['page_name'] != 'notification_trigger_tag_configuration') { ?>
+                                                                    <?php if($notify['page_name'] != 'notification_user_role' && $notify['page_name'] != 'notification_trigger_tag_configuration' && $notify['page_name'] != 'notification_alert_notification') { ?>
                                                                     <input data-name='can_delete' data-id='<?= $notify['id']; ?>' class="col-sm-2 notification_checkbox" type="checkbox">
                                                                     <label for="checkbox_delete_<?= $notify['id']; ?>">
                                                                         Can Delete
