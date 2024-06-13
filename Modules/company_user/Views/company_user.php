@@ -111,9 +111,9 @@ height: 35px;
                                         </div>
                                             
                                         <div class="form-group row">
-                                            <label class="col-sm-1 control-label" for="zone">Mobile</label>
+                                            <label class="col-sm-1 control-label" for="zone">Mobile*</label>
                                             <div class="col-sm-3">
-                                            <input type="tel" name="mobile" value="" id="mobile"  onblur="process(event)">
+                                            <input type="tel" name="mobile" value="" id="mobile"  onblur="process(event)" required>
                                             <div id='error-message' style="display: none"></div>
                                             </div>
                                             <!-- oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"  -->
@@ -169,6 +169,62 @@ height: 35px;
                                             </select>
                                         </div>
                                         </div>
+
+                                        <?php if(session('user_list_add_edit') == '1') { ?>                              
+
+                                        <hr></hr>
+
+                                        <div class="form-group row">                                        
+                                        <label class="col-md-2" for="notification_user">If you want to create a notification user?</label> 
+                                        <div class="col-sm-1">
+                                        <input type="checkbox" style="vertical-align: middle;" name="notification_user" value="" id="notification_user">  
+                                        </div>                                   
+                                        </div>
+                                            
+                                        <div id="notification_user_div" class="dis_none">
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-1 control-label" for="first_name">First Name*</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="first_name"  class="form-control form-control-custom" value="" id="first_name">
+                                                </div>
+
+                                                <label class="col-sm-1 control-label" for="last_name">Last Name*</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="last_name"  class="form-control form-control-custom" value="" id="last_name">
+                                                </div>
+
+                                                <label class="col-sm-1 control-label" for="middle_name">Middle Name</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="middle_name"  class="form-control form-control-custom" value="" id="middle_name">
+                                                </div>                                    
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-1 control-label" for="location">Location*</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="location"  class="form-control form-control-custom" value="" id="location">
+                                                </div>
+
+                                                <label class="col-sm-1 control-label" for="department">Department*</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="department"  class="form-control form-control-custom" value="" id="department">
+                                                </div>
+
+                                                <label class="col-sm-1 control-label" for="notify_email">Notify Email*</label>
+                                                <div class="col-sm-1">
+                                                <input type="checkbox" style="vertical-align: middle;" name="notify_email" value="active" id="notify_email" checked> 
+                                                </div>
+                                                
+                                                <label class="col-sm-1 control-label" for="notify_sms">Notify SMS*</label>
+                                                <div class="col-sm-1">                                                
+                                                    <input type="checkbox" style="vertical-align: middle;" name="notify_sms" value="active" id="notify_sms" checked>
+                                                </div> 
+                                            </div> 
+
+                                        </div>                                      
+
+                                        <?php } ?>
 
 
                                         <div class="text-center">

@@ -92,6 +92,7 @@ height: 35px;
                                     <form class="form-horizontal" id="update_company_user_client_config" action="<?php echo $base_url.route_to('update_company_user'); ?>" method="post" data-parsley-validate>
                                         <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                                         <input type="hidden" name="user_id" value="<?=$user_details[0]['id'];?>">
+                                        <input type="hidden" name="notification_user_id" value="<?=$user_details[0]['notification_user_id'];?>">
 
                                         <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="fullname">Full Name<span>*</span></label>
@@ -114,7 +115,7 @@ height: 35px;
                                         <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="zone">Mobile</label>
                                             <div class="iti col-sm-3">
-                                            <input type="tel" name="mobile" value='<?=$user_details[0]['mobile'];?>' id="mobile" onblur="process(event)">
+                                            <input type="tel" name="mobile" value='<?=$user_details[0]['mobile'];?>' id="mobile" onblur="process(event)" required>
                                             </div>
 
                                             <label class="col-sm-1 control-label" for="zone">Password</label>
@@ -161,11 +162,89 @@ height: 35px;
                                             <div class="col-sm-3">
                                             <select name="status" class="form-control form-control-custom" id="status" required>
                                                     <option value="" readonly>Select</option>
-                                                    <option value="active" selected>Active</option>
-                                                    <option value="inactive">Inactive</option>
+                                                    <option value="active" <?=($user_details[0]['status'] == 'active') ? 'selected' : '';?>>Active</option>
+                                                    <option value="inactive" <?=($user_details[0]['status'] == 'inactive') ? 'selected' : '';?>>Inactive</option>
                                             </select>
                                         </div>
                                         </div>
+
+                                        <?php if(session('user_list_add_edit') == '1') { ?>                              
+
+                                        <hr></hr>
+
+                                        <div class="form-group row">                                        
+                                        <label class="col-md-2" for="notification_user">If you want to create a notification user?</label> 
+                                        <div class="col-sm-1">
+                                        <input type="checkbox" style="vertical-align: middle;" name="notification_user" value="<?=($user_details[0]['notification_user'])?>" id="notification_user" <?=($user_details[0]['notification_user'] == '1') ? 'checked' : '';?>>  
+                                        </div>                                   
+                                        </div>
+                                            
+                                        <div id="notification_user_div" class="<?=($user_details[0]['notification_user'] != '1') ? 'dis_none' : '';?>">
+
+                                            <?php
+                                                if(!empty($notification_user_data))
+                                                {
+                                                    $first_name = $notification_user_data[0]['first_name'];
+                                                    $last_name = $notification_user_data[0]['last_name'];
+                                                    $middle_name = $notification_user_data[0]['middle_name'];
+                                                    $location = $notification_user_data[0]['location'];
+                                                    $department = $notification_user_data[0]['department'];
+                                                    $notify_email = $notification_user_data[0]['notify_email'];
+                                                    $notify_sms = $notification_user_data[0]['notify_sms'];
+                                                }
+                                                else
+                                                {
+                                                    $first_name = '';
+                                                    $last_name = '';
+                                                    $middle_name = '';
+                                                    $location = '';
+                                                    $department = '';
+                                                    $notify_email = '';
+                                                    $notify_sms = ''; 
+                                                }
+                                            ?>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-1 control-label" for="first_name">First Name*</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="first_name"  class="form-control form-control-custom" value="<?=$first_name;?>" id="first_name">
+                                                </div>
+
+                                                <label class="col-sm-1 control-label" for="last_name">Last Name*</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="last_name"  class="form-control form-control-custom" value="<?=$last_name;?>" id="last_name">
+                                                </div>
+
+                                                <label class="col-sm-1 control-label" for="middle_name">Middle Name</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="middle_name"  class="form-control form-control-custom" value="<?=$middle_name;?>" id="middle_name">
+                                                </div>                                    
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-1 control-label" for="location">Location*</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="location"  class="form-control form-control-custom" value="<?=$location;?>" id="location">
+                                                </div>
+
+                                                <label class="col-sm-1 control-label" for="department">Department*</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" name="department"  class="form-control form-control-custom" value="<?=$department;?>" id="department">
+                                                </div>
+
+                                                <label class="col-sm-1 control-label" for="notify_email">Notify Email*</label>
+                                                <div class="col-sm-1">
+                                                <input type="checkbox" style="vertical-align: middle;" name="notify_email" value="<?=$notify_email;?>" id="notify_email" <?=($notify_email == 'active') ? 'checked' : '';?>> 
+                                                </div>
+                                                
+                                                <label class="col-sm-1 control-label" for="notify_sms">Notify SMS*</label>
+                                                <div class="col-sm-1">                                                
+                                                    <input type="checkbox" style="vertical-align: middle;" name="notify_sms" value="<?=$notify_sms;?>" id="notify_sms" <?=($notify_sms == 'active') ? 'checked' : '';?>>
+                                                </div> 
+                                            </div>
+                                        </div>                                      
+
+                                        <?php } ?>
 
 
                                         <div class="text-center">

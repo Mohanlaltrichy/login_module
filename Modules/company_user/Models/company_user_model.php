@@ -21,16 +21,16 @@ class company_user_model extends Model
     }
 
 
-    public function saveUsersConfiguration(array $data){
+    public function saveUsersConfiguration(string $tablename, array $data){
         
         try{
             $this->mysqldb->transException(true)->transStart();
 
-            $users_data_store = $this->insertData('users', $data);
+            $users_data_store = $this->insertData($tablename, $data);
    
             $this->mysqldb->transComplete();
 
-            return true;
+            return $users_data_store;
 
         }catch (\Exception $e) {            
             $currentURL = current_url();            

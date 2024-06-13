@@ -103,6 +103,49 @@
       });
       //Delete Role  
 
+//Notification User Enabled 
+$("#notification_user").change(function(){
+    if ($(this).is(":checked")) {   
+        $('#notification_user_div').removeClass('dis_none');
+        $('#notification_user').val('1'); 
+        $('#first_name').prop('required',true);
+        $('#last_name').prop('required',true);
+        $('#location').prop('required',true);
+        $('#department').prop('required',true);
+        $('#notify_email').prop('required',true);
+        $('#notify_sms').prop('required',true);     
+    } else { 
+        $('#notification_user_div').addClass('dis_none');
+        $('#notification_user').val('0');   
+        $('#first_name').prop('required',false);
+        $('#last_name').prop('required',false);
+        $('#location').prop('required',false);
+        $('#department').prop('required',false);
+        $('#notify_email').prop('required',false);
+        $('#notify_sms').prop('required',false);               
+    }
+});
+
+$('#notify_email').change(function(){
+    if ($(this).is(":checked")) {   
+        $('#notify_email').val('active');
+    }
+    else
+    {
+        $('#notify_email').val('inactive');
+    }    
+});
+
+$('#notify_sms').change(function(){
+    if ($(this).is(":checked")) {   
+        $('#notify_sms').val('active');
+    }
+    else
+    {
+        $('#notify_sms').val('inactive');
+    }    
+});
+
 setTimeout(function() {
     var parenterrordiv = document.getElementById('custom_error_alert_controller_message');
     $("#custom_error_alert_controller_message").addClass('fade-out'); // Custom Error Alert Hide

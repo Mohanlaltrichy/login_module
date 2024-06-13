@@ -156,6 +156,13 @@ class login_controller extends BaseController
                         'roles_view_and_edit_edit' => $roles_view_and_edit_edit,
                         'roles_view_and_edit_delete' => $roles_view_and_edit_delete
                     );
+                } 
+                else if($roles['page_id'] == '41')
+                {                    
+                    $user_list_add_edit = ($roles['can_edit'] == 'Y') ? '1' : '0';
+                    $roles_details[] = array(
+                        'user_list_add_edit' => $user_list_add_edit,                        
+                    );
                 }  
                 // else if($roles['page_id'] == '37')
                 // {
