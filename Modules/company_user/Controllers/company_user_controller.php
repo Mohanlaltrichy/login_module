@@ -59,7 +59,9 @@ class company_user_controller extends BaseController
           {
               if(session('user_add_edit') == '1')
               {
-                $fullname = $this->request->getPost("fullname");
+                $first_name = $this->request->getPost("first_name");
+                $last_name = $this->request->getPost("last_name");
+                $middle_name = $this->request->getPost("middle_name");                
                 $email = $this->request->getPost("email");
                 $phone = $this->request->getPost("phone");
                 $password = $this->request->getPost('password');
@@ -73,16 +75,12 @@ class company_user_controller extends BaseController
                 $mobile_code = $this->request->getPost("mobile_code");
 
 
-                $notification_user = $this->request->getPost("notification_user");
-                $first_name = $this->request->getPost("first_name");
-                $last_name = $this->request->getPost("last_name");
-                $middle_name = $this->request->getPost("middle_name");
+                $notification_user = $this->request->getPost("notification_user");             
                 $location = $this->request->getPost("location");
                 $department = $this->request->getPost("department");
-                $notify_email = $this->request->getPost("notify_email");
-                $notify_sms = $this->request->getPost("notify_sms");
+               
 
-    //   $validation =  \Config\Services::validation();
+                //   $validation =  \Config\Services::validation();
 
                 //   $rules = [
                 //     "fullname" => [
@@ -139,7 +137,15 @@ class company_user_controller extends BaseController
                         return redirect()->route('company_user_add');
                     }
                 }
-                
+
+                if($middle_name != '')
+                {
+                    $fullname = $first_name.' '.$middle_name.' '.$last_name;
+                }
+                else
+                {
+                    $fullname = $first_name.' '.$last_name;
+                }                
 
                 $hashed_password = ($password) ? password_hash((string)$password, PASSWORD_DEFAULT) : $password;
                 $randomUid = $this->generateRandomUid();
@@ -147,6 +153,9 @@ class company_user_controller extends BaseController
                 $data = [
                     'uuid' => $randomUid,
                     'name' => $fullname,
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'middle_name' => $middle_name,
                     'email' => $email,
                     'address' => ($address != '') ? $address : null,
                     'mobile' => ($mobile_code != '') ? $mobile_code : null,
@@ -178,8 +187,8 @@ class company_user_controller extends BaseController
                     'department' => $department,
                     'mobile_no' => ($mobile_code != '') ? $mobile_code : null,
                     'user_email' => $email,
-                    'notify_email' => $notify_email,
-                    'notify_sms' => $notify_sms,
+                    'notify_email' => 'inactive',
+                    'notify_sms' => 'inactive',
                     'national_flag' => '1',
                     'login_user' =>  1,
                     'login_user_id' => $user_id,
@@ -264,7 +273,7 @@ class company_user_controller extends BaseController
                 'login_user_id' => $id,  
             ];
             
-            $notification_user_data = $this->company_user_model->GetTableValue('tbl_notification_users', 'first_name,last_name,middle_name,location,department,notify_email,notify_sms', $notification_user_data_whereConditions);
+            $notification_user_data = $this->company_user_model->GetTableValue('tbl_notification_users', 'location,department', $notification_user_data_whereConditions);
                       
             $data = array(
                 'user_details' => $user_data,
@@ -288,7 +297,9 @@ class company_user_controller extends BaseController
             if(session('user_view_and_edit_edit') == '1') {
 
                 $user_id = $this->request->getPost("user_id");
-                $fullname = $this->request->getPost("fullname");
+                $first_name = $this->request->getPost("first_name");
+                $last_name = $this->request->getPost("last_name");
+                $middle_name = $this->request->getPost("middle_name");
                 $email = $this->request->getPost("email");
                 $phone = $this->request->getPost("phone");
                 $password = $this->request->getPost('password');
@@ -302,13 +313,8 @@ class company_user_controller extends BaseController
                 $mobile_code = $this->request->getPost("mobile_code");
 
                 $notification_user = $this->request->getPost("notification_user");
-                $first_name = $this->request->getPost("first_name");
-                $last_name = $this->request->getPost("last_name");
-                $middle_name = $this->request->getPost("middle_name");
                 $location = $this->request->getPost("location");
                 $department = $this->request->getPost("department");
-                $notify_email = $this->request->getPost("notify_email");
-                $notify_sms = $this->request->getPost("notify_sms");
                 $notification_user_id = $this->request->getPost("notification_user_id");
 
                 $user_email_whereConditions = [
@@ -351,7 +357,16 @@ class company_user_controller extends BaseController
                         session()->setFlashdata('duplicate_record_found', 'This email id notification user already exists');
                         return redirect()->route('company_user_edit',array($user_id));
                     }
-                }                    
+                } 
+                
+                if($middle_name != '')
+                {
+                    $fullname = $first_name.' '.$middle_name.' '.$last_name;
+                }
+                else
+                {
+                    $fullname = $first_name.' '.$last_name;
+                }
 
                 $data = [
                     'name' => $fullname,
@@ -390,9 +405,7 @@ class company_user_controller extends BaseController
                         'location' => $location,
                         'department' => $department,
                         'mobile_no' => ($mobile_code != '') ? $mobile_code : null,
-                        'user_email' => $email,
-                        'notify_email' => $notify_email,
-                        'notify_sms' => $notify_sms,
+                        'user_email' => $email,                        
                         'national_flag' => '1',
                         'login_user' =>  1,
                         'login_user_id' => $user_id,
@@ -420,8 +433,8 @@ class company_user_controller extends BaseController
                             'department' => $department,
                             'mobile_no' => ($mobile_code != '') ? $mobile_code : null,
                             'user_email' => $email,
-                            'notify_email' => $notify_email,
-                            'notify_sms' => $notify_sms,
+                            'notify_email' => 'inactive',
+                            'notify_sms' => 'inactive',
                             'national_flag' => '1',
                             'login_user' =>  1,
                             'login_user_id' => $user_id,

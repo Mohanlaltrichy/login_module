@@ -95,12 +95,23 @@ height: 35px;
                                         <input type="hidden" name="notification_user_id" value="<?=$user_details[0]['notification_user_id'];?>">
 
                                         <div class="form-group row">
-                                            <label class="col-sm-1 control-label" for="fullname">Full Name<span>*</span></label>
+                                            <label class="col-sm-1 control-label" for="first_name">First Name*</label>
                                             <div class="col-sm-3">
-                                            <input type="text" name="fullname" class="form-control form-control-custom" value='<?=$user_details[0]['name'];?>' id="fullname" required>
-                                            <div id='error-message'></div>
+                                                <input type="text" name="first_name"  class="form-control form-control-custom" value="<?=$user_details[0]['first_name'];?>" id="first_name">
                                             </div>
 
+                                            <label class="col-sm-1 control-label" for="last_name">Last Name*</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="last_name"  class="form-control form-control-custom" value="<?=$user_details[0]['last_name'];?>" id="last_name">
+                                            </div>
+
+                                            <label class="col-sm-1 control-label" for="middle_name">Middle Name</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="middle_name"  class="form-control form-control-custom" value="<?=$user_details[0]['middle_name'];?>" id="middle_name">
+                                            </div>                                           
+                                        </div>
+                                            
+                                        <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="email">Email<span>*</span></label>
                                             <div class="col-sm-3">
                                             <input type="email" name="email"  class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' id="email" required>
@@ -110,14 +121,14 @@ height: 35px;
                                             <div class="iti col-sm-3">
                                             <input type="tel" name="phone" id="phone" value='<?=$user_details[0]['phone'];?>' onblur="phone_check(event)">
                                             </div>
-                                        </div>
-                                            
-                                        <div class="form-group row">
+
                                             <label class="col-sm-1 control-label" for="zone">Mobile</label>
                                             <div class="iti col-sm-3">
                                             <input type="tel" name="mobile" value='<?=$user_details[0]['mobile'];?>' id="mobile" onblur="process(event)" required>
-                                            </div>
-
+                                            </div>                                            
+                                        </div>
+                                            
+                                        <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="zone">Password</label>
                                             <div class="col-sm-3">
                                             <input type="password" name="password" class="form-control form-control-custom" value="" minlength="6" placeholder="Enter password if change required" id="pwd">
@@ -127,21 +138,20 @@ height: 35px;
                                             <div class="col-sm-3">
                                             <input type="password" name="conf_password" class="form-control form-control-custom" value="" id="c_pwd">
                                             <span id="edmessage"></span>
-                                        </div>
-                                        </div>
-                                            
-                                        <div class="form-group row">
+                                            </div>
+
                                             <label class="col-sm-1 control-label" for="designation">Designation</label>
                                             <div class="col-sm-3">
                                                 <input type="text" name="designation"  class="form-control form-control-custom" value='<?=$user_details[0]['designation'];?>' id="designation">
-                                            </div>
-
-                                            <label class="col-sm-1 control-label" for="zone">Address</label>
-                                            <div class="col-sm-3">
-                                            <textarea name="address" class="form-control form-control-custom" id="address" maxlength="100" value=''><?=$user_details[0]['address'];?></textarea></div>
+                                            </div>                                           
                                         </div>
                                             
                                         <div class="form-group row role d-flex justify-content-center">   
+                                            <label class="col-sm-1 control-label" for="zone">Address</label>
+                                            <div class="col-sm-3">
+                                                <textarea name="address" class="form-control form-control-custom" id="address" maxlength="100" value=''><?=$user_details[0]['address'];?></textarea>
+                                            </div>
+
                                             <label class="col-sm-1 control-label" for="role">Role<span>*</span></label>
                                             <div class="col-sm-3"> 
                                             <select name="role" class="form-control form-control-custom" id="role" required>
@@ -156,7 +166,8 @@ height: 35px;
                                                         }
                                                     }
                                                     ?>
-                                                </select>                                            </div>
+                                                </select>                                            
+                                            </div>
 
                                             <label class="col-sm-1 control-label" for="status">Status<span>*</span></label>
                                             <div class="col-sm-3">
@@ -165,7 +176,7 @@ height: 35px;
                                                     <option value="active" <?=($user_details[0]['status'] == 'active') ? 'selected' : '';?>>Active</option>
                                                     <option value="inactive" <?=($user_details[0]['status'] == 'inactive') ? 'selected' : '';?>>Inactive</option>
                                             </select>
-                                        </div>
+                                            </div>
                                         </div>
 
                                         <?php if(session('user_list_add_edit') == '1') { ?>                              
@@ -173,7 +184,7 @@ height: 35px;
                                         <hr></hr>
 
                                         <div class="form-group row">                                        
-                                        <label class="col-md-2" for="notification_user">If you want to create a notification user?</label> 
+                                        <label class="col-md-2" for="notification_user">Do you want to create a notification user?</label> 
                                         <div class="col-sm-1">
                                         <input type="checkbox" style="vertical-align: middle;" name="notification_user" value="<?=($user_details[0]['notification_user'])?>" id="notification_user" <?=($user_details[0]['notification_user'] == '1') ? 'checked' : '';?>>  
                                         </div>                                   
@@ -183,43 +194,16 @@ height: 35px;
 
                                             <?php
                                                 if(!empty($notification_user_data))
-                                                {
-                                                    $first_name = $notification_user_data[0]['first_name'];
-                                                    $last_name = $notification_user_data[0]['last_name'];
-                                                    $middle_name = $notification_user_data[0]['middle_name'];
+                                                {                                               
                                                     $location = $notification_user_data[0]['location'];
-                                                    $department = $notification_user_data[0]['department'];
-                                                    $notify_email = $notification_user_data[0]['notify_email'];
-                                                    $notify_sms = $notification_user_data[0]['notify_sms'];
+                                                    $department = $notification_user_data[0]['department'];                                                 
                                                 }
                                                 else
-                                                {
-                                                    $first_name = '';
-                                                    $last_name = '';
-                                                    $middle_name = '';
+                                                {                                                   
                                                     $location = '';
-                                                    $department = '';
-                                                    $notify_email = '';
-                                                    $notify_sms = ''; 
+                                                    $department = '';                                                   
                                                 }
                                             ?>
-
-                                            <div class="form-group row">
-                                                <label class="col-sm-1 control-label" for="first_name">First Name*</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="first_name"  class="form-control form-control-custom" value="<?=$first_name;?>" id="first_name">
-                                                </div>
-
-                                                <label class="col-sm-1 control-label" for="last_name">Last Name*</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="last_name"  class="form-control form-control-custom" value="<?=$last_name;?>" id="last_name">
-                                                </div>
-
-                                                <label class="col-sm-1 control-label" for="middle_name">Middle Name</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="middle_name"  class="form-control form-control-custom" value="<?=$middle_name;?>" id="middle_name">
-                                                </div>                                    
-                                            </div>
 
                                             <div class="form-group row">
                                                 <label class="col-sm-1 control-label" for="location">Location*</label>
@@ -230,17 +214,7 @@ height: 35px;
                                                 <label class="col-sm-1 control-label" for="department">Department*</label>
                                                 <div class="col-sm-3">
                                                     <input type="text" name="department"  class="form-control form-control-custom" value="<?=$department;?>" id="department">
-                                                </div>
-
-                                                <label class="col-sm-1 control-label" for="notify_email">Notify Email*</label>
-                                                <div class="col-sm-1">
-                                                <input type="checkbox" style="vertical-align: middle;" name="notify_email" value="<?=$notify_email;?>" id="notify_email" <?=($notify_email == 'active') ? 'checked' : '';?>> 
-                                                </div>
-                                                
-                                                <label class="col-sm-1 control-label" for="notify_sms">Notify SMS*</label>
-                                                <div class="col-sm-1">                                                
-                                                    <input type="checkbox" style="vertical-align: middle;" name="notify_sms" value="<?=$notify_sms;?>" id="notify_sms" <?=($notify_sms == 'active') ? 'checked' : '';?>>
-                                                </div> 
+                                                </div>                                                
                                             </div>
                                         </div>                                      
 

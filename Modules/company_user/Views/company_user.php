@@ -93,12 +93,24 @@ height: 35px;
                                     <form class="form-horizontal" id="company_user_form" action="<?php echo $base_url.route_to('save_company_user'); ?>" method="post" data-parsley-validate>
                                         <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
 
-                                        <div class="form-group row">
-                                            <label class="col-sm-1 control-label" for="fullname">Full Name<span>*</span></label>
+                                        <div class="form-group row">                                                                                    
+                                            <label class="col-sm-1 control-label" for="first_name">First Name*</label>
                                             <div class="col-sm-3">
-                                            <input type="text" name="fullname" class="form-control form-control-custom" value="" id="fullname" required>
+                                                <input type="text" name="first_name"  class="form-control form-control-custom" value="" id="first_name">
                                             </div>
 
+                                            <label class="col-sm-1 control-label" for="last_name">Last Name*</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="last_name"  class="form-control form-control-custom" value="" id="last_name">
+                                            </div>
+
+                                            <label class="col-sm-1 control-label" for="middle_name">Middle Name</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="middle_name"  class="form-control form-control-custom" value="" id="middle_name">
+                                            </div>                                             
+                                        </div>
+                                        
+                                        <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="email">Email<span>*</span></label>
                                             <div class="col-sm-3">
                                             <input type="email" name="email" class="form-control form-control-custom" value="" id="email" required>
@@ -108,9 +120,7 @@ height: 35px;
                                             <div class="col-sm-3">
                                             <input type="tel" id="phone" value="" name="phone" onblur="phone_check(event)">
                                             </div>
-                                        </div>
-                                            
-                                        <div class="form-group row">
+
                                             <label class="col-sm-1 control-label" for="zone">Mobile*</label>
                                             <div class="col-sm-3">
                                             <input type="tel" name="mobile" value="" id="mobile"  onblur="process(event)" required>
@@ -118,6 +128,9 @@ height: 35px;
                                             </div>
                                             <!-- oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"  -->
 
+                                        </div>
+                                            
+                                        <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="zone">Password<span>*</span></label>
                                             <div class="col-sm-3">
                                             <input type="password" name="password"  class="form-control form-control-custom" value="" minlength="6" id="password" required>
@@ -127,22 +140,20 @@ height: 35px;
                                             <div class="col-sm-3">
                                             <input type="password" name="conf_password" class="form-control form-control-custom" value="" id="conf_password" required>
                                             <span id="message"></span>
-                                        </div>
-                                        </div>
-                                            
-                                        <div class="form-group row">
+                                            </div>
+
                                             <label class="col-sm-1 control-label" for="designation">Designation</label>
                                             <div class="col-sm-3">
                                                 <input type="text" name="designation"  class="form-control form-control-custom" value="" id="designation">
-                                            </div>
-
-                                            <label class="col-sm-1 control-label" for="zone">Address</label>
-                                            <div class="col-sm-3">
-                                            <textarea name="address" class="form-control form-control-custom" id="address" value="" maxlength="100"></textarea>
-                                        </div>
+                                            </div>                                     
                                         </div>
                                             
-                                        <div class="form-group row role d-flex justify-content-center">   
+                                        <div class="form-group row">
+                                            <label class="col-sm-1 control-label" for="zone">Address</label>
+                                            <div class="col-sm-3">
+                                                <textarea name="address" class="form-control form-control-custom" id="address" value="" maxlength="100"></textarea>
+                                            </div>
+
                                             <label class="col-sm-1 control-label" for="role">Role<span>*</span></label>
                                             <div class="col-sm-3"> 
                                                      <select name="role" class="form-control form-control-custom" id="role" required>
@@ -162,43 +173,27 @@ height: 35px;
 
                                             <label class="col-sm-1 control-label" for="status">Status<span>*</span></label>
                                             <div class="col-sm-3">
-                                            <select name="status" class="form-control form-control-custom" id="status" required>
-                                                    <option value="" readonly>Select</option>
-                                                    <option value="active" selected>Active</option>
-                                                    <option value="inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                        </div>
+                                                <select name="status" class="form-control form-control-custom" id="status" required>
+                                                        <option value="" readonly>Select</option>
+                                                        <option value="active" selected>Active</option>
+                                                        <option value="inactive">Inactive</option>
+                                                </select>
+                                            </div>
+                                        </div>                         
+                                        
 
                                         <?php if(session('user_list_add_edit') == '1') { ?>                              
 
                                         <hr></hr>
 
                                         <div class="form-group row">                                        
-                                        <label class="col-md-2" for="notification_user">If you want to create a notification user?</label> 
+                                        <label class="col-md-2" for="notification_user">Do you want to create a notification user?</label> 
                                         <div class="col-sm-1">
                                         <input type="checkbox" style="vertical-align: middle;" name="notification_user" value="" id="notification_user">  
                                         </div>                                   
                                         </div>
                                             
-                                        <div id="notification_user_div" class="dis_none">
-
-                                            <div class="form-group row">
-                                                <label class="col-sm-1 control-label" for="first_name">First Name*</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="first_name"  class="form-control form-control-custom" value="" id="first_name">
-                                                </div>
-
-                                                <label class="col-sm-1 control-label" for="last_name">Last Name*</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="last_name"  class="form-control form-control-custom" value="" id="last_name">
-                                                </div>
-
-                                                <label class="col-sm-1 control-label" for="middle_name">Middle Name</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="middle_name"  class="form-control form-control-custom" value="" id="middle_name">
-                                                </div>                                    
-                                            </div>
+                                        <div id="notification_user_div" class="dis_none">                                            
 
                                             <div class="form-group row">
                                                 <label class="col-sm-1 control-label" for="location">Location*</label>
@@ -209,17 +204,7 @@ height: 35px;
                                                 <label class="col-sm-1 control-label" for="department">Department*</label>
                                                 <div class="col-sm-3">
                                                     <input type="text" name="department"  class="form-control form-control-custom" value="" id="department">
-                                                </div>
-
-                                                <label class="col-sm-1 control-label" for="notify_email">Notify Email*</label>
-                                                <div class="col-sm-1">
-                                                <input type="checkbox" style="vertical-align: middle;" name="notify_email" value="active" id="notify_email" checked> 
-                                                </div>
-                                                
-                                                <label class="col-sm-1 control-label" for="notify_sms">Notify SMS*</label>
-                                                <div class="col-sm-1">                                                
-                                                    <input type="checkbox" style="vertical-align: middle;" name="notify_sms" value="active" id="notify_sms" checked>
-                                                </div> 
+                                                </div>                                              
                                             </div> 
 
                                         </div>                                      
