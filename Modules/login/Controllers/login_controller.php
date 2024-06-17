@@ -163,6 +163,16 @@ class login_controller extends BaseController
                     $roles_details[] = array(
                         'user_list_add_edit' => $user_list_add_edit,                        
                     );
+                }
+                else if($roles['page_id'] == '48')
+                {
+                    $alert_notification_add_view = ($roles['can_view'] == 'Y') ? '1' : '0';
+                    $alert_notification_add_edit = ($roles['can_edit'] == 'Y') ? '1' : '0';
+
+                    $roles_details[] = array(
+                        'alert_notification_add_view' => $alert_notification_add_view,
+                        'alert_notification_add_edit' => $alert_notification_add_edit                        
+                    );
                 }  
                 // else if($roles['page_id'] == '37')
                 // {

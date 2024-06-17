@@ -16,6 +16,15 @@ $routes->group('templates', ['namespace' => '\Modules\global_templates\Controlle
 	//Dashboard Page
 	$routes->get('dashboard', 'templates_controller::dashboard', ['as' => 'dashboard',"filter" => "loginfilter"]);	
 
+	//Get Notification Last 1hour Data 
+	$routes->get('getnotification', 'templates_controller::getnotification', ['as' => 'getnotification',"filter" => "loginfilter"]);
+	
+	//Get All Notification Last 48hour Data
+	$routes->get('get_all_notification', 'templates_controller::get_all_notification', ['as' => 'get_all_notification',"filter" => "loginfilter"]);	
+
+	//Ackowledge Notification Update
+	$routes->post('acknowledge_notification', 'templates_controller::acknowledge_notification', ['as' => 'acknowledge_notification',"filter" => "loginfilter"]);	
+	
 });
 
 

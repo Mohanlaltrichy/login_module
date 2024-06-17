@@ -108,5 +108,76 @@ class templates_controller extends BaseController
 
         return view("\Modules\global_templates\Views\dashboard",$data);        
     } 
+
+    public function getnotification()
+    {
+        try
+        {
+            if ($this->request->isAJAX()) {             
+
+                $last_date_time = date('Y-m-d h:m:s', strtotime('-1 hour'));
+
+                $data = $this->templates_model->get_notification($last_date_time);       
+        
+                return $this->response->setJSON($data);
+            }
+        }catch(\Exception $e){
+            $currentURL = current_url();
+            $this->templates_model->error('global_templates\getnotification', $currentURL, 'getnotification', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }  
     
+    public function get_all_notification()
+    {
+        try
+        {        
+            if(session('alert_notification_add_view') != '1') {
+                return redirect()->route('forbidden_error');
+            }               
+
+            $last_date_time = date('Y-m-d h:m:s', strtotime('-48 hour'));
+
+            $all_notification = $this->templates_model->get_notification($last_date_time);   
+
+            $data = array(
+                'all_notification' => $all_notification,
+            );
+           
+            return view("\Modules\global_templates\Views\all_notification",$data); 
+            
+        }catch(\Exception $e){
+            $currentURL = current_url();
+            $this->templates_model->error('global_templates\get_all_notification', $currentURL, 'get_all_notification', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    public function acknowledge_notification()
+    {
+        try{
+
+            if ($this->request->isAJAX()) { 
+
+                $selectedIds = $this->request->getPost("selectedIds");
+
+                $update_data = array(
+                    "acknowledge" => 1
+                );
+
+                $this->templates_model->updateData_whereIn('alert_notification','id',$selectedIds, $update_data);
+
+                $result = array( 
+                    "status" => 'success', 
+                    "status_msg" => 'Update Successfully', 
+                );  
+                return $this->response->setJSON($result);
+            }
+        }
+        catch(\Exception $e){
+            $currentURL = current_url();
+            $this->templates_model->error('global_templates\acknowledge_notification', $currentURL, 'acknowledge_notification', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
 }

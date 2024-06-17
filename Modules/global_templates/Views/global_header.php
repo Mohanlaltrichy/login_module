@@ -46,6 +46,42 @@ if ($page_title != '') {
                     <div class="menu-extras topbar-custom navbar p-0">
                         <ul class="mb-0 nav navbar-right ml-auto list-inline">
 
+                            <?php if(session('alert_notification_add_view') == '1') { ?>
+                            <li class="list-inline-item dropdown notification-list">
+                                <a href="#" data-target="#" class="dropdown-toggle waves-effect waves-light notification-icon-box" data-toggle="dropdown" aria-expanded="true">
+                                    <i class="fa fa-bell"></i> <span id="reddot" class="badge badge-xs badge-danger"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-lg">
+                                    <li class="text-center notifi-title">Notification <span id="datacount" class="badge badge-xs badge-success"></span></li>
+                                    <li class="list-group">
+                                        <a href="javascript:void(0);" id="anchor1" class="dropdown-item notify-item mt-2">
+                                            <div class="notify-icon bg-danger"><i class="mdi mdi-bell"></i></div>
+                                            <p id="div1" class="cusnotify notify-details"></p>
+                                            <span id="sp1" class="customspan"></span>
+                                        </a>
+
+                                        <a href="javascript:void(0);" id="anchor2" class="dropdown-item notify-item">
+                                            <div class="notify-icon bg-danger"><i class="mdi mdi-bell"></i></div>
+                                            <p id="div2" class="cusnotify notify-details"></p>
+                                            <span id="sp2" class="customspan"></span>
+                                        </a>
+
+                                        <!-- item-->
+                                        <a href="javascript:void(0);" id="anchor3" class="dropdown-item notify-item mb-2">
+                                            <div class="notify-icon bg-danger"><i class="mdi mdi-bell"></i></div>
+                                            <p id="div3" class="cusnotify notify-details"></p>
+                                            <span id="sp3" class="customspan"></span>
+                                        </a>
+
+                                        <!-- last list item -->
+                                        <a href="<?php echo $base_url.route_to('get_all_notification'); ?>" class="list-group-item text-center">
+                                            <small class="text-primary mb-0">View all </small>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <?php } ?>
+
                             <li class="list-inline-item notification-list d-none d-sm-inline-block">
                                 <a href="#" id="btn-fullscreen" class="waves-effect waves-light notification-icon-box"><i class="fas fa-expand"></i></a>
                             </li>
@@ -181,3 +217,5 @@ if ($page_title != '') {
 
     </div>
     <!-- header-bg -->
+
+    
