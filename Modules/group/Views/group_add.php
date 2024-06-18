@@ -63,7 +63,13 @@ $base_url = rtrim(base_url(), '/');
                             <div class="card">
                                 <div class="card-body">
                                     <div class="m-t-0 m-b-30">
-                                        <h3>Groups
+                                        <h3>Groups <span class="float-right" style="font-size:12px;color:red;">
+                                        <?php
+                                        if(session('group_add_edit') != '1')
+                                        {
+                                            echo EDIT_PERMISSION;
+                                        } 
+                                        ?></span>
                                         </h3>
                                     </div>
 
@@ -122,7 +128,7 @@ $base_url = rtrim(base_url(), '/');
 
                                         <!-- -->
                                         <div class="text-center">
-                                            <button type="button" id="save_group" class="btn btn-primary waves-effect waves-light">Save</button>
+                                            <button type="button" id="save_group" class="btn btn-primary waves-effect waves-light" <?=(session('group_add_edit') != '1') ? 'disabled' : '';?>>Save</button>
                                             <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="window.location='<?php echo $base_url . route_to('group'); ?>'">Cancel</button>
                                         </div>
                                         <!-- -->

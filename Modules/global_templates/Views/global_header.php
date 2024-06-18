@@ -164,19 +164,25 @@ if ($page_title != '') {
                             <!-- users Navbar Code End -->
 
                             <!-- Users Group Code Start -->
+                            <?php if (session('group_add_view') == '1' || session('group_view_and_edit_view') == '1') { ?>
                             <li class="has-submenu">
                                 <a href="javascript:void(0)"><i class="ti-notepad"></i> Groups <i class="mdi mdi-chevron-down mdi-drop"></i></a>
                                 <ul class="submenu megamenu">
                                     <li>
                                         <ul>
+                                            <?php if (session('group_add_view') == '1') { ?>
                                             <li><a href="<?php echo $base_url . route_to('group') ?>">Add</a>
                                             </li>
+                                            <?php } ?>
+                                            <?php if (session('group_view_and_edit_view') == '1') { ?>
                                             <li><a href="<?php echo $base_url . route_to('group_list') ?>">Edit
                                                     And Delete</a></li>
+                                            <?php } ?>
                                         </ul>
                                     </li>
                                 </ul>
                             </li>
+                            <?php } ?>
                             <!--Users Group Code End -->
 
                             <!-- Role Navbar Code Start -->

@@ -173,6 +173,30 @@ class login_controller extends BaseController
                         'alert_notification_add_view' => $alert_notification_add_view,
                         'alert_notification_add_edit' => $alert_notification_add_edit                        
                     );
+                }
+                else if($roles['page_id'] == '49')
+                {
+                    $group_add_view = ($roles['can_view'] == 'Y') ? '1' : '0';
+                    $group_add_edit = ($roles['can_edit'] == 'Y') ? '1' : '0';
+                    $group_add_delete = ($roles['can_delete'] == 'Y') ? '1' : '0';
+
+                    $roles_details[] = array(
+                        'group_add_view' => $group_add_view,
+                        'group_add_edit' => $group_add_edit,
+                        'group_add_delete' => $group_add_delete
+                    );
+                }
+                else if($roles['page_id'] == '50')
+                {
+                    $group_view_and_edit_view = ($roles['can_view'] == 'Y') ? '1' : '0';
+                    $group_view_and_edit_edit = ($roles['can_edit'] == 'Y') ? '1' : '0';
+                    $group_view_and_edit_delete = ($roles['can_delete'] == 'Y') ? '1' : '0';
+
+                    $roles_details[] = array(
+                        'group_view_and_edit_view' => $group_view_and_edit_view,
+                        'group_view_and_edit_edit' => $group_view_and_edit_edit,
+                        'group_view_and_edit_delete' => $group_view_and_edit_delete
+                    );
                 }  
                 // else if($roles['page_id'] == '37')
                 // {

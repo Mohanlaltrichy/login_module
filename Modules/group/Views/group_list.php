@@ -68,6 +68,22 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                     <div class="card-body">
                         <div id="heading1">
                             <h3 class="m-0">Groups
+                            <span class="float-right" style="font-size:12px;color:red;">
+                            <?php
+                            if(session('group_view_and_edit_edit') != '1' && session('group_view_and_edit_delete') != '1')
+                            {
+                                echo EDIT_AND_DELETE_PERMISSION;
+                            }
+                            else if(session('group_view_and_edit_edit') != '1')
+                            {
+                                echo EDIT_PERMISSION;
+                            }
+                            else if(session('group_view_and_edit_delete') != '1')
+                            {
+                                echo DELETE_PERMISSION;
+                            }
+                            ?>
+                            </span>
                             </h3>
                         </div>
                         <div class="row" style="margin-top:20px;margin-left:-10px;">
@@ -99,15 +115,23 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                                                         <td><?= ($item[$m['modules_option_name']] == '1') ? 'yes' : 'no'; ?></td>
                                                     <?php } ?>
                                                     <th><a href="<?= $base_url . route_to('group_user_view', $item['id']); ?>" class="badge badge-primary"><i class="fa fa-eye"></i> &nbsp; View </a></th>
-                                                    <th><a href="<?= $base_url . route_to('group_user_edit', $item['id']); ?>" class="badge badge-primary"> Edit User <i class="fa fa-edit">
-                                                            </i></a></th>
+                                                    <th>
+                                                        <?php if(session('group_view_and_edit_edit') == '1') { ?>
+                                                            <a href="<?= $base_url . route_to('group_user_edit', $item['id']); ?>" class="badge badge-primary"> Edit User <i class="fa fa-edit">
+                                                                </i></a>
+                                                        <?php } else { ?> 
+                                                            <button class="badge" disabled> Edit User <i class="fa fa-edit"></i></button>
+                                                        <?php } ?>       
+                                                    </th>
                                                     <td><?= $item['active_status']; ?></td>
                                                     <td><?= $item['local_created_at']; ?></td>
                                                     <td>
+                                                    <?php if(session('group_view_and_edit_edit') == '1') { ?>
                                                         <a href="<?= $base_url . route_to('group_edit', $item['id']); ?>"><i style="font-size: x-large;color: #6CBAFA;" class="mdi mdi-square-edit-outline"></i></a>
-                                                        <?php if ($item['active_status'] == 'active') { ?>
-                                                            <a href="javascript:void(0);" data-id='<?php echo $item['id']; ?>' id="delete_group_list"><i style="font-size: x-large;color: #ef5c6a;" class="mdi mdi-delete"></i></a>
-                                                        <?php } ?>
+                                                    <?php } ?>    
+                                                    <?php if ($item['active_status'] == 'active' && session('group_view_and_edit_delete') == '1') { ?>
+                                                        <a href="javascript:void(0);" data-id='<?php echo $item['id']; ?>' id="delete_group_list" <?=(session('group_view_and_edit_delete') != '1') ? 'disabled' : '';?>><i style="font-size: x-large;color: #ef5c6a;" class="mdi mdi-delete"></i></a>
+                                                    <?php } ?>
                                                     </td>
                                                 </tr>
                                         <?php }

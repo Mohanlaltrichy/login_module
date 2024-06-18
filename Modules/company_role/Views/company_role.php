@@ -188,6 +188,51 @@ $base_url = rtrim(base_url(), '/');
                                             </div>
                                             <!-- Users Code End -->
 
+                                            <!-- Groups Code Start -->
+                                            <div class="col-lg-12">
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Groups</b>
+                                                    <input name='groups_all_checkbox_value' id="groups_all_checkbox_value" value='0' type="hidden">
+                                                    <span class="checkbox">
+                                                        <input id="groups_all_checkbox" class="form-check-inline" type="checkbox">
+                                                        <label for="groups_all_checkbox">
+                                                            Select all pages
+                                                        </label>
+                                                    </span>
+                                                </h5>
+
+                                                <div class="form-groups row">
+                                                    <?php if (!empty($groups_module_data)) {
+                                                        foreach ($groups_module_data as $groups_role) {
+                                                    ?>
+                                                            <div class="col-sm-6 mb-3">
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", $groups_role['page_name'])); ?></b></label>
+                                                                <input name="groups_checkbox_id[]" value='<?= $groups_role['id']; ?>' type="hidden">
+                                                                <input name="groups_checkbox_view[]" id="checkbox_view_<?= $groups_role['id']; ?>" class='groups_checkbox_value' value='0' type="hidden">
+                                                                <input name="groups_checkbox_edit[]" id="checkbox_edit_<?= $groups_role['id']; ?>" class='groups_checkbox_value' value='0' type="hidden">
+                                                                <input name="groups_checkbox_delete[]" id="checkbox_delete_<?= $groups_role['id']; ?>" class='groups_checkbox_value' value='0' type="hidden">
+                                                                <span class="checkbox groups_checkbox_div">
+                                                                    <input data-name='can_view' data-id='<?= $groups_role['id']; ?>' class="col-sm-2 groups_checkbox" type="checkbox">
+                                                                    <label for="checkbox_view_<?= $groups_role['id']; ?>">
+                                                                        Can View
+                                                                    </label>
+                                                                    <input data-name='can_edit' data-id='<?= $groups_role['id']; ?>' class="col-sm-2 groups_checkbox" type="checkbox">
+                                                                    <label for="checkbox_edit_<?= $groups_role['id']; ?>">
+                                                                        Can Edit
+                                                                    </label>
+                                                                    <input data-name='can_delete' data-id='<?= $groups_role['id']; ?>' class="col-sm-2 groups_checkbox" type="checkbox">
+                                                                    <label for="checkbox_delete_<?= $groups_role['id']; ?>">
+                                                                        Can Delete
+                                                                    </label>
+                                                                </span>
+                                                            </div>
+                                                    <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <!-- Groups Code End -->
+
                                             <h3 class="col-lg-12 mb-3">Cloud Connector</h3>
                                             <!-- OPC Role Code Start -->
                                             <div class="col-lg-12">

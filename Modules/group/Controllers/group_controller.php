@@ -27,6 +27,10 @@ class group_controller extends BaseController
     {
         try {
 
+            if(session('group_add_view') != '1') {
+                return redirect()->route('forbidden_error');
+            }
+
             $group_modules_whereConditions = [
                 'active' => 'Y',
             ];
@@ -50,44 +54,51 @@ class group_controller extends BaseController
     {
         try {
 
-            $group_name = $this->request->getPost("group_name");
-            $description = $this->request->getPost("description");
-            $modules = $this->request->getPost("modules");
-            $status = $this->request->getPost("status");
+            if(session('group_add_edit') == '1')
+            {
+                $group_name = $this->request->getPost("group_name");
+                $description = $this->request->getPost("description");
+                $modules = $this->request->getPost("modules");
+                $status = $this->request->getPost("status");
 
-            $group_data_whereConditions = [
-                'grp_name' => $group_name,
-                'company_id' => $this->customer_id,
-            ];
-
-            $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_data_whereConditions);
-
-
-            if (empty($result)) {
-
-                $data = array(
-                    'company_id' => $this->customer_id,
+                $group_data_whereConditions = [
                     'grp_name' => $group_name,
-                    'grp_desc' => $description,
-                    'active_status' => $status,
-                    'utc_created_at' => date('Y-m-d H:i:s'),
-                    'local_created_at' => $this->local_date_time,
-                    'created_by' => $this->logged_user_id,
-                );
+                    'company_id' => $this->customer_id,
+                ];
 
-                if (!empty($modules)) {
-                    foreach ($modules as $m) {
-                        $data[$m] = '1';
+                $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_data_whereConditions);
+
+
+                if (empty($result)) {
+
+                    $data = array(
+                        'company_id' => $this->customer_id,
+                        'grp_name' => $group_name,
+                        'grp_desc' => $description,
+                        'active_status' => $status,
+                        'utc_created_at' => date('Y-m-d H:i:s'),
+                        'local_created_at' => $this->local_date_time,
+                        'created_by' => $this->logged_user_id,
+                    );
+
+                    if (!empty($modules)) {
+                        foreach ($modules as $m) {
+                            $data[$m] = '1';
+                        }
                     }
-                }
 
-                $group_add = $this->group_model->insertData('tbl_group', $data);
+                    $group_add = $this->group_model->insertData('tbl_group', $data);
 
-                if ($group_add) {
-                    session()->setFlashdata('success', 'Group Successfully Added.');
+                    if ($group_add) {
+                        session()->setFlashdata('success', 'Group Successfully Added.');
+                    }
+                } else {
+                    session()->setFlashdata('duplicate_record_found', 'Group name already exists');
                 }
-            } else {
-                session()->setFlashdata('duplicate_record_found', 'Group name already exists');
+            }
+            else
+            {
+                session()->setFlashdata('duplicate_record_found', 'Data Not Updated Access Denied.');
             }
 
             return redirect()->route('group');
@@ -137,6 +148,10 @@ class group_controller extends BaseController
     {
         try {
 
+            if(session('group_view_and_edit_view') != '1') {
+                return redirect()->route('forbidden_error');
+            }
+
             $group_data_whereConditions = [
                 'company_id' => $this->customer_id,
             ];
@@ -162,6 +177,10 @@ class group_controller extends BaseController
     public function group_user_view($id = 0)
     {
         try {
+
+            if(session('group_view_and_edit_view') != '1') {
+                return redirect()->route('forbidden_error');
+            }
 
             $group_whereConditions = [
                 'id' => $id
@@ -189,6 +208,10 @@ class group_controller extends BaseController
     {
         try {
 
+            if(session('group_view_and_edit_edit') != '1') {
+                return redirect()->route('forbidden_error');
+            }
+
             $group_whereConditions = [
                 'id' => $id
             ];
@@ -215,6 +238,10 @@ class group_controller extends BaseController
     public function group_edit($id = 0)
     {
         try {
+
+            if(session('group_view_and_edit_edit') != '1') {
+                return redirect()->route('forbidden_error');
+            }
 
             $group_edit_where = [
                 'id' => $id,
@@ -246,61 +273,67 @@ class group_controller extends BaseController
     {
         try {
 
+            if(session('group_view_and_edit_edit') == '1')
+            {
+                $group_id = $this->request->getPost("group_id");
+                $grp_name = $this->request->getPost("grp_name");
+                $description = $this->request->getPost("description");
+                $modules = $this->request->getPost("modules");
+                $status = $this->request->getPost("status");
 
-            $group_id = $this->request->getPost("group_id");
-            $grp_name = $this->request->getPost("grp_name");
-            $description = $this->request->getPost("description");
-            $modules = $this->request->getPost("modules");
-            $status = $this->request->getPost("status");
-
-            $group_data_whereConditions = [
-                'id' => $group_id,
-                'grp_name' => $grp_name,
-                'company_id' => $this->customer_id,
-            ];
-
-            $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_data_whereConditions);
-
-            if (!empty($result)) {
-
-                $group_modules_whereConditions = [
-                    'active' => 'Y',
-                ];
-
-                $modules_update = $this->group_model->GetTableValue('group_modules', 'modules_option_name', $group_modules_whereConditions);
-
-                $update_whereConditions = [
+                $group_data_whereConditions = [
                     'id' => $group_id,
+                    'grp_name' => $grp_name,
                     'company_id' => $this->customer_id,
                 ];
 
-                foreach ($modules_update as $mu) {
-                    $mu_update_data = array(
-                        $mu['modules_option_name'] => '0'
-                    );
-                    $this->group_model->updateData('tbl_group', $update_whereConditions, $mu_update_data); //All Modules First '0' Set
-                }
+                $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_data_whereConditions);
 
-                $data = array(
-                    'company_id' => $this->customer_id,
-                    'grp_desc' => $description,
-                    'active_status' => $status,
-                    'utc_updated_at' => date('Y-m-d H:i:s'),
-                    'local_updated_at' => $this->local_date_time,
-                    'updated_by' => $this->logged_user_id,
-                );
+                if (!empty($result)) {
 
-                if (!empty($modules)) {
-                    foreach ($modules as $m) {
-                        $data[$m] = '1';
+                    $group_modules_whereConditions = [
+                        'active' => 'Y',
+                    ];
+
+                    $modules_update = $this->group_model->GetTableValue('group_modules', 'modules_option_name', $group_modules_whereConditions);
+
+                    $update_whereConditions = [
+                        'id' => $group_id,
+                        'company_id' => $this->customer_id,
+                    ];
+
+                    foreach ($modules_update as $mu) {
+                        $mu_update_data = array(
+                            $mu['modules_option_name'] => '0'
+                        );
+                        $this->group_model->updateData('tbl_group', $update_whereConditions, $mu_update_data); //All Modules First '0' Set
                     }
+
+                    $data = array(
+                        'company_id' => $this->customer_id,
+                        'grp_desc' => $description,
+                        'active_status' => $status,
+                        'utc_updated_at' => date('Y-m-d H:i:s'),
+                        'local_updated_at' => $this->local_date_time,
+                        'updated_by' => $this->logged_user_id,
+                    );
+
+                    if (!empty($modules)) {
+                        foreach ($modules as $m) {
+                            $data[$m] = '1';
+                        }
+                    }
+
+                    $group_update = $this->group_model->updateData('tbl_group', $update_whereConditions, $data);
+
+                    session()->setFlashdata('success', 'Group Successfully Updated.');
+                } else {
+                    session()->setFlashdata('msg', 'Group Name Not Exists');
                 }
-
-                $group_update = $this->group_model->updateData('tbl_group', $update_whereConditions, $data);
-
-                session()->setFlashdata('success', 'Group Successfully Updated.');
-            } else {
-                session()->setFlashdata('msg', 'Group Name Not Exists');
+            }
+            else
+            {
+                session()->setFlashdata('duplicate_record_found', 'Data Not Updated Access Denied.');
             }
 
             return redirect()->route('group_list');
@@ -318,23 +351,31 @@ class group_controller extends BaseController
 
             if ($this->request->isAJAX()) {
 
-                $id = $this->request->getGet("id");
+                if(session('group_view_and_edit_delete') == '1')
+                {
 
-                $group_whereConditions = [
-                    'id' => $id,
-                ];
+                    $id = $this->request->getGet("id");
 
-                $data = [
-                    'active_status' => 'inactive',
-                    'utc_updated_at' => date('Y-m-d H:i:s'),
-                    'local_updated_at' => $this->local_date_time,
-                    'updated_by' => $this->logged_user_id,
-                ];
+                    $group_whereConditions = [
+                        'id' => $id,
+                    ];
 
-                $this->group_model->updateData('tbl_group', $group_whereConditions, $data);
+                    $data = [
+                        'active_status' => 'inactive',
+                        'utc_updated_at' => date('Y-m-d H:i:s'),
+                        'local_updated_at' => $this->local_date_time,
+                        'updated_by' => $this->logged_user_id,
+                    ];
 
-                session()->removeTempdata('group_deleted_success');
-                session()->setTempdata('group_deleted_success', 'group Successfully Deleted');
+                    $this->group_model->updateData('tbl_group', $group_whereConditions, $data);
+
+                    session()->removeTempdata('group_deleted_success');
+                    session()->setTempdata('group_deleted_success', 'group successfully deleted');
+                }
+                else
+                {
+                    session()->setFlashdata('msg', 'Group not deleted access denied.');
+                }
 
                 $result = array('success' => 'success');
                 echo json_encode($result);
@@ -353,30 +394,37 @@ class group_controller extends BaseController
 
             if ($this->request->isAJAX()) {
 
-                $group_id = $this->request->getGet("group_id");
-                $user_checkedIds = $this->request->getGet("user_checkedIds");
+                if(session('group_view_and_edit_delete') == '1')
+                {
+                    $group_id = $this->request->getGet("group_id");
+                    $user_checkedIds = $this->request->getGet("user_checkedIds");
 
-                $group_user_mapped_delete_whereConditions = [
-                    'grpid' => $group_id,
-                ];
+                    $group_user_mapped_delete_whereConditions = [
+                        'grpid' => $group_id,
+                    ];
 
-                $this->group_model->deleteData('tbl_user_mapping', $group_user_mapped_delete_whereConditions);
+                    $this->group_model->deleteData('tbl_user_mapping', $group_user_mapped_delete_whereConditions);
 
-                $data = [];
-                if (!empty($user_checkedIds)) {
-                    foreach ($user_checkedIds as $user_id) {
-                        $data[] = array(
-                            'grpid' => $group_id,
-                            'user_id' => $user_id,
-                            'active' => 'Y',
-                        );
+                    $data = [];
+                    if (!empty($user_checkedIds)) {
+                        foreach ($user_checkedIds as $user_id) {
+                            $data[] = array(
+                                'grpid' => $group_id,
+                                'user_id' => $user_id,
+                                'active' => 'Y',
+                            );
+                        }
                     }
+
+                    $this->group_model->insertBatchData('tbl_user_mapping', $data);
+
+                    session()->removeTempdata('group_user_success');
+                    session()->setTempdata('group_user_success', 'Group User Successfully Updated');
                 }
-
-                $this->group_model->insertBatchData('tbl_user_mapping', $data);
-
-                session()->removeTempdata('group_user_success');
-                session()->setTempdata('group_user_success', 'Group User Successfully Updated');
+                else
+                {
+                    session()->setFlashdata('msg', 'Group user not deleted access denied.');
+                }
 
                 $result = array('success' => 'success');
                 echo json_encode($result);

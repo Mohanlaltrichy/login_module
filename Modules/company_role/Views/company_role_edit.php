@@ -220,6 +220,66 @@ $this->company_role_model = new company_role_model();
                                             </div>
                                             <!-- Users Code End -->
 
+                                            <!-- Groups Code Start -->                                                
+                                            <div class="col-lg-12">                                                                                                      
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Groups</b>
+                                                <input name='groups_all_checkbox_value' id="groups_all_checkbox_value" value='<?=($roles_details[0]['groups_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
+                                                <span class="checkbox">
+                                                <input id="groups_all_checkbox" class="form-check-inline" type="checkbox" <?=($roles_details[0]['groups_all_pages'] == 'Y') ? 'checked' : ''?>>
+                                                    <label for="groups_all_checkbox">
+                                                        Select all pages
+                                                    </label>
+                                                </span>
+                                                </h5> 
+                                                    
+                                                <div class="form-group row">
+                                                    <?php if(!empty($groups_module_data))
+                                                    {                                                        
+                                                        foreach($groups_module_data as $groups_role)
+                                                        {                                                     
+                                                            $groups_data_whereConditions = [                                  
+                                                                'role_id' => $roles_details[0]['id'], 
+                                                                'page_id' => $groups_role['id'],                                  
+                                                            ];
+                                                
+                                                            $groups_result = $this->company_role_model->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $groups_data_whereConditions);
+
+                                                            if(empty($groups_result))
+                                                            {
+                                                                $groups_result[0]['can_view'] = 'N';
+                                                                $groups_result[0]['can_edit'] = 'N';
+                                                                $groups_result[0]['can_delete'] = 'N';
+                                                            }
+                                                    ?>
+                                                    <div class="col-sm-6 mb-3">                                                   
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$groups_role['page_name'])); ?></b></label>
+                                                        <input name="groups_checkbox_id[]" value='<?=$groups_role['id'];?>' type="hidden"> 
+                                                        <input name="groups_checkbox_view[]" id="checkbox_view_<?=$groups_role['id'];?>" class='groups_checkbox_value' value='<?=($groups_result[0]['can_view'] == 'Y') ? '1' : '0'; ?>' type="hidden">
+                                                        <input name="groups_checkbox_edit[]" id="checkbox_edit_<?=$groups_role['id'];?>" class='groups_checkbox_value' value='<?=($groups_result[0]['can_edit'] == 'Y') ? '1' : '0'; ?>' type="hidden">
+                                                        <input name="groups_checkbox_delete[]" id="checkbox_delete_<?=$groups_role['id'];?>" class='groups_checkbox_value' value='<?=($groups_result[0]['can_delete'] == 'Y') ? '1' : '0'; ?>' type="hidden">                                                                                                                      
+                                                        <span class="checkbox groups_checkbox_div">                                                            
+                                                            <input data-name='can_view' data-id='<?=$groups_role['id'];?>' class="col-sm-2 groups_checkbox" type="checkbox" <?=($groups_result[0]['can_view'] == 'Y') ? 'checked' : ''; ?>>                                                          
+                                                            <label for="checkbox_view_<?=$groups_role['id'];?>">
+                                                                Can View
+                                                            </label>
+                                                            <input data-name='can_edit' data-id='<?=$groups_role['id'];?>' class="col-sm-2 groups_checkbox" type="checkbox" <?=($groups_result[0]['can_edit'] == 'Y') ? 'checked' : ''; ?>>                                                           
+                                                            <label for="checkbox_edit_<?=$groups_role['id'];?>">
+                                                                Can Edit
+                                                            </label>
+                                                            <input data-name='can_delete' data-id='<?=$groups_role['id'];?>' class="col-sm-2 groups_checkbox"  type="checkbox" <?=($groups_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_delete_<?=$groups_role['id'];?>">
+                                                                Can Delete
+                                                            </label>
+                                                        </span>                                             
+                                                    </div>
+                                                    <?php                                                       
+                                                        }
+                                                    }
+                                                    ?>                                                    
+                                                </div>
+                                            </div>
+                                            <!-- Groups Code End -->
+
                                             <h3 class="col-lg-12 mb-3">Cloud Connector</h3>
                                             <!-- OPC Role Code Start -->                                                
                                             <div class="col-lg-12">                                                                                                      

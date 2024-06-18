@@ -36,6 +36,24 @@
         }
     }); 
 
+    $('#groups_all_checkbox').change(function()
+    {             
+        var isChecked = $(this).prop("checked");       
+        
+        if(isChecked == true)
+        {
+            $('.groups_checkbox').prop("checked",true);
+            $('#groups_all_checkbox_value').val('1');
+            $('.groups_checkbox_value').val('1');
+        }   
+        else
+        {
+            $('.groups_checkbox').prop("checked",false);
+            $('#groups_all_checkbox_value').val('0');
+            $('.groups_checkbox_value').val('0');
+        }
+    });
+
     $('#opc_all_checkbox').change(function()
     {             
         var isChecked = $(this).prop("checked");
@@ -178,7 +196,7 @@
         }
     });
 
-    $('.roles_checkbox, .users_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox').change(function()
+    $('.roles_checkbox, .users_checkbox, .groups_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox').change(function()
     {
         var isChecked = $(this).prop("checked"); 
         var data_name = $(this).data('name');
@@ -251,6 +269,25 @@
             {               
                 $('#users_all_checkbox').prop("checked", false);
                 $('#users_all_checkbox_value').val('0');
+            }
+        }
+        else if($(this).hasClass('groups_checkbox'))
+        {
+            var groups_checkboxes = document.querySelectorAll('.groups_checkbox_div input[type="checkbox"]');
+
+            var user_allChecked = Array.from(groups_checkboxes).every(function(usercheckbox) {
+            return usercheckbox.checked;
+            });
+
+            if(user_allChecked == true)
+            {              
+                $('#groups_all_checkbox').prop("checked", true);
+                $('#groups_all_checkbox_value').val('1');
+            }
+            else
+            {               
+                $('#groups_all_checkbox').prop("checked", false);
+                $('#groups_all_checkbox_value').val('0');
             }
         }
         else if($(this).hasClass('opc_checkbox'))
