@@ -76,12 +76,28 @@ class login_controller extends BaseController
                     $this->loginModel->insertData('user_login_history',$data);
 
                     $this->user_roles_set($userData['role_id']); // User Roles Session Code
+
+                    $roles_whereConditions = [
+                        'id' => $userData['role_id'],                 
+                    ];                   
+                    
+                    $rolesData = $this->loginModel->GetTableValue('tbl_roles','role_name',$roles_whereConditions);
+
+                    if($rolesData['role_name'] == "Company Admin")
+                    {
+                        $company_admin = '1';
+                    }
+                    else
+                    {
+                        $company_admin = '0';
+                    }
                     
                     $ses_data = [
                         'Taguser_id'       => $userData['id'],
                         'Taguser_name'     => $userData['name'],
                         'Taguser_email'    => $userData['email'],
                         'Taguser_company'  => $userData['company_id'],
+                        'company_admin'    => $company_admin,
                         'Taglogged_in'     => TRUE
                     ];
                     $session->set($ses_data);

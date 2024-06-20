@@ -51,13 +51,9 @@ class templates_model extends Model
                         'parameter_name !=' => ''
                     ];
 
-                    $user_role_id_whereConditions = [
-                        'id' => $user_id
-                    ];
                     
-                    $user_role_id = $this->GetTableValue('users', 'role_id', $user_role_id_whereConditions,'','','','','');
 
-                    if($user_role_id[0]['role_id'] != 3)
+                    if(session('company_admin') != 1)
                     {
                         $grp_id = [];
                         foreach($user_group_id as $grpid)
@@ -70,7 +66,7 @@ class templates_model extends Model
                     }
                     else
                     {
-                        $data = $this->GetTableValue('alert_notification', '*', $alert_notification_whereConditions,'','','','trigger_time','asc');
+                        $data = $this->GetTableValue_whereIn_pgsql('alert_notification', '*', $alert_notification_whereConditions,'','','trigger_time','asc');
                     }                   
                     
                 }
