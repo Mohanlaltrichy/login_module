@@ -12,12 +12,26 @@
 
 <!-- Notification Bell Icon Data Code Start -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {       
         makeAjaxRequest();        
     });
 
+    var lastRequestTime = 0;
+    var requestInterval = 5000; // Interval in milliseconds between each request
+
     function makeAjaxRequest() {
         var time = "<?=NOTIFICATION_TIME?>";
+
+        var currentTime = Date.now();       
+
+    	// Throttle the requests to ensure a minimum interval between consecutive requests
+    	if (currentTime - lastRequestTime < requestInterval) {
+        	setTimeout(makeAjaxRequest, requestInterval - (currentTime - lastRequestTime));
+        	return;
+    	}
+
+    	lastRequestTime = currentTime;
+
         $.ajax({
             url: base_url+"templates/getnotification",
             type: 'GET',
@@ -48,15 +62,18 @@
                     $('#datacount').text(data.length);
                     $('#reddot').css('visibility', 'visible');
                 }
-            },
-            error: function(xhr, status, error) {}
-        });
 
-        // setTimeout(function() {
-        //     makeAjaxRequest();
-        // }, parseInt({           
-        //         time            
-        // })); //parseInt({{ env('TIME') }})
+                // Schedule the next request
+                setTimeout(makeAjaxRequest, requestInterval);
+            },
+            error: function(xhr, status, error) {
+                 // Handle error if needed
+                 console.error("Error fetching data:", error);
+
+                // Schedule the next request even if there's an error
+                setTimeout(makeAjaxRequest, requestInterval);
+            }
+        });        
     }
 </script>
 <!-- Notification Bell Icon Data Code End -->

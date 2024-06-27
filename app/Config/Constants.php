@@ -101,4 +101,4 @@ define('DELETE_PERMISSION', 'Delete Permission Not Available');
 
 define('EDIT_AND_DELETE_PERMISSION', 'Edit And Delete Permission Not Available');
 
-define('NOTIFICATION_TIME', '100000'); //millisecond
+define('NOTIFICATION_TIME', '30000'); //millisecond 3 sec
