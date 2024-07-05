@@ -102,3 +102,13 @@ define('DELETE_PERMISSION', 'Delete Permission Not Available');
 define('EDIT_AND_DELETE_PERMISSION', 'Edit And Delete Permission Not Available');
 
 define('NOTIFICATION_TIME', '30000'); //millisecond 3 sec
+
+define('OPEN_CLOUDCONNECTOR', 'http://localhost:9000/login/user_login_key_validation/'); 
+
+define('OPEN_SUBSCRIPTION','http://localhost:8000/user_login_key_validation/');
+
+define('OPEN_ALERT_AND_NOTIFY','http://localhost:8001/user_login_key_validation/');
+
+define('OPEN_DASHBOARD','http://localhost:9002/login/user_login_key_validation/');
+
+define('OPEN_REPORTS','http://localhost:3000/dashboard/report_login/');

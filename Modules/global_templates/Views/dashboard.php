@@ -96,25 +96,25 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
 <script>
         //Open Cloud Connector Module
         function open_cloudconnector() {
-            window.open('http://localhost:9000/login/user_login_key_validation/<?=$login_key;?>', '_blank');
+            window.open('<?=OPEN_CLOUDCONNECTOR.$login_key;?>', '_blank');
         }
 
         //Open Subscription Module
         function open_subscription() {
-            window.open('http://localhost:8000/user_login_key_validation/<?=$login_key;?>', '_blank');
+            window.open('<?=OPEN_SUBSCRIPTION.$login_key;?>', '_blank');
         }
 
         //Open Alert And Notification
         function open_alert_and_notify() {
-            window.open('http://localhost:8001/user_login_key_validation/<?=$login_key;?>', '_blank');
+            window.open('<?=OPEN_ALERT_AND_NOTIFY.$login_key;?>', '_blank');
         }
 
         function open_dashboard() {
-            window.open('http://localhost:9002/login/user_login_key_validation/<?=$login_key;?>', '_blank');
+            window.open('<?=OPEN_DASHBOARD.$login_key;?>', '_blank');
         }
 
         function open_reports() {
-            window.open('http://localhost:3000/dashboard/report_login/<?=$login_key;?>', '_blank');
+            window.open('<?=OPEN_REPORTS.$login_key;?>', '_blank');
         }
     </script>
 

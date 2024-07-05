@@ -49,8 +49,7 @@ class login_controller extends BaseController
                 ];
                 
                 
-                $userData = $this->loginModel->GetTableValue('users','*',$login_whereConditions);
-                
+                $userData = $this->loginModel->GetTableValue('users','*',$login_whereConditions);                
 
                 if(empty($userData)){
                     $session->setFlashdata('msg', 'Invalid credentials');
@@ -75,10 +74,26 @@ class login_controller extends BaseController
 
                     $this->loginModel->insertData('user_login_history',$data);
 
+                    $company_whereConditions = [
+                        'id' => $userData['company_id'], 
+                        'status' => 'active',          
+                    ];                    
+                    
+                    //Company Active Check Code Start
+                    $userCompanyData = $this->loginModel->GetTableValue('tbl_companies','*',$company_whereConditions);
+
+                    if(empty($userCompanyData))
+                    {
+                        $redirect_url = OPEN_SUBSCRIPTION.$randomUid;
+
+                        return redirect()->to($redirect_url);
+                    }
+                    //Company Active Check Code End
+
                     $this->user_roles_set($userData['role_id']); // User Roles Session Code
 
                     $roles_whereConditions = [
-                        'id' => $userData['role_id'],                 
+                        'id' => $userData['role_id'],               
                     ];                   
                     
                     $rolesData = $this->loginModel->GetTableValue('tbl_roles','role_name',$roles_whereConditions);
