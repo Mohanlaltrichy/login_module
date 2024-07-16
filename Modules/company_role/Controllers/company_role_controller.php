@@ -96,6 +96,9 @@ class company_role_controller extends BaseController
             ];
 
             $groups_module_data = $this->company_role_model->get_page_details($groups_module_like);
+
+
+            $subscription_roles_page_data = $this->company_role_model->get_subscription_page_details();       
                     
             $data = array(
                 'roles_module_data' => $roles_module_data,
@@ -108,7 +111,8 @@ class company_role_controller extends BaseController
                 'dashboard_module_data' => $dashboard_module_data,
                 'reports_module_data' => $reports_module_data,
                 'notification' => $notification, 
-                'groups_module_data' => $groups_module_data                                          
+                'groups_module_data' => $groups_module_data,
+                'subscription_roles_page_data' => $subscription_roles_page_data                                          
             );
 
             return view("\Modules\company_role\Views\company_role",$data);
@@ -366,6 +370,8 @@ class company_role_controller extends BaseController
             ];
 
             $groups_module_data = $this->company_role_model->get_page_details($groups_module_like);
+
+            $subscription_roles_page_data = $this->company_role_model->get_subscription_page_details(); 
             
             $data = array(
                 'roles_details' => $roles_details,
@@ -379,7 +385,8 @@ class company_role_controller extends BaseController
                 'dashboard_module_data' => $dashboard_module_data,
                 'reports_module_data' => $reports_module_data,
                 'notification_data' => $notification_data,
-                'groups_module_data' => $groups_module_data
+                'groups_module_data' => $groups_module_data,
+                'subscription_roles_page_data' => $subscription_roles_page_data
             );
 
             return view("\Modules\company_role\Views\company_role_edit",$data);

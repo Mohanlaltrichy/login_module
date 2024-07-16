@@ -90,7 +90,7 @@ class login_controller extends BaseController
                     }
                     //Company Active Check Code End
 
-                    $this->user_roles_set($userData['role_id']); // User Roles Session Code
+                    $this->user_roles_set($userData['role_id'], $userData['company_id']); // User Roles Session Code
 
                     $roles_whereConditions = [
                         'id' => $userData['role_id'],               
@@ -132,11 +132,11 @@ class login_controller extends BaseController
         }
     }
 
-    public function user_roles_set($role_id = 0)
+    public function user_roles_set($role_id = 0, $company_id = 0)
     {
         try
         {        
-            $user_roles_data = $this->loginModel->get_user_roles_details($role_id);
+            $user_roles_data = $this->loginModel->get_user_roles_details($role_id, $company_id);
             $roles_details = [];        
             foreach($user_roles_data as $roles)
             {       

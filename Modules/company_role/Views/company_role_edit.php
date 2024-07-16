@@ -146,10 +146,12 @@ $this->company_role_model = new company_role_model();
                                                             <label for="checkbox_edit_<?=$roles_role['id'];?>">
                                                                 Can Edit
                                                             </label>
+                                                            <?php if($roles_role['page_name'] != "roles_add") { ?>
                                                             <input data-name='can_delete' data-id='<?=$roles_role['id'];?>' class="col-sm-2 roles_checkbox"  type="checkbox" <?=($roles_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
                                                             <label for="checkbox_delete_<?=$roles_role['id'];?>">
                                                                 Can Delete
                                                             </label>
+                                                            <?php } ?>
                                                         </span>                                             
                                                     </div>
                                                     <?php                                                       
@@ -206,10 +208,12 @@ $this->company_role_model = new company_role_model();
                                                             <label for="checkbox_edit_<?=$users_role['id'];?>">
                                                                 Can Edit
                                                             </label>
+                                                            <?php if($users_role['page_name'] != "users_add") { ?>
                                                             <input data-name='can_delete' data-id='<?=$users_role['id'];?>' class="col-sm-2 users_checkbox"  type="checkbox" <?=($users_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
                                                             <label for="checkbox_delete_<?=$users_role['id'];?>">
                                                                 Can Delete
                                                             </label>
+                                                            <?php } ?>
                                                         </span>                                             
                                                     </div>
                                                     <?php                                                       
@@ -266,10 +270,12 @@ $this->company_role_model = new company_role_model();
                                                             <label for="checkbox_edit_<?=$groups_role['id'];?>">
                                                                 Can Edit
                                                             </label>
+                                                            <?php if($groups_role['page_name'] != "groups_add") { ?>
                                                             <input data-name='can_delete' data-id='<?=$groups_role['id'];?>' class="col-sm-2 groups_checkbox"  type="checkbox" <?=($groups_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
                                                             <label for="checkbox_delete_<?=$groups_role['id'];?>">
                                                                 Can Delete
                                                             </label>
+                                                            <?php } ?>
                                                         </span>                                             
                                                     </div>
                                                     <?php                                                       
@@ -280,8 +286,9 @@ $this->company_role_model = new company_role_model();
                                             </div>
                                             <!-- Groups Code End -->
 
-                                            <h3 class="col-lg-12 mb-3">Cloud Connector</h3>
-                                            <!-- OPC Role Code Start -->                                                
+                                            <!-- OPC Role Code Start --> 
+                                            <?php if (in_array('cloud_connector', $subscription_roles_page_data)) { ?>
+                                            <h3 class="col-lg-12 mb-3">Cloud Connector</h3>                                                                                           
                                             <div class="col-lg-12">                                                                                                      
                                                 <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">OPC</b>
                                                 <input name="opc_all_checkbox_value" id="opc_all_checkbox_value" value='<?=($roles_details[0]['opc_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
@@ -297,20 +304,24 @@ $this->company_role_model = new company_role_model();
                                                     <?php if(!empty($opc_module_data))
                                                     {                                                      
                                                         foreach($opc_module_data as $opc_role)
-                                                        {   
-                                                            $opc_data_whereConditions = [                                  
-                                                                'role_id' => $roles_details[0]['id'], 
-                                                                'page_id' => $opc_role['id'],                                 
-                                                            ];
-                                                
-                                                            $opc_result = $this->company_role_model->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $opc_data_whereConditions);   
-                                                            
-                                                            if(empty($opc_result))
+                                                        {
+                                                            if($opc_role['page_name'] == 'opc_add_server' && in_array('opc_ua_subscribe', $subscription_roles_page_data) || $opc_role['page_name'] == 'opc_bulk_import' && in_array('opc_bulk_import', $subscription_roles_page_data) || $opc_role['page_name'] != 'opc_add_server' && $opc_role['page_name'] != 'opc_bulk_import')
                                                             {
-                                                                $opc_result[0]['can_view'] = 'N';
-                                                                $opc_result[0]['can_edit'] = 'N';
-                                                                $opc_result[0]['can_delete'] = 'N';
-                                                            }
+                                                                if($opc_role['page_name'] == 'opc_nodes_to_subscribe' && in_array('opc_ua_subscribe', $subscription_roles_page_data) || $opc_role['page_name'] == 'opc_history_data_nodes' && in_array('opc_ua_subscribe', $subscription_roles_page_data) || $opc_role['page_name'] != 'opc_nodes_to_subscribe' && $opc_role['page_name'] != 'opc_history_data_nodes') {
+
+                                                                $opc_data_whereConditions = [                                  
+                                                                    'role_id' => $roles_details[0]['id'], 
+                                                                    'page_id' => $opc_role['id'],                                 
+                                                                ];
+                                                    
+                                                                $opc_result = $this->company_role_model->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $opc_data_whereConditions);   
+                                                                
+                                                                if(empty($opc_result))
+                                                                {
+                                                                    $opc_result[0]['can_view'] = 'N';
+                                                                    $opc_result[0]['can_edit'] = 'N';
+                                                                    $opc_result[0]['can_delete'] = 'N';
+                                                                }
                                                     ?>
                                                     <div class="col-sm-6 mb-3">                                                   
                                                         <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$opc_role['page_name'])); ?></b></label>
@@ -318,30 +329,40 @@ $this->company_role_model = new company_role_model();
                                                         <input name="opc_checkbox_view[]" id="checkbox_view_<?=$opc_role['id'];?>" type="hidden" class='opc_checkbox_value' value='<?=($opc_result[0]['can_view'] == 'Y') ? '1' : '0'; ?>'>
                                                         <input name="opc_checkbox_edit[]" id="checkbox_edit_<?=$opc_role['id'];?>" type="hidden"  class='opc_checkbox_value'  value='<?=($opc_result[0]['can_edit'] == 'Y') ? '1' : '0'; ?>'>
                                                         <input name="opc_checkbox_delete[]" id="checkbox_delete_<?=$opc_role['id'];?>" type="hidden"  class='opc_checkbox_value'  value='<?=($opc_result[0]['can_delete'] == 'Y') ? '1' : '0'; ?>'>                                                                             
-                                                        <span class="checkbox opc_checkbox_div">                                                 
+                                                        <span class="checkbox opc_checkbox_div"> 
+                                                            <?php if($opc_role['page_name'] != "opc_nodes_to_subscribe" && $opc_role['page_name'] != "opc_events_to_subscribe" && $opc_role['page_name'] != "opc_history_data_nodes" && $opc_role['page_name'] != "opc_history_event_nodes") { ?>                                                
                                                             <input data-name='can_view' data-id='<?=$opc_role['id'];?>' class="col-sm-2 opc_checkbox" type="checkbox" <?=($opc_result[0]['can_view'] == 'Y') ? 'checked' : ''; ?>>                                                   
                                                             <label for="checkbox_view_<?=$opc_role['id'];?>">
                                                                 Can View
                                                             </label>
+                                                            <?php } ?>
+                                                            <?php if($opc_role['page_name'] != "opc_add_node") { ?>
                                                             <input data-name='can_edit' data-id='<?=$opc_role['id'];?>' class="col-sm-2 opc_checkbox" type="checkbox" <?=($opc_result[0]['can_edit'] == 'Y') ? 'checked' : ''; ?>>                                                            
                                                             <label for="checkbox_edit_<?=$opc_role['id'];?>">
                                                                 Can Edit
                                                             </label>
+                                                            <?php if($opc_role['page_name'] != "opc_nodes_to_subscribe" && $opc_role['page_name'] != "opc_events_to_subscribe" && $opc_role['page_name'] != "opc_history_data_nodes" && $opc_role['page_name'] != "opc_history_event_nodes" && $opc_role['page_name'] != "opc_add_server" && $opc_role['page_name'] != "opc_client_bcp" && $opc_role['page_name'] != "opc_bulk_import") { ?> 
                                                             <input data-name='can_delete' data-id='<?=$opc_role['id'];?>' class="col-sm-2 opc_checkbox" type="checkbox" <?=($opc_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
                                                             <label for="checkbox_delete_<?=$opc_role['id'];?>">
                                                                 Can Delete
                                                             </label>
+                                                            <?php } ?>
+                                                            <?php } ?>
                                                         </span>                                              
                                                     </div>
-                                                    <?php                                                        
+                                                    <?php
+                                                                }                                                        
+                                                            }
                                                         }
                                                     }
                                                     ?>                                                    
                                                 </div>
                                             </div>
+                                            <?php } ?>
                                             <!-- OPC Role Code End -->                                            
 
-                                            <!-- Mqtt Role Code Start -->                                                
+                                            <!-- Mqtt Role Code Start -->   
+                                            <?php if (in_array('mqtt', $subscription_roles_page_data)) { ?>                                             
                                             <div class="col-lg-12">                                                                                                      
                                                 <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">MQTT</b>
                                                 <input name="mqtt_all_checkbox_value" id="mqtt_all_checkbox_value" value='<?=($roles_details[0]['mqtt_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
@@ -357,7 +378,10 @@ $this->company_role_model = new company_role_model();
                                                     <?php if(!empty($mqtt_module_data)) 
                                                     {                                                        
                                                         foreach($mqtt_module_data as $mqtt_role)
-                                                        {       
+                                                        {   
+                                                            if($mqtt_role['page_name'] == 'mqtt_bulk_import' && in_array('mqtt_bulk_import', $subscription_roles_page_data) ||  $mqtt_role['page_name'] != 'mqtt_bulk_import')
+                                                            {                                                             
+
                                                             $mqtt_data_whereConditions = [                                  
                                                                 'role_id' => $roles_details[0]['id'],
                                                                 'page_id' => $mqtt_role['id'],                                
@@ -387,21 +411,26 @@ $this->company_role_model = new company_role_model();
                                                             <label for="checkbox_edit_<?=$mqtt_role['id'];?>">
                                                                 Can Edit
                                                             </label>
+                                                            <?php if($mqtt_role['page_name'] != "mqtt_add_topic" && $mqtt_role['page_name'] != "mqtt_add_node" && $mqtt_role['page_name'] != "mqtt_bulk_import") { ?>
                                                             <input data-name='can_delete' data-id='<?=$mqtt_role['id'];?>' class="col-sm-2 mqtt_checkbox" type="checkbox" <?=($mqtt_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
                                                             <label for="checkbox_delete_<?=$mqtt_role['id'];?>">
                                                                 Can Delete
                                                             </label>
+                                                            <?php } ?>
                                                         </span>                                              
                                                     </div>
-                                                    <?php                                                        
+                                                    <?php 
+                                                            }                                                       
                                                         }
                                                     }
                                                     ?>                                                    
                                                 </div>
                                             </div>
+                                            <?php } ?>
                                             <!-- Mqtt Role Code End -->
 
                                             <!-- http Role Code Start -->
+                                            <?php if (in_array('https_request', $subscription_roles_page_data) || in_array('https_post', $subscription_roles_page_data)) { ?>
                                             <div class="col-lg-12">                                                                                                      
                                                 <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Http(s)</b>
                                                 <input name="http_all_checkbox_value" id="http_all_checkbox_value" value='<?=($roles_details[0]['http_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
@@ -418,6 +447,9 @@ $this->company_role_model = new company_role_model();
                                                     {                                                      
                                                         foreach($http_module_data as $http_role)
                                                         {   
+                                                            if($http_role['page_name'] == 'http(s)_bulk_import' && in_array('https_bulk_import', $subscription_roles_page_data) ||  $http_role['page_name'] != 'http(s)_bulk_import')
+                                                            { 
+
                                                             $http_data_whereConditions = [                                  
                                                                 'role_id' => $roles_details[0]['id'], 
                                                                 'page_id' => $http_role['id'],                                 
@@ -447,18 +479,22 @@ $this->company_role_model = new company_role_model();
                                                             <label for="checkbox_edit_<?=$http_role['id'];?>">
                                                                 Can Edit
                                                             </label>
+                                                            <?php if($http_role['page_name'] != "http(s)_add_server" && $http_role['page_name'] != "http(s)_add_node" && $http_role['page_name'] != "http(s)_bulk_import") { ?>
                                                             <input data-name='can_delete' data-id='<?=$http_role['id'];?>' class="col-sm-2 http_checkbox" type="checkbox" <?=($http_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
                                                             <label for="checkbox_delete_<?=$http_role['id'];?>">
                                                                 Can Delete
                                                             </label>
+                                                            <?php } ?>
                                                         </span>                                              
                                                     </div>
-                                                    <?php                                                        
+                                                    <?php 
+                                                            }                                                       
                                                         }
                                                     }
                                                     ?>                                                    
                                                 </div>
                                             </div>
+                                            <?php } ?>
                                             <!-- http Role Code End -->   
 
                                             <!-- Tag Role Code Start -->                                                
@@ -477,7 +513,10 @@ $this->company_role_model = new company_role_model();
                                                     <?php if(!empty($tag_module_data)) 
                                                     {                                                       
                                                         foreach($tag_module_data as $tag_role)
-                                                        {          
+                                                        {    
+                                                            if($tag_role['page_name'] == 'historian_bulk_import' && in_array('historian_bulk_import', $subscription_roles_page_data) ||  $tag_role['page_name'] != 'historian_bulk_import')
+                                                            { 
+
                                                             $tag_data_whereConditions = [                                  
                                                                 'role_id' => $roles_details[0]['id'],
                                                                 'page_id' => $tag_role['id'],                                
@@ -507,13 +546,16 @@ $this->company_role_model = new company_role_model();
                                                             <label for="checkbox_edit_<?=$tag_role['id'];?>">
                                                                 Can Edit
                                                             </label>
+                                                            <?php if($tag_role['page_name'] != "historian_create_table" && $tag_role['page_name'] != "historian_bulk_import") { ?>
                                                             <input data-name='can_delete' data-id='<?=$tag_role['id'];?>' class="col-sm-2 tag_checkbox" type="checkbox" <?=($tag_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                           
                                                             <label for="checkbox_delete_<?=$tag_role['id'];?>">
                                                                 Can Delete
                                                             </label>
+                                                            <?php } ?>
                                                         </span>                                              
                                                     </div>
-                                                    <?php                                                        
+                                                    <?php
+                                                            }                                                        
                                                         }
                                                     }
                                                     ?>                                                    
@@ -521,7 +563,8 @@ $this->company_role_model = new company_role_model();
                                             </div>
                                             <!-- Tag Role Code End -->
 
-                                            <!-- Bulk Import List View Role Code Start -->                                                
+                                            <!-- Bulk Import List View Role Code Start --> 
+                                            <?php if(in_array('opc_bulk_import', $subscription_roles_page_data) || in_array('mqtt_bulk_import', $subscription_roles_page_data) || in_array('https_bulk_import', $subscription_roles_page_data) || in_array('historian_bulk_import', $subscription_roles_page_data)) { ?>                                               
                                             <div class="col-lg-12">                                                                                                      
                                                 <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Bulk Import Status</b>
                                                 <input name="bulk_all_checkbox_value" id="bulk_all_checkbox_value" value='<?=($roles_details[0]['bulk_import_status_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
@@ -579,10 +622,12 @@ $this->company_role_model = new company_role_model();
                                                     ?>                                                    
                                                 </div>
                                             </div>
+                                            <?php } ?>
                                             <!-- Bulk Import List View Role Code End --> 
 
 
-                                            <!-- Dashboard Role Code Start -->                                                
+                                            <!-- Dashboard Role Code Start -->   
+                                            <?php if (in_array('dashboards', $subscription_roles_page_data)) { ?>                                             
                                             <div class="col-lg-12">                                                                                                      
                                                 <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Dashboard</b>
                                                 <input name="dashboard_all_checkbox_value" id="dashboard_all_checkbox_value" value='<?=($roles_details[0]['dashboard_status_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
@@ -640,9 +685,11 @@ $this->company_role_model = new company_role_model();
                                                     ?>                                                    
                                                 </div>
                                             </div>
+                                            <?php } ?>
                                             <!-- Dashboard Role Code End --> 
 
-                                            <!-- Reports Role Code Start -->                                                
+                                            <!-- Reports Role Code Start -->     
+                                            <?php if (in_array('reports', $subscription_roles_page_data)) { ?>                                           
                                             <div class="col-lg-12">                                                                                                      
                                                 <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Reports</b>
                                                 <input name="reports_all_checkbox_value" id="reports_all_checkbox_value" value='<?=($roles_details[0]['reports_status_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
@@ -700,9 +747,11 @@ $this->company_role_model = new company_role_model();
                                                     ?>                                                    
                                                 </div>
                                             </div>
+                                            <?php } ?>
                                             <!-- Reports Role Code End --> 
 
-                                             <!-- Notification Code Start -->                                                
+                                             <!-- Notification Code Start -->    
+                                             <?php if (in_array('alert_and_notification', $subscription_roles_page_data)) { ?>                                            
                                              <div class="col-lg-12">                                                                                                      
                                                 <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Notification</b>
                                                 <input name="notification_all_checkbox_value" id="notification_all_checkbox_value" value='<?=($roles_details[0]['notify_all_checkbox_value'] == 'Y') ? '1' : '0'?>' type="hidden">
@@ -718,7 +767,10 @@ $this->company_role_model = new company_role_model();
                                                     <?php if(!empty($notification_data))
                                                     {                                                        
                                                         foreach($notification_data as $notification)
-                                                        {              
+                                                        {   
+                                                            if($notify['page_name'] == 'notification_bulk_import' && in_array('parameter_bulk_import', $subscription_roles_page_data) ||  $notify['page_name'] != 'notification_bulk_import')
+                                                            { 
+
                                                             $notification_data_whereConditions = [                                  
                                                                 'role_id' => $roles_details[0]['id'],
                                                                 'page_id' => $notification['id'],                                
@@ -795,12 +847,14 @@ $this->company_role_model = new company_role_model();
                                                             <?php } ?>
                                                         </span>                                              
                                                     </div>
-                                                    <?php                                                        
+                                                    <?php   
+                                                            }                                                     
                                                         }
                                                     }
                                                     ?>                                                    
                                                 </div>
                                             </div>
+                                            <?php } ?>
                                             <!-- Notification Code End --> 
                                             
                                             

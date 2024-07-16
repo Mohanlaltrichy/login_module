@@ -36,7 +36,7 @@ class Filters extends BaseConfig
     public array $globals = [
         'before' => [
             // 'honeypot',
-            'csrf' => ['except' => ['company_role/company_role_duplicate_check', 'company_role/roledelete', 'group/groupdelete', 'group/group_user_update', 'group/group_duplicate_check', 'templates/getnotification','templates/acknowledge_notification']],
+            'csrf' => ['except' => ['company_role/company_role_duplicate_check', 'company_role/roledelete', 'group/groupdelete', 'group/group_user_update', 'group/group_duplicate_check', 'templates/getnotification','templates/acknowledge_notification','api/number_of_tag_update','api/number_of_tag_count_get']],
             // 'invalidchars',
         ],
         'after' => [

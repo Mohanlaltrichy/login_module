@@ -27,7 +27,10 @@ class company_user_model extends Model
             $this->mysqldb->transException(true)->transStart();
 
             $users_data_store = $this->insertData($tablename, $data);
-   
+
+            //Number Of User Restriction 
+            $this->number_of_user_update();
+            
             $this->mysqldb->transComplete();
 
             return $users_data_store;
@@ -50,6 +53,9 @@ class company_user_model extends Model
             ];         
 
             $this->updateData('users', $user_update_where, $data);
+
+            //Number Of User Restriction 
+            $this->number_of_user_update();
    
             $this->mysqldb->transComplete();
 
@@ -88,7 +94,99 @@ class company_user_model extends Model
         }
     }
 
-          //GetTableValue
+    //Number Of User Check To Update
+    public function number_of_user_update(){
+        
+        try{
+            $this->mysqldb->transException(true)->transStart();
+           
+            $number_of_user_whereConditions = [
+                'company_id' => $this->customer_id,
+                'status !=' => 'deleted'                     
+            ];
+
+            $active_user_check = $this->GetTableValue('users', 'id', $number_of_user_whereConditions); 
+
+            if(!empty(array_filter($active_user_check)))
+            {
+                $user_ids = array_column($active_user_check, 'id');
+                $active_user_count = count($user_ids);
+            }
+            else
+            {
+                $active_user_count = '0';
+            }          
+
+            $sub_number_of_user_whereConditions = [
+                'company_id' => $this->customer_id,
+                'module_id' => '8',
+                'status' => 'Y'                     
+            ];
+
+            $sub_user_check = $this->GetTableValue('tbl_company_page_access_log', 'subscription_plan_value,feature_list', $sub_number_of_user_whereConditions); 
+
+            if(!empty(array_filter($sub_user_check)))
+            {
+                $actual_value = $sub_user_check[0]['subscription_plan_value'];
+            }
+            else
+            {
+                $actual_value = '0';
+            } 
+            
+            $user_company_whereConditions = [
+                'id' => $this->customer_id,                                   
+            ];
+
+            $user_company_check = $this->GetTableValue('tbl_companies', 'subscription_id', $user_company_whereConditions); 
+
+            $company_feature_log_whereConditions = [
+                'company_id' => $this->customer_id,
+                'subscription_id' => $user_company_check[0]['subscription_id'],
+                'module_id' => 8,                                   
+            ];
+
+            $company_feature_log_check = $this->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
+
+            if(!empty(array_filter($company_feature_log_check)))
+            {
+                $company_feature_log_update_whereConditions = [
+                    'id' => $company_feature_log_check[0]['id'],                                   
+                ];
+
+                $company_feature_log_data = array(
+                    'actual_value' => $actual_value,
+                    'user_add_count' => $active_user_count,
+                );
+
+                $users_count_store = $this->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
+            }
+            else
+            {
+                $number_user_count_update = array(
+                    'company_id' => $this->customer_id,
+                    'subscription_id' => $user_company_check[0]['subscription_id'],
+                    'module_id' => 8,
+                    'feature_name' => $sub_user_check[0]['feature_list'],
+                    'actual_value' => $actual_value,
+                    'user_add_count' => $active_user_count,
+                );
+    
+                $users_count_store = $this->insertData('tbl_company_feature_log', $number_user_count_update);
+            }           
+            
+            $this->mysqldb->transComplete();
+
+            return $users_count_store;
+
+        }catch (\Exception $e) {            
+            $currentURL = current_url();            
+            $this->error('company_user\company_user_model',$currentURL,'number_of_user_update',$e->getMessage());                      
+        }
+
+    }
+
+    //GetTableValue
     public function GetTableValue($table = '', $select_column = '', $whereConditions = array(), $or_whereConditions = array(), $groupBy = array(), $having = array(), $order_col = '', $filter = '', $limit ='', $other = '')
     {
         try{

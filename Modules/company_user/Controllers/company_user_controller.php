@@ -7,6 +7,8 @@ use Modules\company_user\Models\company_user_model;
 use App\Libraries\customlibraries;
 use App\Validators\validationrules;
 use Ramsey\Uuid\Uuid;
+use CodeIgniter\HTTP\CURLRequest;
+use Psr\Log\LoggerInterface;
 
 class company_user_controller extends BaseController
 {
@@ -41,7 +43,25 @@ class company_user_controller extends BaseController
 
             $role = $this->company_user_model->GetTableValue('tbl_roles', 'id,role_name', $role_data_whereConditions); 
 
-            $data = ['role' => $role];
+            $company_feature_log_whereConditions = [
+                'company_id' => $this->customer_id,              
+                'module_id' => 8,                                   
+            ];
+
+            $company_user_feature_log_check = $this->company_user_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count', $company_feature_log_whereConditions);
+
+            if(!empty(array_filter($company_user_feature_log_check)))
+            {
+                $actual_value = array_column($company_user_feature_log_check,'actual_value');
+                $user_add_count = array_column($company_user_feature_log_check,'user_add_count');
+            }
+            else
+            {
+                $actual_value = '';
+                $user_add_count = '';
+            }
+
+            $data = ['role' => $role, 'actual_value' => implode($actual_value), 'user_add_count' => implode($user_add_count)];
 
               return view("\Modules\company_user\Views\company_user",$data);
   
@@ -499,6 +519,9 @@ class company_user_controller extends BaseController
 
                     $this->company_user_model->updateData('users', $role_whereConditions, $data);
 
+                    //Number Of User Restriction 
+                    $this->company_user_model->number_of_user_update();
+
                     session()->removeTempdata('company_user_deleted_success');     
                     session()->setTempdata('company_user_deleted_success', 'User Deleted Successfully');
 
@@ -517,23 +540,23 @@ class company_user_controller extends BaseController
             $this->company_user_model->error('company_user\company_user_controller', $currentURL, 'userdelete', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
-    } 
+    }
+   
+    //Random UID Gen
+    function generateRandomUid() {
 
-        //Random UID Gen
-        function generateRandomUid() {
+        try{
 
-            try{
-    
-                $uuid = Uuid::uuid4();
-                $randomId = str_replace('-', '',$uuid->toString());
-                return $randomId;
-    
-            } catch(\Exception $e){
-                $currentURL = current_url();            
-                $this->company_user_model->error('company_user\company_user_controller',$currentURL,'generateRandomUid',$e->getMessage());
-                return redirect()->route('global_catch_error');  
-            }
+            $uuid = Uuid::uuid4();
+            $randomId = str_replace('-', '',$uuid->toString());
+            return $randomId;
+
+        } catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->company_user_model->error('company_user\company_user_controller',$currentURL,'generateRandomUid',$e->getMessage());
+            return redirect()->route('global_catch_error');  
         }
+    }
 
     //JS Vesrioning File Get
     public function versioning($page_type = '')

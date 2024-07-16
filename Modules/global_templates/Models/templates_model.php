@@ -253,6 +253,36 @@ class templates_model extends Model
          }
      }
 
+     //Insert Table Value
+    public function insertData($table = '', $data = array())
+    {
+        try {
+            $this->mysqldb->transException(true)->transStart();
+            $builder = $this->mysqldb->table($table);
+            $result = $builder->insert($data);
+            $this->mysqldb->transComplete();
+            return $this->mysqldb->insertID();
+        } catch (\Exception $e) { 
+            $currentURL = current_url();            
+            $this->error('global_templates\templates_model',$currentURL,'insertData',$e->getMessage());            
+        }
+    }
+
+    //Update Table Value
+    public function updateData($table = '',$update_whereConditions = array(), $data = array())
+    {
+         try {
+             $this->mysqldb->transException(true)->transStart();
+             $builder = $this->mysqldb->table($table);
+             $builder->where($update_whereConditions);
+             $builder->update($data);
+             $this->mysqldb->transComplete();
+         } catch (\Exception $e) {            
+             $currentURL = current_url();            
+             $this->error('global_templates\templates_model',$currentURL,'updateData',$e->getMessage());                      
+         }
+     }
+
     
 }
 

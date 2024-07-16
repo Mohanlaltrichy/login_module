@@ -83,10 +83,17 @@ height: 35px;
                                 <div class="card-body">
                                     <div class="m-t-0 m-b-30"><h3>Create User <span class="float-right" style="font-size:12px;color:red;">
                                     <?php
+                                    $permission_msg = [];
                                     if(session('user_add_edit') != '1')
                                     {
-                                        echo EDIT_PERMISSION;
+                                        $permission_msg[] = EDIT_PERMISSION;
+                                    }
+                                    if($actual_value <= $user_add_count) {                                     
+                                        $permission_msg[] = "User limit reached. Permission to add new users has been revoked";
                                     } 
+
+                                    echo implode(', ',$permission_msg);
+                                    
                                     ?></span>
                                     </h3></div>
 
@@ -216,7 +223,9 @@ height: 35px;
                                         <input type='hidden' id='remove_content' value=''>
                                         <input type='hidden' id='phone_code' name="phone_code" value=''>
                                         <input type='hidden' id='mob_code' name="mobile_code"  value=''>
+                                            <?php if($actual_value > $user_add_count) { ?>
                                             <button type="button" id="save_user" class="btn btn-primary waves-effect waves-light" <?=(session('user_add_edit') != '1') ? 'disabled' : '';?>>Save</button>
+                                            <?php } ?>
                                             <!-- <button type="reset" id="reset" class="btn btn-danger" >Reset</button> -->
                                             <button type="button" class="btn btn-secondary waves-effect m-l-5" onclick="window.location='<?php echo $base_url.route_to('company_user_add'); ?>'">Cancel</button>
                                         </div> 

@@ -52,7 +52,7 @@ class login_model extends Model
     }
 
     //User Session Details Get
-    public function get_user_roles_details($role_id = 0)
+    public function get_user_roles_details($role_id = 0, $company_id = 0)
     {
         try{
             $this->mysqldb->transException(true)->transStart();
@@ -60,6 +60,7 @@ class login_model extends Model
             $builder = $this->mysqldb->table('tbl_roles as tr');    
             $builder->select('trp.page_id,trp.can_view,trp.can_edit,trp.can_delete');
             $builder->join('tbl_role_permissions as trp', 'trp.role_id = tr.id','inner'); 
+            $builder->where('trp.company_id',$company_id);
             $builder->where('tr.id',$role_id);
             $builder->orderBy('tr.id','asc');         
             $result = $builder->get()->getResultArray();

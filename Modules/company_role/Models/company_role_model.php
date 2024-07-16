@@ -49,6 +49,51 @@ class company_role_model extends Model
         }
     }
 
+    //Subscription roles page details
+    public function get_subscription_page_details()
+    {
+        try{
+
+            $this->mysqldb->transException(true)->transStart();
+
+            $company_data_whereConditions = [
+                'id' => $this->customer_id,                                    
+            ];
+
+            $company_details = $this->GetTableValue('tbl_companies', 'subscription_id', $company_data_whereConditions);
+
+            $subscription_data_whereConditions = [
+                'id' => $company_details[0]['subscription_id'],                                    
+            ];
+
+            $subscription_details = $this->GetTableValue('tbl_subscriptions', 'subscription_name, currency', $subscription_data_whereConditions);
+
+            $query = $this->mysqldb->table('modules_feature_list as mfl')  
+                ->join('tbl_company_page_access_log as cpa', 'cpa.module_id = mfl.id', 'inner')            
+                ->select('mfl.page_name')
+                ->where('mfl.page_name <>','')
+                ->where('mfl.status','Y') 
+                ->where('cpa.company_id',$this->customer_id)
+                ->where('cpa.subscription_plan_type',$subscription_details[0]['subscription_name']) 
+                ->where('cpa.subscription_plan_value','Y') 
+                ->where('cpa.currency',$subscription_details[0]['currency'])
+                ->where('cpa.status','Y');
+                              
+            // Execute the combined query and get the result
+            $result = $query->get()->getResultArray();   
+
+            $this->mysqldb->transComplete();  
+
+            $page_names = array_column($result, 'page_name');
+
+            return $page_names;
+
+        }catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->error('company_role\company_role_model',$currentURL,'get_subscription_page_details',$e->getMessage());
+        }
+    }
+
     //Add Tag Data Configuration
     public function add_page_roles_details($role_name = '', $description = '', $status = '', $roles_checkbox_id = array(), $roles_all_checkbox_value = '', $roles_checkbox_view = array(), $roles_checkbox_edit = array(), $roles_checkbox_delete = array(), $users_checkbox_id = array(), $users_all_checkbox_value = '', $users_checkbox_view = array(), $users_checkbox_edit = array(), $users_checkbox_delete = array(), $groups_checkbox_id = array(), $groups_all_checkbox_value = '', $groups_checkbox_view = array(), $groups_checkbox_edit = array(), $groups_checkbox_delete = array(), $opc_checkbox_id = array(), $opc_all_checkbox_value = '', $opc_checkbox_view = array(), $opc_checkbox_edit = array(), $opc_checkbox_delete = array(), $tag_checkbox_id = array(), $tag_all_checkbox_value = '', $tag_checkbox_view = array(), $tag_checkbox_edit = array(), $tag_checkbox_delete = array(), $mqtt_checkbox_id = array(), $mqtt_all_checkbox_value = '', $mqtt_checkbox_view = array(), $mqtt_checkbox_edit = array(), $mqtt_checkbox_delete = array(), $http_checkbox_id = array(), $http_all_checkbox_value = '', $http_checkbox_view = array(), $http_checkbox_edit = array(), $http_checkbox_delete = array(), $bulk_checkbox_id = array(), $bulk_all_checkbox_value = '', $bulk_checkbox_view = array(), $bulk_checkbox_edit = array(), $bulk_checkbox_delete = array(), $dashboard_checkbox_id = array(), $dashboard_all_checkbox_value = '', $dashboard_checkbox_view = array(), $dashboard_checkbox_edit = array(), $dashboard_checkbox_delete = array(), $reports_checkbox_id = array(), $reports_all_checkbox_value = '', $reports_checkbox_view = array(), $reports_checkbox_edit = array(), $reports_checkbox_delete = array(), $notification_checkbox_id = array(), $notification_all_checkbox_value = '', $notification_checkbox_view = array(), $notification_checkbox_edit = array(), $notification_checkbox_delete = array())
     {
@@ -85,6 +130,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($roles_checkbox_id); $i++)
                 {
                     $roles_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $roles_checkbox_id[$i],
                         'type' => 'page',
@@ -101,6 +147,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($users_checkbox_id); $i++)
                 {
                     $users_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $users_checkbox_id[$i],
                         'type' => 'page',
@@ -117,6 +164,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($groups_checkbox_id); $i++)
                 {
                     $groups_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $groups_checkbox_id[$i],
                         'type' => 'page',
@@ -133,6 +181,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($opc_checkbox_id); $i++)
                 {
                     $opc_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $opc_checkbox_id[$i],
                         'type' => 'page',
@@ -149,6 +198,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($tag_checkbox_id); $i++)
                 {
                     $tag_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $tag_checkbox_id[$i],
                         'type' => 'page',
@@ -165,6 +215,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($mqtt_checkbox_id); $i++)
                 {
                     $mqtt_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $mqtt_checkbox_id[$i],
                         'type' => 'page',
@@ -181,6 +232,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($http_checkbox_id); $i++)
                 {
                     $http_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $http_checkbox_id[$i],
                         'type' => 'page',
@@ -197,6 +249,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($bulk_checkbox_id); $i++)
                 {
                     $bulk_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $bulk_checkbox_id[$i],
                         'type' => 'page',
@@ -213,6 +266,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($dashboard_checkbox_id); $i++)
                 {
                     $dashboard_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $dashboard_checkbox_id[$i],
                         'type' => 'page',
@@ -229,6 +283,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($reports_checkbox_id); $i++)
                 {
                     $reports_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $reports_checkbox_id[$i],
                         'type' => 'page',
@@ -245,6 +300,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($notification_checkbox_id); $i++)
                 {
                     $notification_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $notification_checkbox_id[$i],
                         'type' => 'page',
@@ -255,17 +311,67 @@ class company_role_model extends Model
                 }             
             }
             
-            $roles_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($roles_data_insert_data));
-            $users_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($users_data_insert_data));
-            $groups_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($groups_data_insert_data));
-            $opc_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($opc_data_insert_data));
-            $tag_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($tag_data_insert_data));
-            $mqtt_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($mqtt_data_insert_data));
-            $http_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($http_data_insert_data));
-            $bulk_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($bulk_data_insert_data));   
-            $dashboard_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($dashboard_data_insert_data));  
-            $reports_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($reports_data_insert_data));    
-            $notification_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($notification_data_insert_data));  
+            if(!empty(array_filter($roles_data_insert_data)))
+            {
+                $roles_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($roles_data_insert_data));
+            }
+
+            if(!empty(array_filter($users_data_insert_data)))
+            {
+                $users_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($users_data_insert_data));
+            }
+
+            if(!empty(array_filter($groups_data_insert_data)))
+            {
+                $groups_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($groups_data_insert_data));
+            }
+
+            if(!empty(array_filter($opc_data_insert_data)))
+            {
+                $opc_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($opc_data_insert_data));
+            }
+
+            if(!empty(array_filter($tag_data_insert_data)))
+            {
+                $tag_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($tag_data_insert_data));
+            } 
+            
+            if(!empty(array_filter($mqtt_data_insert_data)))
+            {
+                $mqtt_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($mqtt_data_insert_data));
+            }
+
+            if(!empty(array_filter($http_data_insert_data)))
+            {
+                $http_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($http_data_insert_data));
+            }
+
+            if(!empty(array_filter($bulk_data_insert_data)))
+            {
+                $bulk_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($bulk_data_insert_data));  
+            }
+
+            if(!empty(array_filter($dashboard_data_insert_data)))
+            {
+                $dashboard_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($dashboard_data_insert_data));
+            }
+
+            if(!empty(array_filter($reports_data_insert_data)))
+            {
+                $reports_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($reports_data_insert_data));  
+            }
+
+            if(!empty(array_filter($notification_data_insert_data)))
+            {
+                $notification_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($notification_data_insert_data));
+            }    
+            
+            $this->mysqldb->transComplete();
+
+            if($roles_data_insert_data_id || $users_data_insert_data_id || $groups_data_insert_data_id || $opc_data_insert_data_id || $tag_data_insert_data_id ||  $mqtt_data_insert_data_id || $http_data_insert_data_id || $bulk_data_insert_data_id || $dashboard_data_insert_data_id || $reports_data_insert_data_id || $notification_data_insert_data_id)
+            {
+                return true;
+            }        
              
             $this->mysqldb->transComplete();
 
@@ -326,6 +432,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($roles_checkbox_id); $i++)
                 {
                     $roles_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $roles_checkbox_id[$i],
                         'type' => 'page',
@@ -342,6 +449,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($users_checkbox_id); $i++)
                 {
                     $users_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $users_checkbox_id[$i],
                         'type' => 'page',
@@ -358,6 +466,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($groups_checkbox_id); $i++)
                 {
                     $groups_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $groups_checkbox_id[$i],
                         'type' => 'page',
@@ -374,6 +483,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($opc_checkbox_id); $i++)
                 {
                     $opc_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $opc_checkbox_id[$i],
                         'type' => 'page',
@@ -390,6 +500,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($tag_checkbox_id); $i++)
                 {
                     $tag_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $tag_checkbox_id[$i],
                         'type' => 'page',
@@ -406,6 +517,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($mqtt_checkbox_id); $i++)
                 {
                     $mqtt_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $mqtt_checkbox_id[$i],
                         'type' => 'page',
@@ -422,6 +534,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($http_checkbox_id); $i++)
                 {
                     $http_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $http_checkbox_id[$i],
                         'type' => 'page',
@@ -438,6 +551,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($bulk_checkbox_id); $i++)
                 {
                     $bulk_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $bulk_checkbox_id[$i],
                         'type' => 'page',
@@ -454,6 +568,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($dashboard_checkbox_id); $i++)
                 {
                     $dashboard_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $dashboard_checkbox_id[$i],
                         'type' => 'page',
@@ -470,6 +585,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($reports_checkbox_id); $i++)
                 {
                     $reports_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $reports_checkbox_id[$i],
                         'type' => 'page',
@@ -486,6 +602,7 @@ class company_role_model extends Model
                 for($i=0; $i < count($notification_checkbox_id); $i++)
                 {
                     $notification_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
                         'page_id' => $notification_checkbox_id[$i],
                         'type' => 'page',
@@ -496,17 +613,60 @@ class company_role_model extends Model
                 }             
             }
             
-            $roles_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($roles_data_insert_data));
-            $users_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($users_data_insert_data));
-            $groups_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($groups_data_insert_data));
-            $opc_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($opc_data_insert_data));
-            $tag_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($tag_data_insert_data));
-            $mqtt_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($mqtt_data_insert_data));
-            $http_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($http_data_insert_data));
-            $bulk_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($bulk_data_insert_data)); 
-            $dashboard_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($dashboard_data_insert_data));     
-            $reports_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($reports_data_insert_data));  
-            $notification_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($notification_data_insert_data));    
+            if(!empty(array_filter($roles_data_insert_data)))
+            {
+                $roles_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($roles_data_insert_data));
+            }
+
+            if(!empty(array_filter($users_data_insert_data)))
+            {
+                $users_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($users_data_insert_data));
+            }
+
+            if(!empty(array_filter($groups_data_insert_data)))
+            {
+                $groups_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($groups_data_insert_data));
+            }
+
+            if(!empty(array_filter($opc_data_insert_data)))
+            {
+                $opc_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($opc_data_insert_data));
+            }
+
+            if(!empty(array_filter($tag_data_insert_data)))
+            {
+                $tag_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($tag_data_insert_data));
+            } 
+            
+            if(!empty(array_filter($mqtt_data_insert_data)))
+            {
+                $mqtt_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($mqtt_data_insert_data));
+            }
+
+            if(!empty(array_filter($http_data_insert_data)))
+            {
+                $http_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($http_data_insert_data));
+            }
+
+            if(!empty(array_filter($bulk_data_insert_data)))
+            {
+                $bulk_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($bulk_data_insert_data));  
+            }
+
+            if(!empty(array_filter($dashboard_data_insert_data)))
+            {
+                $dashboard_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($dashboard_data_insert_data));
+            }
+
+            if(!empty(array_filter($reports_data_insert_data)))
+            {
+                $reports_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($reports_data_insert_data));  
+            }
+
+            if(!empty(array_filter($notification_data_insert_data)))
+            {
+                $notification_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($notification_data_insert_data));
+            }    
             
             $this->mysqldb->transComplete();
 

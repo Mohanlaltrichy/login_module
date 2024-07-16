@@ -23,9 +23,13 @@ $routes->group('templates', ['namespace' => '\Modules\global_templates\Controlle
 	$routes->get('get_all_notification', 'templates_controller::get_all_notification', ['as' => 'get_all_notification',"filter" => "loginfilter"]);	
 
 	//Ackowledge Notification Update
-	$routes->post('acknowledge_notification', 'templates_controller::acknowledge_notification', ['as' => 'acknowledge_notification',"filter" => "loginfilter"]);	
-	
+	$routes->post('acknowledge_notification', 'templates_controller::acknowledge_notification', ['as' => 'acknowledge_notification',"filter" => "loginfilter"]);
+
 });
 
-
+$routes->group('api', ['namespace' => '\Modules\global_templates\Controllers'], function ($routes) {
+	//Number Of Tag Update
+	$routes->post('number_of_tag_update', 'templates_controller::number_of_tag_update', ['as' => 'number_of_tag_update']);
+	$routes->post('number_of_tag_count_get', 'templates_controller::number_of_tag_count_get', ['as' => 'number_of_tag_count_get']);
+});
 ?>
