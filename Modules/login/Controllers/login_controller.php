@@ -4,15 +4,19 @@ namespace Modules\login\Controllers;
 
 use App\Controllers\BaseController;
 use Modules\login\Models\login_model;
+use App\Libraries\customlibraries;
 use Ramsey\Uuid\Uuid;
 
 class login_controller extends BaseController
 {
     protected $loginModel;
+    protected $number_of_user;
     
     public function __construct()
     {
-        $this->loginModel = new login_model();        
+        $this->loginModel = new login_model();  
+        $customlibraries = new customlibraries();
+        $this->number_of_user = $customlibraries->number_of_user_count_get();      
     }
 
     //login 
@@ -106,6 +110,9 @@ class login_controller extends BaseController
                     {
                         $company_admin = '0';
                     }
+
+                    //Number Of User Count Set Libraries Class Call
+                    $this->number_of_user;
                     
                     $ses_data = [
                         'Taguser_id'       => $userData['id'],

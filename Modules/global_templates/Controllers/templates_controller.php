@@ -181,6 +181,7 @@ class templates_controller extends BaseController
         }
     }
 
+    //Number Of Tag Added Count Update Code Start
     public function number_of_tag_update()
     {
         $data = $this->request->getPost();       
@@ -323,13 +324,13 @@ class templates_controller extends BaseController
 
             $tag_added_count = $opc_nodes_count+$opc_events_count+$opc_history_data_count+$opc_history_event_count+$mqtt_device_node_count+$mqtt_device_event_count+$http_node_count+$http_event_count;
 
-            $sub_number_of_user_whereConditions = [
+            $sub_number_of_tag_whereConditions = [
                 'company_id' => $company_id,
                 'module_id' => '14',
                 'status' => 'Y'                     
             ];
 
-            $sub_user_check = $this->templates_model->GetTableValue('tbl_company_page_access_log', 'subscription_plan_value,feature_list', $sub_number_of_user_whereConditions); 
+            $sub_user_check = $this->templates_model->GetTableValue('tbl_company_page_access_log', 'subscription_plan_value,feature_list', $sub_number_of_tag_whereConditions); 
 
             if(!empty(array_filter($sub_user_check)))
             {
@@ -394,8 +395,10 @@ class templates_controller extends BaseController
             ]);
         }        
     }
+    //Number Of Tag Added Count Update Code End    
 
-    public function number_of_tag_count_get()
+    //Number Of Dashboard Template Count Add/Update Code Start
+    public function number_of_dashboard_template_update()
     {
         $data = $this->request->getPost();       
 
@@ -405,6 +408,277 @@ class templates_controller extends BaseController
            
         } else {
             $company_id = $data['company_id'];
+            $login_key  = '';
+        }
+
+        $login_key_verify_pass = '';
+        if($login_key != '')
+        {
+            $login_key_whereConditions = [
+                'login_key' => $login_key,                            
+            ];
+
+            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+            
+            if(!empty($user_login_key))
+            {
+                $user_login_whereConditions = [
+                    'id' => $user_login_key[0]['user_id'], 
+                    'status' => 'active',          
+                ];           
+                
+                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
+                
+                if(!empty($userData))
+                {
+                    $login_key_verify_pass = $userData[0]['id'];
+                }                               
+            }
+        }
+        else
+        {
+            $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+        }    
+        
+
+        if($login_key_verify_pass != ''){ 
+
+            $dashboard_where = [
+                'status !=' => 'D',
+                'customer_id' => $company_id,
+            ];
+    
+            $dashboard_data = $this->templates_model->GetTableValue('tbl_dashboard', 'id', $dashboard_where);
+
+            if(!empty(array_filter($dashboard_data)))
+            {
+                $dashboard_data_ids = array_column($dashboard_data, 'id');
+                $dashboard_data_count = count($dashboard_data_ids);
+            }
+            else
+            {
+                $dashboard_data_count = 0;
+            }
+
+            $sub_number_of_tag_whereConditions = [
+                'company_id' => $company_id,
+                'module_id' => '26',
+                'status' => 'Y'                     
+            ];
+
+            $sub_user_check = $this->templates_model->GetTableValue('tbl_company_page_access_log', 'subscription_plan_value,feature_list', $sub_number_of_tag_whereConditions); 
+
+            if(!empty(array_filter($sub_user_check)))
+            {
+                $actual_value = $sub_user_check[0]['subscription_plan_value'];
+            }
+            else
+            {
+                $actual_value = '0';
+            }            
+
+            $user_company_whereConditions = [
+                'id' => $company_id,                                   
+            ];
+
+            $user_company_check = $this->templates_model->GetTableValue('tbl_companies', 'subscription_id', $user_company_whereConditions); 
+
+            $company_feature_log_whereConditions = [
+                'company_id' => $company_id,
+                'subscription_id' => $user_company_check[0]['subscription_id'],
+                'module_id' => 26,                                   
+            ];
+
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
+
+            if(!empty(array_filter($company_feature_log_check)))
+            {
+                $company_feature_log_update_whereConditions = [
+                    'id' => $company_feature_log_check[0]['id'],                                   
+                ];                
+
+                $company_feature_log_data = array(
+                    'actual_value' => $actual_value,
+                    'user_add_count' => $dashboard_data_count,
+                );
+
+                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
+            }
+            else
+            {
+                $number_user_count_update = array(
+                    'company_id' => $company_id,
+                    'subscription_id' => $user_company_check[0]['subscription_id'],
+                    'module_id' => 26,
+                    'feature_name' => $sub_user_check[0]['feature_list'],
+                    'actual_value' => $actual_value,
+                    'user_add_count' => $dashboard_data_count,
+                );                
+    
+                $dashboard_count_store = $this->templates_model->insertData('tbl_company_feature_log', $number_user_count_update);
+            }
+
+            return $this->response->setJSON([
+                'status' => 'success',
+                'receivedData' => $dashboard_count_store
+            ]);
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'receivedData' => ''
+            ]);
+        }        
+    }
+    //Number Of Dashboard Template Count Add/Update Code End
+
+    //Number Of Historian Table Count Add/Update Code Start
+    public function number_of_historian_table_update()
+    {
+        $data = $this->request->getPost();       
+
+        if (isset($data['company_id']) && isset($data['login_key'])) {
+            $company_id = $data['company_id'];
+            $login_key  = $data['login_key'];
+           
+        } else {
+            $company_id = $data['company_id'];
+            $login_key  = '';
+        }
+
+        $login_key_verify_pass = '';
+        if($login_key != '')
+        {
+            $login_key_whereConditions = [
+                'login_key' => $login_key,                            
+            ];
+
+            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+            
+            if(!empty($user_login_key))
+            {
+                $user_login_whereConditions = [
+                    'id' => $user_login_key[0]['user_id'], 
+                    'status' => 'active',          
+                ];           
+                
+                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
+                
+                if(!empty($userData))
+                {
+                    $login_key_verify_pass = $userData[0]['id'];
+                }                               
+            }
+        }
+        else
+        {
+            $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+        }
+
+        if($login_key_verify_pass != ''){
+
+            $customer_tabledata_whereConditions = [
+                'customer_id' =>$company_id,           
+            ];   
+
+            $customer_table_name = $this->templates_model->GetTableValue_whereIn_pgsql('tag_config', 'id', $customer_tabledata_whereConditions);
+
+            if(!empty(array_filter($customer_table_name)))
+            {
+                $table_ids = array_column($customer_table_name, 'id');
+                $historian_table_count = count($table_ids);
+            }
+            else
+            {
+                $historian_table_count = 0;
+            }
+            $sub_number_of_tag_whereConditions = [
+                'company_id' => $company_id,
+                'module_id' => '15',
+                'status' => 'Y'                     
+            ];
+
+            $sub_user_check = $this->templates_model->GetTableValue('tbl_company_page_access_log', 'subscription_plan_value,feature_list', $sub_number_of_tag_whereConditions); 
+
+            if(!empty(array_filter($sub_user_check)))
+            {
+                $actual_value = $sub_user_check[0]['subscription_plan_value'];
+            }
+            else
+            {
+                $actual_value = '0';
+            }            
+
+            $user_company_whereConditions = [
+                'id' => $company_id,                                   
+            ];
+
+            $user_company_check = $this->templates_model->GetTableValue('tbl_companies', 'subscription_id', $user_company_whereConditions); 
+
+            $company_feature_log_whereConditions = [
+                'company_id' => $company_id,
+                'subscription_id' => $user_company_check[0]['subscription_id'],
+                'module_id' => 15,                                   
+            ];
+
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
+
+            if(!empty(array_filter($company_feature_log_check)))
+            {
+                $company_feature_log_update_whereConditions = [
+                    'id' => $company_feature_log_check[0]['id'],                                   
+                ];                
+
+                $company_feature_log_data = array(
+                    'actual_value' => $actual_value,
+                    'user_add_count' => $historian_table_count,
+                );
+
+                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
+            }
+            else
+            {
+                $number_user_count_update = array(
+                    'company_id' => $company_id,
+                    'subscription_id' => $user_company_check[0]['subscription_id'],
+                    'module_id' => 15,
+                    'feature_name' => $sub_user_check[0]['feature_list'],
+                    'actual_value' => $actual_value,
+                    'user_add_count' => $historian_table_count,
+                );                
+    
+                $dashboard_count_store = $this->templates_model->insertData('tbl_company_feature_log', $number_user_count_update);
+            }
+
+            return $this->response->setJSON([
+                'status' => 'success',
+                'receivedData' => $dashboard_count_store
+            ]);
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'receivedData' => ''
+            ]);
+        }
+    }
+    //Number Of Historian Table Count Add/Update Code End
+
+    //Number Of Count Get Code Start  
+    public function number_of_count_get()
+    {
+        $data = $this->request->getPost();       
+
+        if (isset($data['company_id']) && isset($data['login_key'])) {
+            $company_id = $data['company_id'];
+            $module_id  = $data['module_id'];
+            $login_key  = $data['login_key'];            
+           
+        } else {
+            $company_id = $data['company_id'];
+            $module_id  = $data['module_id'];
             $login_key  = '';
         }
 
@@ -448,7 +722,7 @@ class templates_controller extends BaseController
             $company_feature_log_whereConditions = [
                 'company_id' => $company_id,
                 'subscription_id' => $user_company_check[0]['subscription_id'],
-                'module_id' => 14,                                   
+                'module_id' => $module_id,                                   
             ];
     
             $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count', $company_feature_log_whereConditions);
@@ -467,5 +741,6 @@ class templates_controller extends BaseController
                 'user_add_count' => ''
             ]);
         }           
-    }
+    }  
+    //Number Of Count Get Code End
 }

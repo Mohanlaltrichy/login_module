@@ -16,12 +16,14 @@ class company_user_controller extends BaseController
     protected $customer_id;
     protected $logged_user_id;
     protected $local_date_time;
+    protected $number_of_user_update;
    
     public function __construct()
     { 
         $this->company_user_model = new company_user_model();
         $customlibraries = new customlibraries();
         $this->local_date_time = $customlibraries->local_date_time();
+        $this->number_of_user_update = $customlibraries->number_of_user_count_update(); 
         $this->customer_id = session('Taguser_company');
         $this->logged_user_id = session('Taguser_id');
     }
@@ -41,27 +43,9 @@ class company_user_controller extends BaseController
                 'status' => 'active',                                    
             ];
 
-            $role = $this->company_user_model->GetTableValue('tbl_roles', 'id,role_name', $role_data_whereConditions); 
+            $role = $this->company_user_model->GetTableValue('tbl_roles', 'id,role_name', $role_data_whereConditions);         
 
-            $company_feature_log_whereConditions = [
-                'company_id' => $this->customer_id,              
-                'module_id' => 8,                                   
-            ];
-
-            $company_user_feature_log_check = $this->company_user_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count', $company_feature_log_whereConditions);
-
-            if(!empty(array_filter($company_user_feature_log_check)))
-            {
-                $actual_value = array_column($company_user_feature_log_check,'actual_value');
-                $user_add_count = array_column($company_user_feature_log_check,'user_add_count');
-            }
-            else
-            {
-                $actual_value = '';
-                $user_add_count = '';
-            }
-
-            $data = ['role' => $role, 'actual_value' => implode($actual_value), 'user_add_count' => implode($user_add_count)];
+            $data = ['role' => $role, 'actual_value' => session('actual_value'), 'user_add_count' => session('user_add_count')];
 
               return view("\Modules\company_user\Views\company_user",$data);
   
@@ -194,6 +178,12 @@ class company_user_controller extends BaseController
                 ];
     
                 $user_id = $this->company_user_model->saveUsersConfiguration('users', $data);
+
+                if($user_id)
+                {
+                    //Number Of User Count Update Libraries
+                    $this->number_of_user_update;
+                }
 
                 if($notification_user == '1')
                 {
@@ -518,9 +508,9 @@ class company_user_controller extends BaseController
                     ];
 
                     $this->company_user_model->updateData('users', $role_whereConditions, $data);
-
-                    //Number Of User Restriction 
-                    $this->company_user_model->number_of_user_update();
+                    
+                    //Number Of User Count Update Libraries
+                    $this->number_of_user_update;   
 
                     session()->removeTempdata('company_user_deleted_success');     
                     session()->setTempdata('company_user_deleted_success', 'User Deleted Successfully');
