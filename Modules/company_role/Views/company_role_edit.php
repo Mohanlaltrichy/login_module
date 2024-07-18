@@ -768,7 +768,7 @@ $this->company_role_model = new company_role_model();
                                                     {                                                        
                                                         foreach($notification_data as $notification)
                                                         {   
-                                                            if($notify['page_name'] == 'notification_bulk_import' && in_array('parameter_bulk_import', $subscription_roles_page_data) ||  $notify['page_name'] != 'notification_bulk_import')
+                                                            if($notification['page_name'] == 'notification_bulk_import' && in_array('parameter_bulk_import', $subscription_roles_page_data) ||  $notification['page_name'] != 'notification_bulk_import')
                                                             { 
 
                                                             $notification_data_whereConditions = [                                  

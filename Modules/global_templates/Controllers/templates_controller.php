@@ -4,6 +4,7 @@ namespace Modules\global_templates\Controllers;
 use Modules\global_templates\Models\templates_model;
 
 use App\Controllers\BaseController;
+use PhpParser\Node\Expr\FuncCall;
 
 class templates_controller extends BaseController
 {
@@ -354,102 +355,7 @@ class templates_controller extends BaseController
             ]);
         }        
     }
-    //Number Of Tag Added Count Update Code End    
-
-    //Number Of Dashboard Template Count Add/Update Code Start
-    public function number_of_dashboard_template_update()
-    {
-        $data = $this->request->getPost();       
-
-        if (isset($data['company_id']) && isset($data['login_key'])) {
-            $company_id = $data['company_id'];
-            $login_key  = $data['login_key'];
-           
-        } else {
-            $company_id = $data['company_id'];
-            $login_key  = '';
-        }
-
-        $login_key_verify_pass = '';
-        if($login_key != '')
-        {
-            $login_key_whereConditions = [
-                'login_key' => $login_key,                            
-            ];
-
-            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-            
-            if(!empty($user_login_key))
-            {
-                $user_login_whereConditions = [
-                    'id' => $user_login_key[0]['user_id'], 
-                    'status' => 'active',          
-                ];           
-                
-                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                
-                if(!empty($userData))
-                {
-                    $login_key_verify_pass = $userData[0]['id'];
-                }                               
-            }
-        }
-        else
-        {
-            $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
-        }    
-        
-
-        if($login_key_verify_pass != ''){ 
-
-            $dashboard_where = [
-                'status !=' => 'D',
-                'customer_id' => $company_id,
-            ];
-    
-            $dashboard_data = $this->templates_model->GetTableValue('tbl_dashboard', 'id', $dashboard_where);
-
-            if(!empty(array_filter($dashboard_data)))
-            {
-                $dashboard_data_ids = array_column($dashboard_data, 'id');
-                $dashboard_data_count = count($dashboard_data_ids);
-            }
-            else
-            {
-                $dashboard_data_count = 0;
-            }                        
-
-            $company_feature_log_whereConditions = [
-                'company_id' => $company_id,                
-                'module_id' => 26,                                   
-            ];
-
-            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
-           
-            $company_feature_log_update_whereConditions = [
-                'id' => $company_feature_log_check[0]['id'],                                   
-            ];                
-
-            $company_feature_log_data = array(
-                'user_add_count' => $dashboard_data_count,
-            );
-
-            $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
-            
-            return $this->response->setJSON([
-                'status' => 'success',
-                'receivedData' => $dashboard_count_store
-            ]);
-        }
-        else
-        {
-            return $this->response->setJSON([
-                'status' => 'failed',
-                'receivedData' => ''
-            ]);
-        }        
-    }
-    //Number Of Dashboard Template Count Add/Update Code End
+    //Number Of Tag Added Count Update Code End   
 
     //Number Of Historian Table Count Add/Update Code Start
     public function number_of_historian_table_update()
@@ -546,6 +452,194 @@ class templates_controller extends BaseController
     }
     //Number Of Historian Table Count Add/Update Code End
 
+    //Number Of Dashboard Template Count Add/Update Code Start
+    public function number_of_dashboard_template_update()
+    {
+        $data = $this->request->getPost();       
+
+        if (isset($data['company_id']) && isset($data['login_key'])) {
+            $company_id = $data['company_id'];
+            $login_key  = $data['login_key'];
+           
+        } else {
+            $company_id = $data['company_id'];
+            $login_key  = '';
+        }
+
+        $login_key_verify_pass = '';
+        if($login_key != '')
+        {
+            $login_key_whereConditions = [
+                'login_key' => $login_key,                            
+            ];
+
+            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+            
+            if(!empty($user_login_key))
+            {
+                $user_login_whereConditions = [
+                    'id' => $user_login_key[0]['user_id'], 
+                    'status' => 'active',          
+                ];           
+                
+                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
+                
+                if(!empty($userData))
+                {
+                    $login_key_verify_pass = $userData[0]['id'];
+                }                               
+            }
+        }          
+        
+
+        if($login_key_verify_pass != ''){ 
+
+            $dashboard_where = [
+                'status !=' => 'D',
+                'customer_id' => $company_id,
+            ];
+    
+            $dashboard_data = $this->templates_model->GetTableValue('tbl_dashboard', 'id', $dashboard_where);
+
+            if(!empty(array_filter($dashboard_data)))
+            {
+                $dashboard_data_ids = array_column($dashboard_data, 'id');
+                $dashboard_data_count = count($dashboard_data_ids);
+            }
+            else
+            {
+                $dashboard_data_count = 0;
+            }                        
+
+            $company_feature_log_whereConditions = [
+                'company_id' => $company_id,                
+                'module_id' => 26,                                   
+            ];
+
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
+           
+            $company_feature_log_update_whereConditions = [
+                'id' => $company_feature_log_check[0]['id'],                                   
+            ];                
+
+            $company_feature_log_data = array(
+                'user_add_count' => $dashboard_data_count,
+            );
+
+            $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
+            
+            return $this->response->setJSON([
+                'status' => 'success',
+                'receivedData' => $dashboard_count_store
+            ]);
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'receivedData' => ''
+            ]);
+        }        
+    }
+    //Number Of Dashboard Template Count Add/Update Code End
+
+    //Number Of Parameter Count Update Code Start
+    public function number_of_parameter_count_update()
+    {
+        $data_get = $this->request->getPost();
+
+        $jsonKey = key($data_get); // Get the key of the JSON string
+        $data = json_decode($jsonKey, true); // Decode the JSON string into an array
+        
+        if (isset($data['company_id']) && isset($data['login_key'])) {
+            $company_id = $data['company_id'];
+            $login_key  = $data['login_key'];
+           
+        } else {
+            $company_id = $data['company_id'];
+            $login_key  = '';
+        }
+
+        $login_key_verify_pass = '';
+        if($login_key != '')
+        {
+            $login_key_whereConditions = [
+                'login_key' => $login_key,                            
+            ];
+
+            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+            
+            if(!empty($user_login_key))
+            {
+                $user_login_whereConditions = [
+                    'id' => $user_login_key[0]['user_id'], 
+                    'status' => 'active',          
+                ];           
+                
+                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
+                
+                if(!empty($userData))
+                {
+                    $login_key_verify_pass = $userData[0]['id'];
+                }                               
+            }
+        }
+        else
+        {
+            $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+        }
+
+        if($login_key_verify_pass != ''){ 
+
+            $parameter_where = [
+                'active' => 'yes',
+                'company_id' => $company_id,
+            ];
+    
+            $parameter_data = $this->templates_model->GetTableValue('tbl_notification_trigger', 'id', $parameter_where);
+
+            if(!empty(array_filter($parameter_data)))
+            {
+                $parameter_data_ids = array_column($parameter_data, 'id');
+                $parameter_data_count = count($parameter_data_ids);
+            }
+            else
+            {
+                $parameter_data_count = 0;
+            }                        
+
+            $company_feature_log_whereConditions = [
+                'company_id' => $company_id,                
+                'module_id' => 27,                                   
+            ];
+
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
+           
+            $company_feature_log_update_whereConditions = [
+                'id' => $company_feature_log_check[0]['id'],                                   
+            ];                
+
+            $company_feature_log_data = array(
+                'user_add_count' => $parameter_data_count,
+            );
+
+            $parameter_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
+            
+            return $this->response->setJSON([
+                'status' => 'success',
+                'receivedData' => $parameter_count_store
+            ]);
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'receivedData' => ''
+            ]);
+        }       
+    }
+    //Number Of Parameter Count Update Code End
+
     //Number Of Count Get Code Start  
     public function number_of_count_get()
     {
@@ -615,5 +709,79 @@ class templates_controller extends BaseController
             ]);
         }           
     }  
-    //Number Of Count Get Code End
+    //Number Of Count Get Code End   
+    
+    //Number Of Count Get Laravel Code Start  
+    public function number_of_count_get_laravel()
+    {
+        $data_get = $this->request->getPost();
+
+        $jsonKey = key($data_get); // Get the key of the JSON string
+        $data = json_decode($jsonKey, true); // Decode the JSON string into an array     
+
+        if (isset($data['company_id']) && isset($data['login_key'])) {
+            $company_id = $data['company_id'];
+            $module_id  = $data['module_id'];
+            $login_key  = $data['login_key'];            
+           
+        } else {
+            $company_id = $data['company_id'];
+            $module_id  = $data['module_id'];
+            $login_key  = '';
+        }
+
+        $login_key_verify_pass = '';
+        if($login_key != '')
+        {
+            $login_key_whereConditions = [
+                'login_key' => $login_key,                            
+            ];
+
+            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+            
+            if(!empty($user_login_key))
+            {
+                $user_login_whereConditions = [
+                    'id' => $user_login_key[0]['user_id'], 
+                    'status' => 'active',          
+                ];           
+                
+                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
+                
+                if(!empty($userData))
+                {
+                    $login_key_verify_pass = $userData[0]['id'];
+                }                               
+            }
+        }
+        else
+        {
+            $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+        } 
+
+        if($login_key_verify_pass != '')
+        {
+            $company_feature_log_whereConditions = [
+                'company_id' => $company_id,
+                'module_id' => $module_id,                                   
+            ];
+    
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count', $company_feature_log_whereConditions);
+
+            return $this->response->setJSON([
+                'status' => 'success',
+                'actual_value' => $company_feature_log_check[0]['actual_value'],
+                'user_add_count' => $company_feature_log_check[0]['user_add_count']
+            ]);
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'actual_value' => '',
+                'user_add_count' => ''
+            ]);
+        }           
+    }  
+    //Number Of Count Get Laravel Code End 
 }
