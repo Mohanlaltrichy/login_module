@@ -33,6 +33,7 @@ $routes->group('api', ['namespace' => '\Modules\global_templates\Controllers'], 
 	$routes->post('number_of_dashboard_template_update', 'templates_controller::number_of_dashboard_template_update', ['as' => 'number_of_dashboard_template_update']);
 	$routes->post('number_of_historian_table_update', 'templates_controller::number_of_historian_table_update', ['as' => 'number_of_historian_table_update']);
 	$routes->post('number_of_parameter_count_update','templates_controller::number_of_parameter_count_update', ['as' => 'number_of_parameter_count_update']);
+	$routes->post('number_of_reports_count_update','templates_controller::number_of_reports_count_update', ['as' => 'number_of_reports_count_update']);
 	$routes->post('number_of_count_get', 'templates_controller::number_of_count_get', ['as' => 'number_of_count_get']);
 	$routes->post('number_of_count_get_laravel', 'templates_controller::number_of_count_get_laravel', ['as' => 'number_of_count_get_laravel']);
 });
