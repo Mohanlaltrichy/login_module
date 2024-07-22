@@ -88,6 +88,52 @@ class templates_model extends Model
         }
     }
 
+    //GetTableValuewithjoin
+    public function getsearchvaluewithjoin($from_table = '', $from_table_id = '', $select_column = '', $to_table = '', $to_table_id = '', $whereConditions = array(), $order_col = '', $filter = '', $like = '', $limit ='', $offset = '')
+    {
+        try{
+            $this->mysqldb->transException(true)->transStart();
+
+                $builder = $this->mysqldb->table($from_table);
+                $builder->join($to_table, ''.$from_table.'.'.$from_table_id.' = '.$to_table.'.'.$to_table_id.'', 'left');
+                $builder->select($select_column);
+
+                if($whereConditions != '')
+                {
+                    $builder->where($whereConditions);
+                }
+
+                if($like != '')
+                {
+                    $builder->like($like);
+                }
+
+                if($limit != '')
+                {
+                    $builder->limit($limit);
+                }
+
+                if($offset != '')
+                {
+                    $builder->offset($offset);
+                }                
+
+                if($order_col != '')
+                {
+                    $builder->orderBy($order_col, $filter);
+                }
+                            
+                $result = $builder->get()->getResultArray();
+
+            $this->mysqldb->transComplete();
+
+            return $result; 
+        } catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->error('global_templates\templates_model',$currentURL,'getsearchvaluewithjoin',$e->getMessage());
+        }
+    }
+
     //GetTableValue
     public function GetTableValue($table = '', $select_column = '', $whereConditions = array(), $or_whereConditions = array(), $groupBy = array(), $having = array(), $order_col = '', $filter = '', $limit ='', $other = '')
     {

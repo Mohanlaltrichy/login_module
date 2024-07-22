@@ -735,6 +735,109 @@ class templates_controller extends BaseController
     }
     //Number Of Reports Count Update Code End
 
+    //Number Of Email & SMS For Month Count Update Code Start
+    public function number_of_email_sms_count_update()
+    {
+        $data_get = $this->request->getPost();
+
+        $jsonKey = key($data_get); // Get the key of the JSON string
+        $data = json_decode($jsonKey, true); // Decode the JSON string into an array        
+       
+        $company_id = $data['company_id'];
+        
+        if($company_id != ''){ 
+
+            //Email Count Update
+            $email_success_where = [
+                'tbl_notification_trigger.company_id' => $company_id,
+                'tbl_notification_history.email_notification_status' => 1,
+            ];
+
+            $select_column = 'tbl_notification_history.id';
+    
+            $email_success = $this->templates_model->getsearchvaluewithjoin('tbl_notification_trigger',  'id', $select_column, 'tbl_notification_history', 'trigger_id', $email_success_where);
+           
+            if(!empty(array_filter($email_success)))
+            {
+                $email_data_ids = array_column($email_success, 'id');
+                $email_data_count = count($email_data_ids);
+            }
+            else
+            {
+                $email_data_count = 0;
+            }
+
+            $email_company_feature_log_whereConditions = [
+                'company_id' => $company_id,                
+                'module_id' => 28,                                   
+            ];
+
+            $email_company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $email_company_feature_log_whereConditions); 
+           
+            $email_company_feature_log_update_whereConditions = [
+                'id' => $email_company_feature_log_check[0]['id'],                                   
+            ];                
+
+            $email_company_feature_log_data = array(
+                'user_add_count' => $email_data_count,
+            );
+
+            $email_count_store = $this->templates_model->updateData('tbl_company_feature_log',$email_company_feature_log_update_whereConditions, $email_company_feature_log_data);
+
+            //SMS Count Update
+            $sms_success_where = [
+                'tbl_notification_trigger.company_id' => $company_id,
+                'tbl_notification_history.sms_notification_status' => 1,
+            ];
+
+            $select_column = 'tbl_notification_history.id';
+    
+            $sms_success = $this->templates_model->getsearchvaluewithjoin('tbl_notification_trigger',  'id', $select_column, 'tbl_notification_history', 'trigger_id', $sms_success_where);
+           
+            if(!empty(array_filter($sms_success)))
+            {
+                $sms_data_ids = array_column($sms_success, 'id');
+                $sms_data_count = count($sms_data_ids);
+            }
+            else
+            {
+                $sms_data_count = 0;
+            }
+
+            $sms_company_feature_log_whereConditions = [
+                'company_id' => $company_id,                
+                'module_id' => 29,                                   
+            ];
+
+            $sms_company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $sms_company_feature_log_whereConditions); 
+           
+            $sms_company_feature_log_update_whereConditions = [
+                'id' => $sms_company_feature_log_check[0]['id'],                                   
+            ];                
+
+            $sms_company_feature_log_data = array(
+                'user_add_count' => $sms_data_count,
+            );
+
+            $sms_count_store = $this->templates_model->updateData('tbl_company_feature_log',$sms_company_feature_log_update_whereConditions, $sms_company_feature_log_data);
+            
+            return $this->response->setJSON([
+                'status' => 'success',
+                'receivedData' => true,
+                'email_count_store' => $email_count_store,
+                'sms_count_store' => $sms_count_store
+            ]);
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'receivedData' => ''
+            ]);
+        }   
+    }
+    //Number Of Email & SMS For Month Count Update Code End
+
     //Number Of Count Get Code Start  
     public function number_of_count_get()
     {
