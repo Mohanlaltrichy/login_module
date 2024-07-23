@@ -88,7 +88,7 @@ height: 35px;
                                     {
                                         $permission_msg[] = EDIT_PERMISSION;
                                     }
-                                    if($actual_value <= $user_add_count) {                                     
+                                    if($actual_value <= $user_add_count && $actual_value != 'Unlimited') {                                     
                                         $permission_msg[] = "User limit reached. Permission to add new users has been revoked";
                                     } 
 
@@ -223,7 +223,7 @@ height: 35px;
                                         <input type='hidden' id='remove_content' value=''>
                                         <input type='hidden' id='phone_code' name="phone_code" value=''>
                                         <input type='hidden' id='mob_code' name="mobile_code"  value=''>
-                                            <?php if($actual_value > $user_add_count) { ?>
+                                            <?php if($actual_value > $user_add_count || $actual_value == 'Unlimited') { ?>
                                             <button type="button" id="save_user" class="btn btn-primary waves-effect waves-light" <?=(session('user_add_edit') != '1') ? 'disabled' : '';?>>Save</button>
                                             <?php } ?>
                                             <!-- <button type="reset" id="reset" class="btn btn-danger" >Reset</button> -->
