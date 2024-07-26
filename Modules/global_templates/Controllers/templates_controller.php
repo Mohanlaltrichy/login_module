@@ -964,12 +964,14 @@ class templates_controller extends BaseController
                 'module_id' => $module_id,                                   
             ];
     
-            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count', $company_feature_log_whereConditions);
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count, start_month, end_month', $company_feature_log_whereConditions);
 
             return $this->response->setJSON([
                 'status' => 'success',
                 'actual_value' => $company_feature_log_check[0]['actual_value'],
-                'user_add_count' => $company_feature_log_check[0]['user_add_count']
+                'user_add_count' => $company_feature_log_check[0]['user_add_count'],
+                'start_month' => $company_feature_log_check[0]['start_month'],
+                'end_month' => $company_feature_log_check[0]['end_month']
             ]);
         }
         else
@@ -977,7 +979,9 @@ class templates_controller extends BaseController
             return $this->response->setJSON([
                 'status' => 'failed',
                 'actual_value' => '',
-                'user_add_count' => ''
+                'user_add_count' => '',
+                'start_month' => '',
+                'end_month' => ''
             ]);
         }           
     }  
