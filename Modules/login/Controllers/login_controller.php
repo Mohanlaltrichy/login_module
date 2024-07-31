@@ -78,13 +78,8 @@ class login_controller extends BaseController
 
                     $this->loginModel->insertData('user_login_history',$data);
 
-                    $company_whereConditions = [
-                        'id' => $userData['company_id'], 
-                        'status' => 'active',          
-                    ];                    
-                    
                     //Company Active Check Code Start
-                    $userCompanyData = $this->loginModel->GetTableValue('tbl_companies','*',$company_whereConditions);
+                    $userCompanyData = $this->loginModel->company_subscription_active_check($userData['company_id']);
 
                     if(empty($userCompanyData))
                     {

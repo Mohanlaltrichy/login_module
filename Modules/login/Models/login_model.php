@@ -12,6 +12,25 @@ class login_model extends Model
         parent::__construct();
         $this->mysqldb = \Config\Database::connect('mysqldb');       
     }
+
+    public function company_subscription_active_check($company_id = 0)
+    {
+        try {
+            
+            $builder = $this->mysqldb->table('tbl_companies');
+            $builder->select('id');      
+            $builder->where('id',$company_id);   
+            $builder->where('status','active');  
+            $builder->where('DATE(subscription_end) >=', date('Y-m-d'));
+            $result = $builder->get()->getRowArray();
+
+            return $result;
+
+       } catch (\Exception $e) {            
+            $currentURL = current_url();            
+            $this->error('login\login_Model',$currentURL,'company_subscription_active_check',$e->getMessage());                       
+       }
+    }
        
     //GetTableValue
     public function GetTableValue($table = '', $select_column = '', $whereConditions = array())
