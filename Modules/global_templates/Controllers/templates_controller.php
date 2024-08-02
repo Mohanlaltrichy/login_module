@@ -2,7 +2,7 @@
 
 namespace Modules\global_templates\Controllers;
 use Modules\global_templates\Models\templates_model;
-
+use App\Helpers\Validationrules;
 use App\Controllers\BaseController;
 use PhpParser\Node\Expr\FuncCall;
 
@@ -150,6 +150,253 @@ class templates_controller extends BaseController
         }catch(\Exception $e){
             $currentURL = current_url();
             $this->templates_model->error('global_templates\get_all_notification', $currentURL, 'get_all_notification', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+    public function edit_company()
+    {
+        $comp_where = [
+            'id' => session('Taguser_company'), 
+        ];
+
+        $comp_data = $this->templates_model->GetTableValue('tbl_companies', '*', $comp_where);
+        
+        $user_where = [
+            'company_id' => session('Taguser_company'), 
+        ];
+
+        $user_data = $this->templates_model->GetTableValue('users', 'first_name,last_name,email,mobile', $user_where);
+        $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'name');
+
+        $data = array(
+            'comp_data' => $comp_data,
+            'user_data' => $user_data,
+            'countries' => $countries,
+        );
+        
+            return view("\Modules\global_templates\Views/edit_company",$data); 
+    }
+
+    public function get_states()
+    {
+        $country_id = $this->request->getGet('country_id');
+
+        $state_where = [
+            'country_id' => $country_id,
+        ];
+
+        $states = $this->templates_model->GetTableValue('states', 'id,name', $state_where, [], 'name');
+
+        return response()->setJSON(['states' => $states]);
+
+    }
+    public function get_cities()
+    {
+        $stat_name = $this->request->getGet('state_id');
+
+        $state_where = [
+            'name' => $stat_name,
+        ];
+
+        $states = $this->templates_model->GetTableValue(
+            'states',
+            'id',
+            $state_where
+        );
+        $city_where = [
+            'state_id' => $states[0]['id'],
+        ];
+
+        $cities = $this->templates_model->GetTableValue('cities', 'id,name', $city_where, [], 'name');
+
+        return response()->setJSON(['cities' => $cities]);
+    }
+
+    public function update_company()
+    {
+        try {
+
+            if ($this->request->getMethod() == "post") {
+
+                $session = session();
+
+                $company_name = $this->request->getPost("company_name");
+                $email_address = $this->request->getPost("company_email");
+                $gstn = $this->request->getPost("gstn");
+                $phone = $this->request->getPost("phone");
+                $website = $this->request->getPost("website");
+                $address = $this->request->getPost("address");
+                $city = $this->request->getPost("city");
+                $state = $this->request->getPost("state");
+                $country = $this->request->getPost("country");
+                $pincode = $this->request->getPost("pincode");
+                $firstname = $this->request->getPost("firstname");
+                $middlename = $this->request->getPost("middlename");
+                $lastname = $this->request->getPost("lastname");
+                $useremail = $this->request->getPost("useremail");
+                $mobile = $this->request->getPost("mobile");
+                $logo = $this->request->getFile('logo');
+
+                if ($logo->isValid()) {
+                  $filename = $logo->getClientName();
+                  $random_name = $logo->getRandomName();
+                  $uploadPath = WRITEPATH . 'uploads/logo';
+                  $logo->move($uploadPath, $random_name);
+                  $path = 'uploads/logo/' . $random_name;
+                }
+
+                $validation = \Config\Services::validation();
+                $rules = [
+                    "company_name" => [
+                        "label" => "Company name",
+                        "rules" => "required"
+                    ],
+                    "gstn" => [
+                        "label" => "GSTN",
+                        "rules" => "required"
+                    ],
+                    "company_email" => [
+                        "label" => "Email",
+                        'rules' => 'required|valid_email',
+                    ],
+                    "firstname" => [
+                        "label" => "Firstname",
+                        "rules" => "required"
+                    ]
+                ];
+
+                $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'name');
+
+                $comp_data[0] = array(
+                    'company_name' => $company_name,
+                    'company_email' => $email_address,
+                    'gstn' => $gstn,
+                    'company_phone' => $phone,
+                    'company_website' => $phone,
+                    'company_address' => $address,
+                    'city' => $city,
+                    'state' => $state,
+                    'country' => $country,
+                    'zipcode' => $pincode,
+                    'logo' => $filename ?? null,
+                    'firstname' => $firstname,
+                    'middle_name' => $middlename,
+                    'lastname' => $lastname,
+                    'mobile' => $mobile,
+                );
+
+                $user_data[0] = array(
+                    'first_name' => $firstname,
+                    'last_name' => $lastname,
+                    'email' => $useremail,
+                    'mobile' => $mobile,
+                );
+
+                $data = array(
+                    'comp_data' => $comp_data,
+                    'countries' => $countries,
+                    'user_data' => $user_data,
+                );
+
+                // if (!$validation->setRules($rules)->withRequest($this->request)->run()) {
+                if (!$this->validate($rules)) {
+                    $session->setFlashdata('msg', $validation->getErrors());
+                    return view("\Modules\global_templates\Views/edit_company",$data); 
+                }
+
+                $company_name_check = [
+                    'company_name' => $company_name
+                ];
+
+                $or_where = [
+                    'company_email' => $email_address
+                ];
+
+                $comp_data = $this->templates_model->GetTableValue('tbl_companies', 'id', $company_name_check, $or_where);
+      
+                $user_where = [
+                    'mobile' => $mobile
+                ];
+
+                $user_email_check = $this->templates_model->GetTableValue('users', 'id', $user_where);
+
+                if (count($comp_data) > 1) {
+                    $session->setFlashdata('msg', 'Company name or Email already found');
+                    return view("\Modules\global_templates\Views/edit_company",$data); 
+                }
+                if (count($user_email_check) > 1) {
+                    $session->setFlashdata('msg', 'Contact mobile number already found');
+                    return view("\Modules\global_templates\Views/edit_company",$data); 
+                }
+
+                $company_data = [
+                    'company_name' => $company_name,
+                    'first_name' => $firstname,
+                    'middle_name' => ($middlename != '') ? $middlename : null,
+                    'last_name' => $lastname,
+                    'company_address' => $address,
+                    'city' => $city,
+                    'state' => $state,
+                    'country' => $country,
+                    'zipcode' => $pincode,
+                    'company_email' => $email_address,
+                    'company_phone' => ($phone != '') ? $phone : null,
+                    'contact_mobile' => $mobile,
+                    'company_website' => ($website != '') ? $website : null,
+                    'gstn' => $gstn,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => session('Taguser_id'),
+                ];
+               
+                $set_companyname = [
+                    'company_name'     => $company_name,
+                    'Taguser_name'     => $firstname,
+                    'Taguser_email'     => $useremail,
+                ];
+                $session->set($set_companyname);
+
+                if (isset($path)) {
+                    $company_data['company_logo'] = $path;
+                        $imagePath = (WRITEPATH . $path);
+                        $imageData = file_get_contents($imagePath);
+                        $base64Image = base64_encode($imageData);
+
+                        $set_logo = [
+                            'logo'     => $base64Image
+                        ];
+                        $session->set($set_logo);
+                }
+
+                $comp_update_where = [
+                    'id' => session('Taguser_company'),
+                ];
+
+                $this->templates_model->updateData('tbl_companies', $comp_update_where, $company_data);
+
+                $users_data = [
+                    'name' => $firstname,
+                    'company_name' => $company_name,
+                    'first_name' => $firstname,
+                    'last_name' => $lastname,
+                    'phone' => ($phone != '') ? $phone : null,
+                    'mobile' => $mobile,
+                    'utc_updated_at' => date('Y-m-d H:i:s'),
+                    'local_updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => '0',
+                ];
+                
+                $user_update_where = [
+                    'company_id' => session('Taguser_company'),
+                ];
+
+                $this->templates_model->updateData('users', $user_update_where, $users_data);
+
+                session()->setFlashdata('success', 'Data Updated successfully');
+                return redirect()->route('edit_company');
+            }
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->templates_model->error('global_template\templates_controller', $currentURL, 'update_company', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }

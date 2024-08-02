@@ -1,11 +1,13 @@
 <?php
-$data['page_title'] = 'Dashboard';
+$data['page_title'] = 'Quick Access';
 echo view('\Modules\global_templates\Views\global_header',$data); // Header File Included
 ?>
 <!-- Custom CSS -->
 <link href="<?php echo base_url(); ?>assets/css/custom_style.css?v=1.1" rel="stylesheet" type="text/css"> 
-<!-- Custom CSS -->
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/flaticon.css?v=1.1" type="text/css" media="all" />	
 
+<!-- Custom CSS -->
+ 
 <!-- ============================================================== -->
 <!-- Content here -->
 <!-- ============================================================== -->
@@ -13,69 +15,115 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
     <div class="container-fluid">
         <!-- Page-Title -->
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-lg-12">
                 <div class="page-title-box">
                     <div class="row align-items-center">
                         <div class="col-md-8">
-                            <h4 class="page-title m-0">Dashboard</h4>
+                            <!-- <h4 class="page-title m-0">Quick Access</h4> -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>    
 
-        <div class="row">
-            <div class="col-sm-6 col-xl-2">
-                <div class="card" style="background-color:#662483;">
-                    <div onclick="open_cloudconnector()" target="_blank"> 
-                    <img src="<?php echo base_url(); ?>assets/images/cloud_logo.png" style='padding: 10px 10px;' width='100px;' height='100px;' alt="user-img">
-                        <div class="card-heading1 text-right" style="font-size: 15px;">                                               
-                            <b>Cloud Connector</b>                         
-                        </div>                     
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-2">
-                <div class="card" style="background-color:#0E7833;">
-                    <div onclick="open_subscription()" target="_blank"> 
-                    <img src="<?php echo base_url(); ?>assets/images/subscription.png" style='padding: 10px 10px;' width='100px;' height='100px;' alt="user-img">
-                        <div class="card-heading1 text-right" style="font-size: 15px;">                                               
-                            <b>Subscription</b>                         
-                        </div>                     
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-2">
-                <div class="card" style="background-color:#EA5B0B;">
-                    <div onclick="open_alert_and_notify()" target="_blank"> 
-                    <img src="<?php echo base_url(); ?>assets/images/alert_and_notify.png" style='padding: 10px 10px;' width='100px;' height='100px;' alt="user-img">
-                        <div class="card-heading1 text-right" style="font-size: 15px;">                                               
-                            <b>Alert And Notification</b>                     
-                        </div>                     
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-2">
-                <div class="card" style="background-color:#E6007E;">
-                    <div onclick="open_dashboard()" target="_blank"> 
-                    <img src="<?php echo base_url(); ?>assets/images/dashboard.png" style='padding: 10px 10px;' width='100px;' height='100px;' alt="user-img">
-                        <div class="card-heading1 text-right" style="font-size: 15px;">                                               
-                            <b>Dashboard</b>                     
-                        </div>                     
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-2">
-                <div class="card" style="background-color:#164194;">
-                    <div onclick="open_reports()" target="_blank"> 
-                    <img src="<?php echo base_url(); ?>assets/images/reports.png" style='padding: 10px 10px;' width='100px;' height='100px;' alt="user-img">
-                        <div class="card-heading1 text-right" style="font-size: 15px;">                                               
-                            <b>Reports</b>                     
-                        </div>                     
-                    </div>
-                </div>
-            </div>
-        </div>    
+       
+<!--==================================================-->
+<!-- Start datatech technology Area -->
+<!--==================================================-->
+<div class="technology-area pt-70 pb-40">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 ">
+				<div class="row">
+					<div class="col-lg-4 col-md-6 col-sm-12">
+						<div class="em-feature-box1 white" onclick="open_cloudconnector()" target="_blank">
+							<div class="em-feature-box-inner">
+								<div class="em-feature-icon">
+                                <img src="<?php echo base_url(); ?>assets/images/Cloud1.png" alt="user-img">
+								</div>
+								<div class="em-content-text">
+									<div class="em-feature-title">
+										<h2>Cloud Connectors</h2>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6 col-sm-12">
+						<div class="em-feature-box" onclick="open_subscription()" target="_blank"> 
+							<div class="em-feature-box-inner">
+								<div class="em-feature-icon">
+                                <img src="<?php echo base_url(); ?>assets/images/Subscription1.png" width='90px;' height='90px;' alt="user-img">
+								</div>
+								<div class="em-content-text">
+									<div class="em-feature-title">
+										<h2>Subscriptions</h2>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> 
+					<div class="col-lg-4 col-md-6 col-sm-12">
+						<div class="em-feature-box" onclick="open_alert_and_notify()" target="_blank"> 
+							<div class="em-feature-box-inner">
+								<div class="em-feature-icon">
+                                <img src="<?php echo base_url(); ?>assets/images/Alert1.png" style='padding: 10px 10px;' width='90px;' height='90px;' alt="user-img">
+								</div>
+								<div class="em-content-text">
+									<div class="em-feature-title">
+										<h2>Alert and Notifications</h2>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6 col-sm-12">
+						<div class="em-feature-box" onclick="open_dashboard()" target="_blank">
+							<div class="em-feature-box-inner">
+								<div class="em-feature-icon">
+                                <img src="<?php echo base_url(); ?>assets/images/Dashboards2.png" width='90px;' height='90px;' alt="user-img">
+								</div>
+								<div class="em-content-text">
+									<div class="em-feature-title">
+										<h2>Dashboards</h2>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6 col-sm-12">
+						<div class="em-feature-box" onclick="open_reports()" target="_blank">
+							<div class="em-feature-box-inner">
+								<div class="em-feature-icon">
+                                <img src="<?php echo base_url(); ?>assets/images/Reports1.png" height='75px;' style="margin-bottom: 5px;margin-top: 8px;" alt="user-img">
+								</div>
+								<div class="em-content-text">
+									<div class="em-feature-title">
+										<h2>Reports</h2>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6 col-sm-12">
+						<div class="em-feature-box" onclick="open_ai()" target="_blank"> 
+							<div class="em-feature-box-inner">
+								<div class="em-feature-icon">
+                                 <i class="flaticon-call" style="font-size: 80px;margin-top: -13px;"></i> 
+                                     <h2 style="font-size: 23px;">AI Predictions</h2>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--==================================================-->
+<!-- End datatech technology Area -->
+<!--==================================================-->
+  
                  
     </div>
 </div>
@@ -115,6 +163,10 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
 
         function open_reports() {
             window.open('<?=OPEN_REPORTS.$login_key;?>', '_blank');
+        }
+
+        function open_ai() {
+            window.open('<?=OPEN_AI.$login_key;?>', '_blank');
         }
     </script>
 

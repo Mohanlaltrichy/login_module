@@ -4,17 +4,20 @@ namespace Modules\login\Controllers;
 
 use App\Controllers\BaseController;
 use Modules\login\Models\login_model;
+use Modules\global_templates\Models\templates_model;
 use App\Libraries\customlibraries;
 use Ramsey\Uuid\Uuid;
 
 class login_controller extends BaseController
 {
     protected $loginModel;
+    protected $templates_model;
     protected $number_of_user;
     
     public function __construct()
     {
         $this->loginModel = new login_model();  
+        $this->templates_model = new templates_model();  
         $customlibraries = new customlibraries();
         $this->number_of_user = $customlibraries->number_of_user_count_get();      
     }
@@ -78,8 +81,13 @@ class login_controller extends BaseController
 
                     $this->loginModel->insertData('user_login_history',$data);
 
+                    $company_whereConditions = [
+                        'id' => $userData['company_id'], 
+                        'status' => 'active',          
+                    ];                    
+                    
                     //Company Active Check Code Start
-                    $userCompanyData = $this->loginModel->company_subscription_active_check($userData['company_id']);
+                    $userCompanyData = $this->loginModel->GetTableValue('tbl_companies','company_name,company_logo',$company_whereConditions);
 
                     if(empty($userCompanyData))
                     {
@@ -106,6 +114,21 @@ class login_controller extends BaseController
                         $company_admin = '0';
                     }
 
+                    if ($userCompanyData['company_logo'] !== null) {
+                        $imagePath = (LOGO_PATH . $userCompanyData['company_logo']);
+                        $imagePath2 = (WRITEPATH . $userCompanyData['company_logo']);
+
+                        if (file_exists($imagePath)) {
+                        $imageData = file_get_contents($imagePath);
+                        }else{
+                            $imageData = file_get_contents($imagePath2);
+                        }
+                        
+                        $base64Image = base64_encode($imageData);
+                        } else {
+                            $base64Image = '';
+                        }
+
                     //Number Of User Count Set Libraries Class Call
                     $this->number_of_user;
                     
@@ -115,7 +138,9 @@ class login_controller extends BaseController
                         'Taguser_email'    => $userData['email'],
                         'Taguser_company'  => $userData['company_id'],
                         'company_admin'    => $company_admin,
-                        'Taglogged_in'     => TRUE
+                        'Taglogged_in'     => TRUE,
+                        'logo'     => $base64Image,
+                        'company_name'     => $userCompanyData['company_name'],
                     ];
                     $session->set($ses_data);
                     return redirect()->route('dashboard');
@@ -276,6 +301,54 @@ class login_controller extends BaseController
             $this->loginModel->error('login\login_controller',$currentURL,'generateRandomUid',$e->getMessage());
             return redirect()->route('global_catch_error');  
         }
+    }
+
+    public function password_change()
+    {
+        return view('\Modules\login\Views\password_change');
+    }
+
+        public function check_old_password()
+        {
+            $old_pass = $this->request->getGet('old_pass');
+
+            $login_whereConditions = [
+                'id' => session('Taguser_id'),
+            ]; 
+            
+            $userData = $this->loginModel->GetTableValue('users','password',$login_whereConditions);                
+
+            $verify_pass = password_verify((string)$old_pass, $userData['password']);
+        
+                if ($verify_pass) {
+                    return $this->response->setJSON(['status' => 'success']);
+                } else {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'Incorrect old password']);
+                }
+    }
+        public function update_pwd()
+        {
+            if ($this->request->getMethod() == "post") {
+
+                $session = session();
+                $new_pass = $this->request->getPost("new_pass");
+                $conf_pass = $this->request->getPost("conf_pass");
+
+                if($new_pass == $conf_pass){
+
+                    $company_data = [
+                        'password' => password_hash($new_pass, PASSWORD_DEFAULT)
+                    ];
+
+                    $comp_update_where = [
+                        'id' => session('Taguser_id'),
+                    ];
+    
+                    $this->templates_model->updateData('users', $comp_update_where, $company_data);
+                }
+                $session->destroy();
+                return redirect()->route('login');
+            }
     }
 
     //User Logout Code

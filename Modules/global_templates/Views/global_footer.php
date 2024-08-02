@@ -2,10 +2,9 @@
  <footer class="footer">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
-                © <?=date('Y');?> Unfold Technologies
-            </div>
-        </div>
+        <div class="col-12">
+    <a href="https://www.unfoldtec.com/" target="_blank" style="color: #58666e;">© <?= date('Y'); ?> Unfold Technologies</a>
+</div>
     </div>
 </footer>
 <!-- End Footer -->

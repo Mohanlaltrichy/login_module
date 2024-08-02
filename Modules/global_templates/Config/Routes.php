@@ -21,6 +21,12 @@ $routes->group('templates', ['namespace' => '\Modules\global_templates\Controlle
 	
 	//Get All Notification Last 48hour Data
 	$routes->get('get_all_notification', 'templates_controller::get_all_notification', ['as' => 'get_all_notification',"filter" => "loginfilter"]);	
+	
+	//edit_compant
+	$routes->get('edit_company', 'templates_controller::edit_company', ['as' => 'edit_company',"filter" => "loginfilter"]);	
+	$routes->get('get_states', 'templates_controller::get_states', ['as' => 'get_states']);	
+	$routes->get('get_cities', 'templates_controller::get_cities', ['as' => 'get_cities']);	
+	$routes->post('update_company', 'templates_controller::update_company', ['as' => 'update_company']);	
 
 	//Ackowledge Notification Update
 	$routes->post('acknowledge_notification', 'templates_controller::acknowledge_notification', ['as' => 'acknowledge_notification',"filter" => "loginfilter"]);
