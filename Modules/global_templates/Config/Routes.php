@@ -43,5 +43,6 @@ $routes->group('api', ['namespace' => '\Modules\global_templates\Controllers'], 
 	$routes->post('number_of_email_sms_count_update','templates_controller::number_of_email_sms_count_update', ['as' => 'number_of_email_sms_count_update']);
 	$routes->post('number_of_count_get', 'templates_controller::number_of_count_get', ['as' => 'number_of_count_get']);
 	$routes->post('number_of_count_get_laravel', 'templates_controller::number_of_count_get_laravel', ['as' => 'number_of_count_get_laravel']);
+	$routes->post('company_page_access_log_laravel', 'templates_controller::company_page_access_log_laravel', ['as' => 'company_page_access_log_laravel']);
 });
 ?>

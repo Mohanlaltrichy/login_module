@@ -1233,4 +1233,87 @@ class templates_controller extends BaseController
         }           
     }  
     //Number Of Count Get Laravel Code End 
+
+    //Company Page Access Log Get Laravel Code Start
+    public function company_page_access_log_laravel()
+    {
+        $data_get = $this->request->getPost();
+
+        $jsonKey = key($data_get); // Get the key of the JSON string
+        $data = json_decode($jsonKey, true); // Decode the JSON string into an array     
+
+        if (isset($data['company_id']) && isset($data['login_key'])) {
+            $company_id = $data['company_id'];
+            $module_id  = $data['module_id'];            
+            $login_key  = $data['login_key'];            
+           
+        } else {
+            $company_id = $data['company_id'];
+            $module_id  = $data['module_id'];            
+            $login_key  = '';
+        }
+
+        $login_key_verify_pass = '';
+        if($login_key != '')
+        {
+            $login_key_whereConditions = [
+                'login_key' => $login_key,                            
+            ];
+
+            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+            
+            if(!empty($user_login_key))
+            {
+                $user_login_whereConditions = [
+                    'id' => $user_login_key[0]['user_id'], 
+                    'status' => 'active',          
+                ];           
+                
+                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
+                
+                if(!empty($userData))
+                {
+                    $login_key_verify_pass = $userData[0]['id'];
+                }                               
+            }
+        }
+        else
+        {
+            $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+        }
+
+        if($login_key_verify_pass != '')
+        {
+            $company_page_access_log_whereConditions = [
+                'company_id' => $company_id,
+                'module_id' => $module_id,                
+                'status' => 'Y'                                 
+            ];
+    
+            $company_page_access_check = $this->templates_model->GetTableValue('tbl_company_page_access_log', 'subscription_plan_value', $company_page_access_log_whereConditions);
+
+            if(!empty($company_page_access_check))
+            {
+                return $this->response->setJSON([
+                    'status' => 'success',
+                    'subscription_plan_value' => $company_page_access_check[0]['subscription_plan_value']              
+                ]);
+            }
+            else
+            {
+                return $this->response->setJSON([
+                    'status' => 'failed',
+                    'subscription_plan_value' => '',                
+                ]);
+            }            
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'subscription_plan_value' => '',                
+            ]);
+        }             
+    }
+    //Company Page Access Log Get Laravel Code End
 }
