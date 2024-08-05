@@ -140,13 +140,13 @@ if ($page_title != '') {
             <!-- end topbar-main -->
             <!-- MENU Start -->
             <div class="navbar-custom">
-                <div class="container-fluid">
+                <div class="container-fluid container-fluid-custom">
 
                     <div id="navigation">
 
                         <!-- Navigation Menu-->
 
-                        <ul class="navigation-menu">
+                        <ul class="navigation-menu" style="display: flex;">
 
                             <!-- Dashboard Navbar Code Start -->
                             <li class="has-submenu">
@@ -218,11 +218,12 @@ if ($page_title != '') {
                                 <!-- this menu need for design issue, dont remove -->
                             </li>
 
-                            <li class="has-submenu" style="left: 74%;">
+                            <li class="has-submenu" style="margin-left: auto;">
                                 <a target="_blank" href="http://3.110.35.56/documentation/overview/"><i style="margin-right: 0;font-size: 22px;" class="mdi mdi-book-open-variant"></i>
                                     Help</a>
                             </li>
                             <!-- users Navbar Code End -->
+                            <!-- <i style="margin-right: 0;font-size: 22px;" class="mdi mdi-book-open-variant"></i> -->
                         </ul>
 
                         <!-- End navigation menu -->
