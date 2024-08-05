@@ -346,8 +346,8 @@ class login_controller extends BaseController
     
                     $this->templates_model->updateData('users', $comp_update_where, $company_data);
                 }
-                $session->destroy();
-                return redirect()->route('login');
+                session()->setFlashdata('success', 'Password Updated successfully');
+                return redirect()->route('password_change');
             }
     }
 

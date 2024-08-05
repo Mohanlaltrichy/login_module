@@ -18,29 +18,16 @@ $base_url = rtrim(base_url(), '/');
                 <div class="page-title-box">
                     <div class="row align-items-center">
                         <div class="col-md-12">
-
+                          
                             <!-- Duplicate record not allowed Alert -->
-                            <div id="custom_error_alert_controller_message">
-                                <?php if (session()->getFlashdata('msg')): ?>
-                                    <div class="alert alert-danger">
-                                        <center>
-                                            <?php if (is_array(session()->getFlashdata('msg'))): ?>
-                                                <?php foreach (session()->getFlashdata('msg') as $item): ?>
-                                                    <?= $item . '<br/>' ?>
-                                                <?php endforeach; ?>
-                                            <?php else: ?>
-                                                <?= session()->getFlashdata('msg') ?>
-                                            <?php endif; ?>
-                                        </center>
+                            <div id="custom_success_alert_controller_message">
+                                <?php if (session()->getFlashdata('success')): ?>
+                                    <div id="flash-message">
+                                        <?php echo $customlibraries->global_alert_msg('controller_success', session()->getFlashdata('success')); ?>
                                     </div>
                                 <?php endif; ?>
                             </div>
-                            <!-- Duplicate record not allowed Alert -->
-                            <div id="custom_success_alert_controller_message">
-                                <?php if (session()->getFlashdata('success')) {
-                                    echo $customlibraries->global_alert_msg('controller_success', session()->getFlashdata('success'));
-                                } ?>
-                            </div>
+
                             <!-- group Add Code Start -->
                             <div class="card">
                                 <div class="card-body">
@@ -61,6 +48,7 @@ $base_url = rtrim(base_url(), '/');
                                                     placeholder="Enter Old password" required>
                                                 <span class="toggle-password" data-target="#old_pass"><i
                                                         class="fas fa-eye"></i></span>
+                                                        <div id="old_pass_error" class="error"></div>
                                             </div>
                                         </div>
 
@@ -121,6 +109,15 @@ $base_url = rtrim(base_url(), '/');
 echo view('\Modules\global_templates\Views\global_footer'); // Footer File Included
 ?>
 <script>
+     document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('flash-message')) {
+            var logoutUrl = "<?php echo $base_url . route_to('logout'); ?>";
+            setTimeout(function() {
+                window.location.href = logoutUrl;
+            }, 2000);
+        }
+    });
+
     $(document).ready(function () {
         $('.toggle-password').on('click', function () {
             var input = $($(this).data('target'));
@@ -136,6 +133,7 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
     });
 
     $(document).on('blur', '#old_pass', function () {
+        $('#old_pass_error').text("");
         var old_pass = $('#old_pass').val();
         if (old_pass != "") {
             $.ajax({
@@ -218,6 +216,11 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
     }});
 
     $('#save_pwd').on('click', function () {
+        var old_pass = $('#old_pass').val();
+        if(old_pass == ""){
+            $('#old_pass_error').text("Old Password required");
+            return false;
+        }
         const newPassword = $('#new_pass').val();
         const confirmPassword = $('#conf_pass').val();
 
@@ -227,8 +230,7 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
         if (passwordError || confirmError) {
             $('#new_pass_error').text(passwordError).toggle(!!passwordError);
             $('#conf_pass_error').text(confirmError).toggle(!!confirmError);
-        } else {
-            $('#custom_success_alert_controller_message').text('Password updated successfully.').show();
+        } else {           
             $('#update_pwd_form').submit();
         }
     });
