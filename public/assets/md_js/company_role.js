@@ -196,7 +196,25 @@
         }
     });
 
-    $('.roles_checkbox, .users_checkbox, .groups_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox').change(function()
+    $('#subscription_all_checkbox').change(function()
+    {
+        var isChecked = $(this).prop("checked");
+
+        if(isChecked == true)
+        {
+            $('.subscription_checkbox').prop("checked",true);
+            $('#subscription_all_checkbox_value').val('1');
+            $('.subscription_checkbox_value').val('1');
+        }
+        else
+        {
+            $('.subscription_checkbox').prop("checked",false);
+            $('#subscription_all_checkbox_value').val('0');
+            $('.subscription_checkbox_value').val('0');
+        }
+    });
+
+    $('.roles_checkbox, .users_checkbox, .groups_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox, .subscription_checkbox').change(function()
     {
         var isChecked = $(this).prop("checked"); 
         var data_name = $(this).data('name');
@@ -440,6 +458,25 @@
             {               
                 $('#notification_all_checkbox').prop("checked", false);
                 $('#notification_all_checkbox_value').val('0');
+            }
+        }
+        else if($(this).hasClass('subscription_checkbox'))
+        {
+            var subscription_checkboxes = document.querySelectorAll('.subscription_checkbox_div input[type="checkbox"]');
+
+            var subscription_allChecked = Array.from(subscription_checkboxes).every(function(subscriptioncheckbox) {
+            return subscriptioncheckbox.checked;
+            });
+
+            if(subscription_allChecked == true)
+            {              
+                $('#subscription_all_checkbox').prop("checked", true);
+                $('#subscription_all_checkbox_value').val('1');
+            }
+            else
+            {               
+                $('#subscription_all_checkbox').prop("checked", false);
+                $('#subscription_all_checkbox_value').val('0');
             }
         }
 

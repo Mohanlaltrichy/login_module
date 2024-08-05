@@ -689,6 +689,52 @@ $base_url = rtrim(base_url(), '/');
                                             <?php } ?>                                                                             
                                             <!-- Notification Code End -->
 
+                                            <!-- Subscription Role Code Start -->
+                                            <h3 class="col-lg-12 mb-3">Subscription</h3>
+                                            <div class="col-lg-12">
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Subscription</b>
+                                                    <input name="subscription_all_checkbox_value" id="subscription_all_checkbox_value" value='0' type="hidden">
+                                                    <span class="checkbox">
+                                                        <input id="subscription_all_checkbox" class="form-check-inline" type="checkbox">
+                                                        <label for="subscription_all_checkbox">
+                                                            Select all pages
+                                                        </label>
+                                                    </span>
+                                                </h5>
+
+                                                <div class="form-group row">
+                                                    <?php if (!empty($subscription_module_data)) {
+                                                        foreach ($subscription_module_data as $subscription_role) {
+                                                    ?>
+                                                            <div class="col-sm-6 mb-3">
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", $subscription_role['page_name'])); ?></b></label>
+                                                                <input name="subscription_checkbox_id[]" value='<?= $subscription_role['id']; ?>' type="hidden">
+                                                                <input name="subscription_checkbox_view[]" id="checkbox_view_<?= $subscription_role['id']; ?>" class='subscription_checkbox_value' value='0' type="hidden">
+                                                                <input name="subscription_checkbox_edit[]" id="checkbox_edit_<?= $subscription_role['id']; ?>" class='subscription_checkbox_value' value='0' type="hidden">
+                                                                <input name="subscription_checkbox_delete[]" id="checkbox_delete_<?= $subscription_role['id']; ?>" class='subscription_checkbox_value' value='0' type="hidden">
+                                                                <span class="checkbox subscription_checkbox_div">
+                                                                    <input data-name='can_view' data-id='<?= $subscription_role['id']; ?>' class="col-sm-2 subscription_checkbox" type="checkbox">
+                                                                    <label for="checkbox_view_<?= $subscription_role['id']; ?>">
+                                                                        Can View
+                                                                    </label>
+                                                                    <input data-name='can_edit' data-id='<?= $subscription_role['id']; ?>' class="col-sm-2 subscription_checkbox" type="checkbox">
+                                                                    <label for="checkbox_edit_<?= $subscription_role['id']; ?>">
+                                                                        Can Edit
+                                                                    </label>
+                                                                    <input data-name='can_delete' data-id='<?= $subscription_role['id']; ?>' class="col-sm-2 subscription_checkbox" type="checkbox">
+                                                                    <label for="checkbox_delete_<?= $subscription_role['id']; ?>">
+                                                                        Can Delete
+                                                                    </label>
+                                                                </span>
+                                                            </div>
+                                                    <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>                                            
+                                            <!-- Subscription Role Code End -->
+
                                         </div>
                                         <!--  Setting Role Display Code End -->
 

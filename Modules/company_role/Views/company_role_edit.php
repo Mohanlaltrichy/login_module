@@ -856,9 +856,66 @@ $this->company_role_model = new company_role_model();
                                             </div>
                                             <?php } ?>
                                             <!-- Notification Code End --> 
-                                            
-                                            
 
+                                            <!-- Subscription Role Code Start -->     
+                                            <div class="col-lg-12">                                                                                                      
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Subscription</b>
+                                                <input name="subscription_all_checkbox_value" id="subscription_all_checkbox_value" value='<?=($roles_details[0]['subscription_all_pages'] == 'Y') ? '1' : '0'?>' type="hidden">
+                                                <span class="checkbox">
+                                                <input id="subscription_all_checkbox" class="form-check-inline" type="checkbox" <?=($roles_details[0]['subscription_all_pages'] == 'Y') ? 'checked' : ''?>>
+                                                    <label for="subscription_all_checkbox">
+                                                        Select all pages
+                                                    </label>
+                                                </span>
+                                                </h5> 
+                                                    
+                                                <div class="form-group row">
+                                                    <?php if(!empty($subscription_module_data))
+                                                    {                                                        
+                                                        foreach($subscription_module_data as $subscription_role)
+                                                        {              
+                                                            $subscription_data_whereConditions = [                                  
+                                                                'role_id' => $roles_details[0]['id'],
+                                                                'page_id' => $subscription_role['id'],                                
+                                                            ];
+                                                
+                                                            $subscription_result = $this->company_role_model->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $subscription_data_whereConditions); 
+                                                            
+                                                            if(empty($subscription_result))
+                                                            {
+                                                                $subscription_result[0]['can_view'] = 'N';
+                                                                $subscription_result[0]['can_edit'] = 'N';
+                                                                $subscription_result[0]['can_delete'] = 'N';
+                                                            }
+                                                    ?>
+                                                    <div class="col-sm-6 mb-3">                                                   
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$subscription_role['page_name'])); ?></b></label> 
+                                                        <input name="subscription_checkbox_id[]" value='<?=$subscription_role['id'];?>' type="hidden">
+                                                        <input name="subscription_checkbox_view[]" id="checkbox_view_<?=$subscription_role['id'];?>" class='subscription_checkbox_value' value='<?=($subscription_result[0]['can_view'] == 'Y') ? '1' : '0'; ?>' type="hidden">
+                                                        <input name="subscription_checkbox_edit[]" id="checkbox_edit_<?=$subscription_role['id'];?>" class='subscription_checkbox_value' value='<?=($subscription_result[0]['can_edit'] == 'Y') ? '1' : '0'; ?>' type="hidden">
+                                                        <input name="subscription_checkbox_delete[]" id="checkbox_delete_<?=$subscription_role['id'];?>" class='subscription_checkbox_value' value='<?=($subscription_result[0]['can_delete'] == 'Y') ? '1' : '0'; ?>' type="hidden">                                                                                                                                     
+                                                        <span class="checkbox subscription_checkbox_div">                                                            
+                                                            <input data-name='can_view' data-id='<?=$subscription_role['id'];?>' class="col-sm-2 subscription_checkbox" type="checkbox" <?=($subscription_result[0]['can_view'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_view_<?=$subscription_role['id'];?>">
+                                                                Can View
+                                                            </label>
+                                                            <input data-name='can_edit' data-id='<?=$subscription_role['id'];?>' class="col-sm-2 subscription_checkbox" type="checkbox" <?=($subscription_result[0]['can_edit'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_edit_<?=$subscription_role['id'];?>">
+                                                                Can Edit
+                                                            </label>
+                                                            <input data-name='can_delete' data-id='<?=$subscription_role['id'];?>' class="col-sm-2 subscription_checkbox" type="checkbox" <?=($subscription_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
+                                                            <label for="checkbox_delete_<?=$subscription_role['id'];?>">
+                                                                Can Delete
+                                                            </label>
+                                                        </span>                                              
+                                                    </div>
+                                                    <?php                                                        
+                                                        }
+                                                    }
+                                                    ?>                                                    
+                                                </div>
+                                            </div>                                        
+                                            <!-- Subscription Role Code End -->
                                         </div>
                                         <!--  Setting Role Display Code End -->
 
