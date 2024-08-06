@@ -35,6 +35,7 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 		<div class="row">
 			<div class="col-lg-12 ">
 				<div class="row">
+					<?php if(session('cloud_connector_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
 						<div class="em-feature-box1 white" onclick="open_cloudconnector()" target="_blank">
 							<div class="em-feature-box-inner">
@@ -49,6 +50,8 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 							</div>
 						</div>
 					</div>
+					<?php } ?>
+					<?php if(session('subscription_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
 						<div class="em-feature-box" onclick="open_subscription()" target="_blank"> 
 							<div class="em-feature-box-inner">
@@ -63,6 +66,8 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 							</div>
 						</div>
 					</div> 
+					<?php } ?>
+					<?php if(session('alert_notification_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
 						<div class="em-feature-box" onclick="open_alert_and_notify()" target="_blank"> 
 							<div class="em-feature-box-inner">
@@ -77,6 +82,8 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 							</div>
 						</div>
 					</div>
+					<?php } ?>
+					<?php if(session('dashboard_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
 						<div class="em-feature-box" onclick="open_dashboard()" target="_blank">
 							<div class="em-feature-box-inner">
@@ -91,6 +98,8 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 							</div>
 						</div>
 					</div>
+					<?php } ?>
+					<?php if(session('reports_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
 						<div class="em-feature-box" onclick="open_reports()" target="_blank">
 							<div class="em-feature-box-inner">
@@ -105,6 +114,8 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 							</div>
 						</div>
 					</div>
+					<?php } ?>
+					<?php if(session('ai_prediction_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
 						<div class="em-feature-box" onclick="open_ai()" target="_blank"> 
 							<div class="em-feature-box-inner">
@@ -115,6 +126,7 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 							</div>
 						</div>
 					</div>
+					<?php } ?>
 				</div>
 			</div>
 		</div>

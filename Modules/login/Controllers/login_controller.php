@@ -131,6 +131,57 @@ class login_controller extends BaseController
 
                     //Number Of User Count Set Libraries Class Call
                     $this->number_of_user;
+
+                    $active_page_details = $this->loginModel->dashboard_subscription_active_page_details($userData['company_id']);
+                    if($active_page_details)
+                    {
+                        $ses_active_page_data = [];
+                        foreach($active_page_details as $active_page)
+                        {       
+                            if($active_page['feature_list'] == 'Cloud Connector')
+                            {
+                                $cloud_connector_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                                $ses_active_page_data[] = array(
+                                    'cloud_connector_module_view' => $cloud_connector_module_view,                                    
+                                );
+                            }
+                            else if($active_page['feature_list'] == 'Reports')
+                            {
+                                $reports_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                                $ses_active_page_data[] = array(
+                                    'reports_module_view' => $reports_module_view,                                    
+                                );
+                            }
+                            else if($active_page['feature_list'] == 'Dashboards')
+                            {
+                                $dashboard_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                                $ses_active_page_data[] = array(
+                                    'dashboard_module_view' => $dashboard_module_view,                                    
+                                );
+                            }
+                            else if($active_page['feature_list'] == 'Alert and Notification')
+                            {
+                                $alert_notification_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                                $ses_active_page_data[] = array(
+                                    'alert_notification_module_view' => $alert_notification_module_view,                                    
+                                );
+                            }
+                            else if($active_page['feature_list'] == 'AI Prediction')
+                            {
+                                $ai_prediction_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                                $ses_active_page_data[] = array(
+                                    'ai_prediction_module_view' => $ai_prediction_module_view,                                    
+                                );
+                            }
+                        }
+
+                        $module_page_mergedArray = [];
+                        foreach ($ses_active_page_data as $subArray) {
+                            $module_page_mergedArray = array_merge($module_page_mergedArray, $subArray);
+                        }
+
+                        session()->set($module_page_mergedArray);
+                    }                    
                     
                     $ses_data = [
                         'Taguser_id'       => $userData['id'],
@@ -255,6 +306,14 @@ class login_controller extends BaseController
                         'group_view_and_edit_edit' => $group_view_and_edit_edit,
                         'group_view_and_edit_delete' => $group_view_and_edit_delete
                     );
+                }
+                else if($roles['page_id'] == '55')
+                {
+                    $subscription_module_view = ($roles['can_view'] == 'Y') ? '1' : '0';                    
+
+                    $roles_details[] = array(
+                        'subscription_module_view' => $subscription_module_view,                        
+                    );
                 }  
                 // else if($roles['page_id'] == '37')
                 // {
@@ -337,7 +396,7 @@ class login_controller extends BaseController
                 if($new_pass == $conf_pass){
 
                     $company_data = [
-                        'password' => password_hash($new_pass, PASSWORD_DEFAULT)
+                        'password' => password_hash((string)$new_pass, PASSWORD_DEFAULT)
                     ];
 
                     $comp_update_where = [

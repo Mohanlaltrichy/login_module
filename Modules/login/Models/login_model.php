@@ -31,6 +31,24 @@ class login_model extends Model
             $this->error('login\login_Model',$currentURL,'company_subscription_active_check',$e->getMessage());                       
        }
     }
+
+    public function dashboard_subscription_active_page_details($company_id = 0)
+    {
+        try {
+            
+            $builder = $this->mysqldb->table('tbl_company_page_access_log');
+            $builder->select('feature_list,subscription_plan_value');      
+            $builder->where('company_id',$company_id);   
+            $builder->where('status','Y');       
+            $builder->whereIn('feature_list',array('Cloud Connector','Reports','Dashboards','Alert and Notification','AI Prediction'));     
+            $result = $builder->get()->getResultArray();
+            return $result;
+
+       } catch (\Exception $e) {            
+            $currentURL = current_url();            
+            $this->error('login\login_Model',$currentURL,'dashboard_subscription_active_page_details',$e->getMessage());                       
+       }
+    }
        
     //GetTableValue
     public function GetTableValue($table = '', $select_column = '', $whereConditions = array())
