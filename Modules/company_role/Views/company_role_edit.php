@@ -902,11 +902,7 @@ $this->company_role_model = new company_role_model();
                                                             <input data-name='can_edit' data-id='<?=$subscription_role['id'];?>' class="col-sm-2 subscription_checkbox" type="checkbox" <?=($subscription_result[0]['can_edit'] == 'Y') ? 'checked' : ''; ?>>                                                            
                                                             <label for="checkbox_edit_<?=$subscription_role['id'];?>">
                                                                 Can Edit
-                                                            </label>
-                                                            <input data-name='can_delete' data-id='<?=$subscription_role['id'];?>' class="col-sm-2 subscription_checkbox" type="checkbox" <?=($subscription_result[0]['can_delete'] == 'Y') ? 'checked' : ''; ?>>                                                            
-                                                            <label for="checkbox_delete_<?=$subscription_role['id'];?>">
-                                                                Can Delete
-                                                            </label>
+                                                            </label>                                                            
                                                         </span>                                              
                                                     </div>
                                                     <?php                                                        

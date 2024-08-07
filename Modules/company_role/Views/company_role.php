@@ -720,11 +720,7 @@ $base_url = rtrim(base_url(), '/');
                                                                     <input data-name='can_edit' data-id='<?= $subscription_role['id']; ?>' class="col-sm-2 subscription_checkbox" type="checkbox">
                                                                     <label for="checkbox_edit_<?= $subscription_role['id']; ?>">
                                                                         Can Edit
-                                                                    </label>
-                                                                    <input data-name='can_delete' data-id='<?= $subscription_role['id']; ?>' class="col-sm-2 subscription_checkbox" type="checkbox">
-                                                                    <label for="checkbox_delete_<?= $subscription_role['id']; ?>">
-                                                                        Can Delete
-                                                                    </label>
+                                                                    </label>                                                                    
                                                                 </span>
                                                             </div>
                                                     <?php
