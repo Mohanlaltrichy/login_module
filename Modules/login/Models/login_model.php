@@ -18,7 +18,7 @@ class login_model extends Model
         try {
             
             $builder = $this->mysqldb->table('tbl_companies');
-            $builder->select('id');      
+            $builder->select('id,company_logo,company_name');      
             $builder->where('id',$company_id);   
             $builder->where('status','active');  
             $builder->where('DATE(subscription_end) >=', date('Y-m-d'));

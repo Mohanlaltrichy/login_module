@@ -37,14 +37,17 @@ if ($page_title != '') {
                         <a href="<?php echo "javascript:void(0);" ?>" class="logo">
                         <?php if(session('logo')) : ?>
                             <img src="data:image;base64,<?php echo htmlspecialchars(session('logo')); ?>" title="Company Logo" alt="Company Logo" width="55" height="50">
+                            <a href="<?php echo "javascript:void(0);" ?>" class="logo">
+                                <h5 style="padding: 15px 10px;margin-left: -35px;color: white;"><?php echo session('company_name') ?></h5>
+                            </a>
                         <?php else: ?>
-                            <img src="" title="Company Logo" alt="Logo" width="55" height="50">
-                            <?php endif; ?>
+                            <a href="<?php echo "javascript:void(0);" ?>"  class="logo">
+                                <h5 style="padding: 15px 10px;margin-left: 0px;color: white;"><?php echo session('company_name') ?></h5>
+                            </a>
+                        <?php endif; ?>
                         </a>
    
-                        <a href="<?php echo "javascript:void(0);" ?>" class="logo">
-                      <h5 style="padding: 15px 10px;margin-left: -35px;color: white;"><?php echo session('company_name') ?></h5>
-                        </a>
+                        
                 </div>
                     <!-- End Logo-->
                        
