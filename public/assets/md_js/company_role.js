@@ -123,6 +123,22 @@
         }
     });
 
+    $('#aggregation_all_checkbox').change(function()
+    {
+        var isChecked = $(this).prop("checked");
+        if(isChecked == true)
+        {
+            $('.aggregation_checkbox').prop("checked",true);
+            $('#aggregation_all_checkbox_value').val('1');
+            $('.aggregation_checkbox_value').val('1');
+        }
+        else
+        {
+            $('.aggregation_checkbox').prop("checked",false);
+            $('#aggregation_all_checkbox_value').val('0');
+            $('.aggregation_checkbox_value').val('0');
+        }
+    });
 
     $('#bulk_all_checkbox').change(function()
     {
@@ -214,7 +230,7 @@
         }
     });
 
-    $('.roles_checkbox, .users_checkbox, .groups_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox, .subscription_checkbox').change(function()
+    $('.roles_checkbox, .users_checkbox, .groups_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .aggregation_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox, .subscription_checkbox').change(function()
     {
         var isChecked = $(this).prop("checked"); 
         var data_name = $(this).data('name');
@@ -382,6 +398,25 @@
             {               
                 $('#tag_all_checkbox').prop("checked", false);
                 $('#tag_all_checkbox_value').val('0');
+            }
+        }
+        else if($(this).hasClass('aggregation_checkbox'))
+        {
+            var aggregation_checkboxes = document.querySelectorAll('.aggregation_checkbox_div input[type="checkbox"]');
+
+            var aggregation_allChecked = Array.from(aggregation_checkboxes).every(function(aggregationcheckbox) {
+            return aggregationcheckbox.checked;
+            });
+
+            if(aggregation_allChecked == true)
+            {              
+                $('#aggregation_all_checkbox').prop("checked", true);
+                $('#aggregation_all_checkbox_value').val('1');
+            }
+            else
+            {               
+                $('#aggregation_all_checkbox').prop("checked", false);
+                $('#aggregation_all_checkbox_value').val('0');
             }
         }
         else if($(this).hasClass('bulk_checkbox'))

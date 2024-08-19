@@ -453,6 +453,59 @@ $base_url = rtrim(base_url(), '/');
                                             </div>
                                             <!-- Tag Role Code End -->
 
+                                            <!-- Data Aggregation Code Start -->
+                                            <?php if (in_array('tag_data_aggregation', $subscription_roles_page_data)) { ?>
+                                                <div class="col-lg-12">
+                                                    <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">Data Aggregation</b>
+                                                        <input name="aggregation_all_checkbox_value" id="aggregation_all_checkbox_value" value='0' type="hidden">
+                                                        <span class="checkbox">
+                                                            <input id="aggregation_all_checkbox" class="form-check-inline" type="checkbox">
+                                                            <label for="aggregation_all_checkbox">
+                                                                Select all pages
+                                                            </label>
+                                                        </span>
+                                                    </h5>
+
+                                                    <div class="form-group row">
+                                                        <?php if (!empty($data_aggregation_module_data)) {
+                                                            foreach ($data_aggregation_module_data as $data_aggregation) {                                                               
+                                                        ?>
+                                                            <div class="col-sm-6 mb-3">
+                                                                <?php if($data_aggregation['page_name'] == 'aggregation_add') { ?>
+                                                                    <label class="col-sm-3 font-orange"><b>AGGREGATION ADD</b></label>
+                                                                <?php } else if($data_aggregation['page_name'] == 'aggregation_search_&_edit') { ?>
+                                                                    <label class="col-sm-3 font-orange"><b>SEARCH & EDIT</b></label>
+                                                                <?php } ?>
+                                                                <input name="aggregation_checkbox_id[]" value='<?= $data_aggregation['id']; ?>' type="hidden">
+                                                                <input name="aggregation_checkbox_view[]" id="checkbox_view_<?= $data_aggregation['id']; ?>" class='aggregation_checkbox_value' value='0' type="hidden">
+                                                                <input name="aggregation_checkbox_edit[]" id="checkbox_edit_<?= $data_aggregation['id']; ?>" class='aggregation_checkbox_value' value='0' type="hidden">
+                                                                <input name="aggregation_checkbox_delete[]" id="checkbox_delete_<?= $data_aggregation['id']; ?>" class='aggregation_checkbox_value' value='0' type="hidden">
+                                                                <span class="checkbox aggregation_checkbox_div">
+                                                                    <input data-name='can_view' data-id='<?= $data_aggregation['id']; ?>' class="col-sm-2 aggregation_checkbox" type="checkbox">
+                                                                    <label for="checkbox_view_<?= $data_aggregation['id']; ?>">
+                                                                        Can View
+                                                                    </label>
+                                                                    <?php if($data_aggregation['page_name'] != "aggregation_add") { ?>
+                                                                    <input data-name='can_edit' data-id='<?= $data_aggregation['id']; ?>' class="col-sm-2 aggregation_checkbox" type="checkbox">
+                                                                    <label for="checkbox_edit_<?= $data_aggregation['id']; ?>">
+                                                                        Can Edit
+                                                                    </label>                                                                    
+                                                                    <input data-name='can_delete' data-id='<?= $data_aggregation['id']; ?>' class="col-sm-2 aggregation_checkbox" type="checkbox">
+                                                                    <label for="checkbox_delete_<?= $data_aggregation['id']; ?>">
+                                                                        Can Delete
+                                                                    </label>
+                                                                    <?php } ?>
+                                                                </span>
+                                                            </div>
+                                                        <?php                                                                
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
+                                            <!-- Data Aggregation Code End -->
+
                                             <!-- Bulk Import List View Role Code Start -->
                                             <?php if(in_array('opc_bulk_import', $subscription_roles_page_data) || in_array('mqtt_bulk_import', $subscription_roles_page_data) || in_array('https_bulk_import', $subscription_roles_page_data) || in_array('historian_bulk_import', $subscription_roles_page_data)) { ?>
                                             <div class="col-lg-12">
