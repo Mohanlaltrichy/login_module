@@ -311,49 +311,57 @@ class company_user_controller extends BaseController
                 $last_name = $this->request->getPost("last_name");
                 $middle_name = $this->request->getPost("middle_name");
                 $email = $this->request->getPost("email");
+                $old_email = $this->request->getPost("old_email");
                 $phone = $this->request->getPost("phone");
                 $password = $this->request->getPost('password');
                 $conf_password = $this->request->getPost("conf_password");
                 $designation = $this->request->getPost("designation");
                 $mobile = $this->request->getPost("mobile");
+                $old_mobile = $this->request->getPost("old_mobile");
                 $address = trim((string)$this->request->getPost("address"));
                 $role = $this->request->getPost("role");
                 $status = $this->request->getPost("status");
                 $phone_code = $this->request->getPost("phone_code");
-                $mobile_code = $this->request->getPost("mobile_code");
+                $mobile_code = $this->request->getPost("mobile_code");                
 
                 $notification_user = $this->request->getPost("notification_user");
                 $location = $this->request->getPost("location");
                 $department = $this->request->getPost("department");
                 $notification_user_id = $this->request->getPost("notification_user_id");
 
-                $user_email_whereConditions = [
-                    'email' => $email,  
-                    'id !=' => $user_id,
-                    'status !=' => 'deleted'                   
-                ];
-
-                $email_check = $this->company_user_model->GetTableValue('users', 'id', $user_email_whereConditions); 
-
-                if (!empty($email_check)) {
-                    session()->setFlashdata('duplicate_record_found', 'Email ID already exists');
-                    return redirect()->route('company_user_edit',array($user_id));
-                }
-
-                $user_or_whereConditions = [
-                    'mobile' => $mobile_code,
-                    'id !=' => $user_id,
-                    'status !=' => 'deleted'                     
-                ];
-
-                $mob_check = $this->company_user_model->GetTableValue('users', 'id',$user_or_whereConditions); 
-
-                if (!empty($mob_check)) {
-                    session()->setFlashdata('duplicate_record_found', 'Mobile Number already exists');
-                    return redirect()->route('company_user_edit',array($user_id));
+                if($old_email != $email)
+                {
+                    $user_email_whereConditions = [
+                        'email' => $email,  
+                        'id !=' => $user_id,
+                        'status' => 'active'                   
+                    ];
+                        
+                    $email_check = $this->company_user_model->GetTableValue('users', 'id', $user_email_whereConditions); 
+    
+                    if (!empty($email_check)) {
+                        session()->setFlashdata('duplicate_record_found', 'Email ID already exists');
+                        return redirect()->route('company_user_edit',array($user_id));
+                    }
                 }                
 
-                if($notification_user == '1')
+                if($old_mobile != $mobile_code)
+                {
+                    $user_whereConditions = [
+                        'mobile' => $mobile_code,
+                        'id !=' => $user_id,
+                        'status' => 'active'                     
+                    ];                   
+
+                    $mob_check = $this->company_user_model->GetTableValue('users', 'id',$user_whereConditions); 
+
+                    if (!empty($mob_check)) {
+                        session()->setFlashdata('duplicate_record_found', 'Mobile Number already exists');
+                        return redirect()->route('company_user_edit',array($user_id));
+                    }  
+                }              
+
+                if($notification_user == '1' && $old_email != $email)
                 {
                     $notification_email_whereConditions = [
                         'user_email' => $email,

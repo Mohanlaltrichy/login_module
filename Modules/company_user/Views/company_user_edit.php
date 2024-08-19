@@ -114,7 +114,8 @@ height: 35px;
                                         <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="email">Email<span>*</span></label>
                                             <div class="col-sm-3">
-                                            <input type="email" name="email"  class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' id="email" required>
+                                            <input type="email"  name="email" class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' id="email" required>
+                                            <input type="hidden" name="old_email"  class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' required>
                                             </div>
 
                                             <label class="col-sm-1 control-label" for="phone">Phone</label>
@@ -125,6 +126,7 @@ height: 35px;
                                             <label class="col-sm-1 control-label" for="zone">Mobile</label>
                                             <div class="iti col-sm-3">
                                             <input type="tel" name="mobile" value='<?=$user_details[0]['mobile'];?>' id="mobile" onblur="process(event)" required>
+                                            <input type="hidden" name="old_mobile" value='<?=$user_details[0]['mobile'];?>' id="old_mobile" required>                                            
                                             </div>                                            
                                         </div>
                                             
