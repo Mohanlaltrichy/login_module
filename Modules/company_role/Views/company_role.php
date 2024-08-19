@@ -484,12 +484,12 @@ $base_url = rtrim(base_url(), '/');
                                                                     <input data-name='can_view' data-id='<?= $data_aggregation['id']; ?>' class="col-sm-2 aggregation_checkbox" type="checkbox">
                                                                     <label for="checkbox_view_<?= $data_aggregation['id']; ?>">
                                                                         Can View
-                                                                    </label>
-                                                                    <?php if($data_aggregation['page_name'] != "aggregation_add") { ?>
+                                                                    </label>                                                                    
                                                                     <input data-name='can_edit' data-id='<?= $data_aggregation['id']; ?>' class="col-sm-2 aggregation_checkbox" type="checkbox">
                                                                     <label for="checkbox_edit_<?= $data_aggregation['id']; ?>">
                                                                         Can Edit
-                                                                    </label>                                                                    
+                                                                    </label>   
+                                                                    <?php if($data_aggregation['page_name'] != "aggregation_add") { ?>                                                                 
                                                                     <input data-name='can_delete' data-id='<?= $data_aggregation['id']; ?>' class="col-sm-2 aggregation_checkbox" type="checkbox">
                                                                     <label for="checkbox_delete_<?= $data_aggregation['id']; ?>">
                                                                         Can Delete
