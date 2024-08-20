@@ -1015,7 +1015,7 @@ $this->company_role_model = new company_role_model();
                                                             }
                                                     ?>
                                                     <div class="col-sm-6 mb-3">                                                   
-                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ",$ai_prediction_role['page_name'])); ?></b></label> 
+                                                        <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_"," ", str_replace("ai_prediction","",$ai_prediction_role['page_name']))); ?></b></label> 
                                                         <input name="ai_prediction_checkbox_id[]" value='<?=$ai_prediction_role['id'];?>' type="hidden">
                                                         <input name="ai_prediction_checkbox_view[]" id="checkbox_view_<?=$ai_prediction_role['id'];?>" class='ai_prediction_checkbox_value' value='<?=($ai_prediction_result[0]['can_view'] == 'Y') ? '1' : '0'; ?>' type="hidden">
                                                         <input name="ai_prediction_checkbox_edit[]" id="checkbox_edit_<?=$ai_prediction_role['id'];?>" class='ai_prediction_checkbox_value' value='<?=($ai_prediction_result[0]['can_edit'] == 'Y') ? '1' : '0'; ?>' type="hidden">
