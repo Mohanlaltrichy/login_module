@@ -103,6 +103,12 @@ class company_role_controller extends BaseController
 
             $subscription_module_data = $this->company_role_model->get_page_details($subscription_status_module_like);
 
+            $ai_prediction_status_module_like = [
+                'tcp.page_name' => 'ai_prediction'
+            ];
+
+            $ai_prediction_module_data = $this->company_role_model->get_page_details($ai_prediction_status_module_like);
+
             $groups_module_like = [
                 'tcp.page_name' => 'groups'
             ];
@@ -125,6 +131,7 @@ class company_role_controller extends BaseController
                 'reports_module_data' => $reports_module_data,
                 'notification' => $notification, 
                 'subscription_module_data' => $subscription_module_data,
+                'ai_prediction_module_data' => $ai_prediction_module_data,
                 'groups_module_data' => $groups_module_data,
                 'subscription_roles_page_data' => $subscription_roles_page_data                                          
             );
@@ -213,6 +220,11 @@ class company_role_controller extends BaseController
                 $subscription_checkbox_view = $this->request->getPost("subscription_checkbox_view");          
                 $subscription_checkbox_edit = $this->request->getPost("subscription_checkbox_edit");            
                 $subscription_checkbox_delete = $this->request->getPost("subscription_checkbox_delete");
+                $ai_prediction_checkbox_id = $this->request->getPost("ai_prediction_checkbox_id");     
+                $ai_prediction_all_checkbox_value = $this->request->getPost("ai_prediction_all_checkbox_value");
+                $ai_prediction_checkbox_view = $this->request->getPost("ai_prediction_checkbox_view");          
+                $ai_prediction_checkbox_edit = $this->request->getPost("ai_prediction_checkbox_edit");            
+                $ai_prediction_checkbox_delete = $this->request->getPost("ai_prediction_checkbox_delete");
 
                 $role_data_whereConditions = [
                     'role_name' => $role_name,                    
@@ -223,7 +235,7 @@ class company_role_controller extends BaseController
 
                 if(empty($result))
                 {
-                    $roles_add = $this->company_role_model->add_page_roles_details($role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $groups_checkbox_id, $groups_all_checkbox_value, $groups_checkbox_view, $groups_checkbox_edit, $groups_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $aggregation_checkbox_id, $aggregation_all_checkbox_value, $aggregation_checkbox_view, $aggregation_checkbox_edit, $aggregation_checkbox_delete, $mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete, $reports_checkbox_id, $reports_all_checkbox_value, $reports_checkbox_view, $reports_checkbox_edit, $reports_checkbox_delete, $notification_checkbox_id, $notification_all_checkbox_value, $notification_checkbox_view, $notification_checkbox_edit, $notification_checkbox_delete, $subscription_checkbox_id, $subscription_all_checkbox_value, $subscription_checkbox_view, $subscription_checkbox_edit, $subscription_checkbox_delete);
+                    $roles_add = $this->company_role_model->add_page_roles_details($role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $groups_checkbox_id, $groups_all_checkbox_value, $groups_checkbox_view, $groups_checkbox_edit, $groups_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $aggregation_checkbox_id, $aggregation_all_checkbox_value, $aggregation_checkbox_view, $aggregation_checkbox_edit, $aggregation_checkbox_delete, $mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete, $reports_checkbox_id, $reports_all_checkbox_value, $reports_checkbox_view, $reports_checkbox_edit, $reports_checkbox_delete, $notification_checkbox_id, $notification_all_checkbox_value, $notification_checkbox_view, $notification_checkbox_edit, $notification_checkbox_delete, $subscription_checkbox_id, $subscription_all_checkbox_value, $subscription_checkbox_view, $subscription_checkbox_edit, $subscription_checkbox_delete, $ai_prediction_checkbox_id, $ai_prediction_all_checkbox_value, $ai_prediction_checkbox_view, $ai_prediction_checkbox_edit, $ai_prediction_checkbox_delete);
 
                     if($roles_add)
                     {
@@ -322,7 +334,7 @@ class company_role_controller extends BaseController
                 'company_id' => $this->customer_id,                                        
             ];
 
-            $roles_details = $this->company_role_model->GetTableValue('tbl_roles', 'id,role_name,description,roles_all_pages,users_all_pages,groups_all_pages,opc_all_pages,mqtt_all_pages,http_all_pages,tag_all_pages, data_aggregation_all_pages, bulk_import_status_all_pages,dashboard_status_all_pages,reports_status_all_pages,notify_all_checkbox_value,subscription_all_pages,status', $role_data_whereConditions);
+            $roles_details = $this->company_role_model->GetTableValue('tbl_roles', 'id,role_name,description,roles_all_pages,users_all_pages,groups_all_pages,opc_all_pages,mqtt_all_pages,http_all_pages,tag_all_pages, data_aggregation_all_pages, bulk_import_status_all_pages,dashboard_status_all_pages,reports_status_all_pages,notify_all_checkbox_value,subscription_all_pages,ai_prediction_all_pages,status', $role_data_whereConditions);
 
             if(empty($roles_details))
             {
@@ -401,6 +413,12 @@ class company_role_controller extends BaseController
 
             $subscription_module_data = $this->company_role_model->get_page_details($subscription_status_module_like);
 
+            $ai_prediction_status_module_like = [
+                'tcp.page_name' => 'ai_prediction'
+            ];
+
+            $ai_prediction_module_data = $this->company_role_model->get_page_details($ai_prediction_status_module_like);
+
             $groups_module_like = [
                 'tcp.page_name' => 'groups'
             ];
@@ -423,6 +441,7 @@ class company_role_controller extends BaseController
                 'reports_module_data' => $reports_module_data,
                 'notification_data' => $notification_data,
                 'subscription_module_data' => $subscription_module_data,
+                'ai_prediction_module_data' => $ai_prediction_module_data,
                 'groups_module_data' => $groups_module_data,
                 'subscription_roles_page_data' => $subscription_roles_page_data
             );
@@ -512,6 +531,11 @@ class company_role_controller extends BaseController
                 $subscription_checkbox_view = $this->request->getPost("subscription_checkbox_view");          
                 $subscription_checkbox_edit = $this->request->getPost("subscription_checkbox_edit");            
                 $subscription_checkbox_delete = $this->request->getPost("subscription_checkbox_delete");
+                $ai_prediction_checkbox_id = $this->request->getPost("ai_prediction_checkbox_id");     
+                $ai_prediction_all_checkbox_value = $this->request->getPost("ai_prediction_all_checkbox_value");
+                $ai_prediction_checkbox_view = $this->request->getPost("ai_prediction_checkbox_view");          
+                $ai_prediction_checkbox_edit = $this->request->getPost("ai_prediction_checkbox_edit");            
+                $ai_prediction_checkbox_delete = $this->request->getPost("ai_prediction_checkbox_delete");
 
                 $role_data_whereConditions = [
                     'id' => $role_id,
@@ -523,7 +547,7 @@ class company_role_controller extends BaseController
 
                 if(!empty($result))
                 {
-                    $roles_update = $this->company_role_model->update_page_roles_details($role_id, $role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $groups_checkbox_id, $groups_all_checkbox_value, $groups_checkbox_view, $groups_checkbox_edit, $groups_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $aggregation_checkbox_id, $aggregation_all_checkbox_value, $aggregation_checkbox_view, $aggregation_checkbox_edit, $aggregation_checkbox_delete,$mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete, $reports_checkbox_id, $reports_all_checkbox_value, $reports_checkbox_view, $reports_checkbox_edit, $reports_checkbox_delete, $notification_checkbox_id, $notification_all_checkbox_value, $notification_checkbox_view, $notification_checkbox_edit, $notification_checkbox_delete, $subscription_checkbox_id, $subscription_all_checkbox_value, $subscription_checkbox_view, $subscription_checkbox_edit, $subscription_checkbox_delete);
+                    $roles_update = $this->company_role_model->update_page_roles_details($role_id, $role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $groups_checkbox_id, $groups_all_checkbox_value, $groups_checkbox_view, $groups_checkbox_edit, $groups_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $aggregation_checkbox_id, $aggregation_all_checkbox_value, $aggregation_checkbox_view, $aggregation_checkbox_edit, $aggregation_checkbox_delete,$mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete, $reports_checkbox_id, $reports_all_checkbox_value, $reports_checkbox_view, $reports_checkbox_edit, $reports_checkbox_delete, $notification_checkbox_id, $notification_all_checkbox_value, $notification_checkbox_view, $notification_checkbox_edit, $notification_checkbox_delete, $subscription_checkbox_id, $subscription_all_checkbox_value, $subscription_checkbox_view, $subscription_checkbox_edit, $subscription_checkbox_delete, $ai_prediction_checkbox_id, $ai_prediction_all_checkbox_value, $ai_prediction_checkbox_view, $ai_prediction_checkbox_edit, $ai_prediction_checkbox_delete);
                 
                     session()->setFlashdata('success', 'Roles Successfully Updated.');             
                 }

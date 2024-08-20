@@ -115,7 +115,7 @@ $base_url = rtrim(base_url(), '/');
                                                         foreach ($roles_module_data as $roles_role) {
                                                     ?>
                                                             <div class="col-sm-6 mb-3">
-                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", $roles_role['page_name'])); ?></b></label>
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", str_replace("roles", "",$roles_role['page_name']))); ?></b></label>
                                                                 <input name="roles_checkbox_id[]" value='<?= $roles_role['id']; ?>' type="hidden">
                                                                 <input name="roles_checkbox_view[]" id="checkbox_view_<?= $roles_role['id']; ?>" class='roles_checkbox_value' value='0' type="hidden">
                                                                 <input name="roles_checkbox_edit[]" id="checkbox_edit_<?= $roles_role['id']; ?>" class='roles_checkbox_value' value='0' type="hidden">
@@ -162,7 +162,7 @@ $base_url = rtrim(base_url(), '/');
                                                         foreach ($users_module_data as $users_role) {
                                                     ?>
                                                             <div class="col-sm-6 mb-3">
-                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", $users_role['page_name'])); ?></b></label>
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", str_replace("users", "",$users_role['page_name']))); ?></b></label>
                                                                 <input name="users_checkbox_id[]" value='<?= $users_role['id']; ?>' type="hidden">
                                                                 <input name="users_checkbox_view[]" id="checkbox_view_<?= $users_role['id']; ?>" class='users_checkbox_value' value='0' type="hidden">
                                                                 <input name="users_checkbox_edit[]" id="checkbox_edit_<?= $users_role['id']; ?>" class='users_checkbox_value' value='0' type="hidden">
@@ -209,7 +209,7 @@ $base_url = rtrim(base_url(), '/');
                                                         foreach ($groups_module_data as $groups_role) {
                                                     ?>
                                                             <div class="col-sm-6 mb-3">
-                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", $groups_role['page_name'])); ?></b></label>
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", str_replace("groups", "",$groups_role['page_name']))); ?></b></label>
                                                                 <input name="groups_checkbox_id[]" value='<?= $groups_role['id']; ?>' type="hidden">
                                                                 <input name="groups_checkbox_view[]" id="checkbox_view_<?= $groups_role['id']; ?>" class='groups_checkbox_value' value='0' type="hidden">
                                                                 <input name="groups_checkbox_edit[]" id="checkbox_edit_<?= $groups_role['id']; ?>" class='groups_checkbox_value' value='0' type="hidden">
@@ -262,7 +262,7 @@ $base_url = rtrim(base_url(), '/');
                                                                 {
                                                     ?>
                                                             <div class="col-sm-6 mb-3">
-                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", $opc_role['page_name'])); ?></b></label>
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", str_replace("opc", "",$opc_role['page_name']))); ?></b></label>
                                                                 <input name="opc_checkbox_id[]" value='<?= $opc_role['id']; ?>' type="hidden">
                                                                 <input name="opc_checkbox_view[]" id="checkbox_view_<?= $opc_role['id']; ?>" type="hidden" class='opc_checkbox_value' value='0'>
                                                                 <input name="opc_checkbox_edit[]" id="checkbox_edit_<?= $opc_role['id']; ?>" type="hidden" class='opc_checkbox_value' value='0'>
@@ -319,7 +319,7 @@ $base_url = rtrim(base_url(), '/');
                                                             {
                                                     ?>
                                                             <div class="col-sm-6 mb-3">
-                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", $mqtt_role['page_name'])); ?></b></label>
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", str_replace("mqtt", "",$mqtt_role['page_name']))); ?></b></label>
                                                                 <input name="mqtt_checkbox_id[]" value='<?= $mqtt_role['id']; ?>' type="hidden">
                                                                 <input name="mqtt_checkbox_view[]" id="checkbox_view_<?= $mqtt_role['id']; ?>" class='mqtt_checkbox_value' value='0' type="hidden">
                                                                 <input name="mqtt_checkbox_edit[]" id="checkbox_edit_<?= $mqtt_role['id']; ?>" class='mqtt_checkbox_value' value='0' type="hidden">
@@ -371,7 +371,7 @@ $base_url = rtrim(base_url(), '/');
                                                             { 
                                                     ?>
                                                             <div class="col-sm-6 mb-3">
-                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", $http_role['page_name'])); ?></b></label>
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", str_replace("http(s)", "",$http_role['page_name']))); ?></b></label>
                                                                 <input name="http_checkbox_id[]" value='<?= $http_role['id']; ?>' type="hidden">
                                                                 <input name="http_checkbox_view[]" id="checkbox_view_<?= $http_role['id']; ?>" type="hidden" class='http_checkbox_value' value='0'>
                                                                 <input name="http_checkbox_edit[]" id="checkbox_edit_<?= $http_role['id']; ?>" type="hidden" class='http_checkbox_value' value='0'>
@@ -422,7 +422,7 @@ $base_url = rtrim(base_url(), '/');
                                                             { 
                                                     ?>
                                                             <div class="col-sm-6 mb-3">
-                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", $tag_role['page_name'])); ?></b></label>
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", str_replace('historian','', $tag_role['page_name']))); ?></b></label>
                                                                 <input name="tag_checkbox_id[]" value='<?= $tag_role['id']; ?>' type="hidden">
                                                                 <input name="tag_checkbox_view[]" id="checkbox_view_<?= $tag_role['id']; ?>" class='tag_checkbox_value' value='0' type="hidden">
                                                                 <input name="tag_checkbox_edit[]" id="checkbox_edit_<?= $tag_role['id']; ?>" class='tag_checkbox_value' value='0' type="hidden">
@@ -472,7 +472,7 @@ $base_url = rtrim(base_url(), '/');
                                                         ?>
                                                             <div class="col-sm-6 mb-3">
                                                                 <?php if($data_aggregation['page_name'] == 'aggregation_add') { ?>
-                                                                    <label class="col-sm-3 font-orange"><b>AGGREGATION ADD</b></label>
+                                                                    <label class="col-sm-3 font-orange"><b>ADD</b></label>
                                                                 <?php } else if($data_aggregation['page_name'] == 'aggregation_search_&_edit') { ?>
                                                                     <label class="col-sm-3 font-orange"><b>SEARCH & EDIT</b></label>
                                                                 <?php } ?>
@@ -783,6 +783,56 @@ $base_url = rtrim(base_url(), '/');
                                                 </div>
                                             </div>                                            
                                             <!-- Subscription Role Code End -->
+
+                                            <!-- AI Prediction Role Code Start -->
+                                            <?php if (in_array('ai_prediction', $subscription_roles_page_data)) { ?>
+                                            <h3 class="col-lg-12 mb-3">AI Prediction</h3>
+                                            <div class="col-lg-12">
+                                                <h5 class="m-b-15 m-t-0"><b class="font-grey" style="font-size: 18px;">AI Prediction</b>
+                                                    <input name="ai_prediction_all_checkbox_value" id="ai_prediction_all_checkbox_value" value='0' type="hidden">
+                                                    <span class="checkbox">
+                                                        <input id="ai_prediction_all_checkbox" class="form-check-inline" type="checkbox">
+                                                        <label for="ai_prediction_all_checkbox">
+                                                            Select all pages
+                                                        </label>
+                                                    </span>
+                                                </h5>
+
+                                                <div class="form-group row">
+                                                    <?php if (!empty($ai_prediction_module_data)) {
+                                                        foreach ($ai_prediction_module_data as $ai_prediction_role) {
+                                                    ?>
+                                                            <div class="col-sm-6 mb-3">
+                                                                <label class="col-sm-3 font-orange"><b><?= strtoupper(str_replace("_", " ", str_replace("ai_prediction", "",$ai_prediction_role['page_name']))); ?></b></label>
+                                                                <input name="ai_prediction_checkbox_id[]" value='<?= $ai_prediction_role['id']; ?>' type="hidden">
+                                                                <input name="ai_prediction_checkbox_view[]" id="checkbox_view_<?= $ai_prediction_role['id']; ?>" class='ai_prediction_checkbox_value' value='0' type="hidden">
+                                                                <input name="ai_prediction_checkbox_edit[]" id="checkbox_edit_<?= $ai_prediction_role['id']; ?>" class='ai_prediction_checkbox_value' value='0' type="hidden">
+                                                                <input name="ai_prediction_checkbox_delete[]" id="checkbox_delete_<?= $ai_prediction_role['id']; ?>" class='ai_prediction_checkbox_value' value='0' type="hidden">
+                                                                <span class="checkbox ai_prediction_checkbox_div">
+                                                                    <input data-name='can_view' data-id='<?= $ai_prediction_role['id']; ?>' class="col-sm-2 ai_prediction_checkbox" type="checkbox">
+                                                                    <label for="checkbox_view_<?= $ai_prediction_role['id']; ?>">
+                                                                        Can View
+                                                                    </label>
+                                                                    <input data-name='can_edit' data-id='<?= $ai_prediction_role['id']; ?>' class="col-sm-2 ai_prediction_checkbox" type="checkbox">
+                                                                    <label for="checkbox_edit_<?= $ai_prediction_role['id']; ?>">
+                                                                        Can Edit
+                                                                    </label>   
+                                                                    <?php if($ai_prediction_role['page_name'] == "ai_prediction_search_&_edit") { ?>
+                                                                    <input data-name='can_delete' data-id='<?= $ai_prediction_role['id']; ?>' class="col-sm-2 ai_prediction_checkbox" type="checkbox">
+                                                                    <label for="checkbox_delete_<?= $ai_prediction_role['id']; ?>">
+                                                                        Can Delete
+                                                                    </label>    
+                                                                    <?php } ?>                                                             
+                                                                </span>
+                                                            </div>
+                                                    <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <?php } ?>                                            
+                                            <!-- AI Prediction Role Code End -->
 
                                         </div>
                                         <!--  Setting Role Display Code End -->

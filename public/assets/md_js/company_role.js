@@ -230,7 +230,25 @@
         }
     });
 
-    $('.roles_checkbox, .users_checkbox, .groups_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .aggregation_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox, .subscription_checkbox').change(function()
+    $('#ai_prediction_all_checkbox').change(function()
+    {
+        var isChecked = $(this).prop("checked");
+
+        if(isChecked == true)
+        {
+            $('.ai_prediction_checkbox').prop("checked",true);
+            $('#ai_prediction_all_checkbox_value').val('1');
+            $('.ai_prediction_checkbox_value').val('1');
+        }
+        else
+        {
+            $('.ai_prediction_checkbox').prop("checked",false);
+            $('#ai_prediction_all_checkbox_value').val('0');
+            $('.ai_prediction_checkbox_value').val('0');
+        }
+    });
+
+    $('.roles_checkbox, .users_checkbox, .groups_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .aggregation_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox, .subscription_checkbox, .ai_prediction_checkbox').change(function()
     {
         var isChecked = $(this).prop("checked"); 
         var data_name = $(this).data('name');
@@ -512,6 +530,25 @@
             {               
                 $('#subscription_all_checkbox').prop("checked", false);
                 $('#subscription_all_checkbox_value').val('0');
+            }
+        }
+        else if($(this).hasClass('ai_prediction_checkbox'))
+        {
+            var ai_prediction_checkboxes = document.querySelectorAll('.ai_prediction_checkbox_div input[type="checkbox"]');
+
+            var ai_prediction_allChecked = Array.from(ai_prediction_checkboxes).every(function(ai_predictioncheckbox) {
+            return ai_predictioncheckbox.checked;
+            });
+
+            if(ai_prediction_allChecked == true)
+            {              
+                $('#ai_prediction_all_checkbox').prop("checked", true);
+                $('#ai_prediction_all_checkbox_value').val('1');
+            }
+            else
+            {               
+                $('#ai_prediction_all_checkbox').prop("checked", false);
+                $('#ai_prediction_all_checkbox_value').val('0');
             }
         }
 

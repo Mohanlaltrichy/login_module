@@ -95,7 +95,7 @@ class company_role_model extends Model
     }
 
     //Add Tag Data Configuration
-    public function add_page_roles_details($role_name = '', $description = '', $status = '', $roles_checkbox_id = array(), $roles_all_checkbox_value = '', $roles_checkbox_view = array(), $roles_checkbox_edit = array(), $roles_checkbox_delete = array(), $users_checkbox_id = array(), $users_all_checkbox_value = '', $users_checkbox_view = array(), $users_checkbox_edit = array(), $users_checkbox_delete = array(), $groups_checkbox_id = array(), $groups_all_checkbox_value = '', $groups_checkbox_view = array(), $groups_checkbox_edit = array(), $groups_checkbox_delete = array(), $opc_checkbox_id = array(), $opc_all_checkbox_value = '', $opc_checkbox_view = array(), $opc_checkbox_edit = array(), $opc_checkbox_delete = array(), $tag_checkbox_id = array(), $tag_all_checkbox_value = '', $tag_checkbox_view = array(), $tag_checkbox_edit = array(), $tag_checkbox_delete = array(), $aggregation_checkbox_id = array(), $aggregation_all_checkbox_value = '', $aggregation_checkbox_view = array(), $aggregation_checkbox_edit = array(), $aggregation_checkbox_delete = array(), $mqtt_checkbox_id = array(), $mqtt_all_checkbox_value = '', $mqtt_checkbox_view = array(), $mqtt_checkbox_edit = array(), $mqtt_checkbox_delete = array(), $http_checkbox_id = array(), $http_all_checkbox_value = '', $http_checkbox_view = array(), $http_checkbox_edit = array(), $http_checkbox_delete = array(), $bulk_checkbox_id = array(), $bulk_all_checkbox_value = '', $bulk_checkbox_view = array(), $bulk_checkbox_edit = array(), $bulk_checkbox_delete = array(), $dashboard_checkbox_id = array(), $dashboard_all_checkbox_value = '', $dashboard_checkbox_view = array(), $dashboard_checkbox_edit = array(), $dashboard_checkbox_delete = array(), $reports_checkbox_id = array(), $reports_all_checkbox_value = '', $reports_checkbox_view = array(), $reports_checkbox_edit = array(), $reports_checkbox_delete = array(), $notification_checkbox_id = array(), $notification_all_checkbox_value = '', $notification_checkbox_view = array(), $notification_checkbox_edit = array(), $notification_checkbox_delete = array(), $subscription_checkbox_id = array(), $subscription_all_checkbox_value = '', $subscription_checkbox_view = array(), $subscription_checkbox_edit = array(), $subscription_checkbox_delete = array())
+    public function add_page_roles_details($role_name = '', $description = '', $status = '', $roles_checkbox_id = array(), $roles_all_checkbox_value = '', $roles_checkbox_view = array(), $roles_checkbox_edit = array(), $roles_checkbox_delete = array(), $users_checkbox_id = array(), $users_all_checkbox_value = '', $users_checkbox_view = array(), $users_checkbox_edit = array(), $users_checkbox_delete = array(), $groups_checkbox_id = array(), $groups_all_checkbox_value = '', $groups_checkbox_view = array(), $groups_checkbox_edit = array(), $groups_checkbox_delete = array(), $opc_checkbox_id = array(), $opc_all_checkbox_value = '', $opc_checkbox_view = array(), $opc_checkbox_edit = array(), $opc_checkbox_delete = array(), $tag_checkbox_id = array(), $tag_all_checkbox_value = '', $tag_checkbox_view = array(), $tag_checkbox_edit = array(), $tag_checkbox_delete = array(), $aggregation_checkbox_id = array(), $aggregation_all_checkbox_value = '', $aggregation_checkbox_view = array(), $aggregation_checkbox_edit = array(), $aggregation_checkbox_delete = array(), $mqtt_checkbox_id = array(), $mqtt_all_checkbox_value = '', $mqtt_checkbox_view = array(), $mqtt_checkbox_edit = array(), $mqtt_checkbox_delete = array(), $http_checkbox_id = array(), $http_all_checkbox_value = '', $http_checkbox_view = array(), $http_checkbox_edit = array(), $http_checkbox_delete = array(), $bulk_checkbox_id = array(), $bulk_all_checkbox_value = '', $bulk_checkbox_view = array(), $bulk_checkbox_edit = array(), $bulk_checkbox_delete = array(), $dashboard_checkbox_id = array(), $dashboard_all_checkbox_value = '', $dashboard_checkbox_view = array(), $dashboard_checkbox_edit = array(), $dashboard_checkbox_delete = array(), $reports_checkbox_id = array(), $reports_all_checkbox_value = '', $reports_checkbox_view = array(), $reports_checkbox_edit = array(), $reports_checkbox_delete = array(), $notification_checkbox_id = array(), $notification_all_checkbox_value = '', $notification_checkbox_view = array(), $notification_checkbox_edit = array(), $notification_checkbox_delete = array(), $subscription_checkbox_id = array(), $subscription_all_checkbox_value = '', $subscription_checkbox_view = array(), $subscription_checkbox_edit = array(), $subscription_checkbox_delete = array(), $ai_prediction_checkbox_id = array(), $ai_prediction_all_checkbox_value = '', $ai_prediction_checkbox_view = array(), $ai_prediction_checkbox_edit = array(), $ai_prediction_checkbox_delete = array())
     {
         try {
 
@@ -118,6 +118,7 @@ class company_role_model extends Model
             'reports_status_all_pages' => ($reports_all_checkbox_value == '1') ? 'Y' : 'N',
             'notify_all_checkbox_value' => ($notification_all_checkbox_value == '1') ? 'Y' : 'N',
             'subscription_all_pages' => ($subscription_all_checkbox_value == '1') ? 'Y' : 'N',
+            'ai_prediction_all_pages' => ($ai_prediction_all_checkbox_value == '1') ? 'Y' : 'N',
             'status' => $status,
             'utc_created_at' => date('Y-m-d H:i:s'),
             'local_created_at' => $this->local_date_time,
@@ -346,6 +347,23 @@ class company_role_model extends Model
                     );
                 }             
             }
+
+            $ai_prediction_data_insert_data[] = '';
+            if(!empty($ai_prediction_checkbox_id))
+            {
+                for($i=0; $i < count($ai_prediction_checkbox_id); $i++)
+                {
+                    $ai_prediction_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
+                        'role_id'=> $role_id,
+                        'page_id' => $ai_prediction_checkbox_id[$i],
+                        'type' => 'page',
+                        'can_view' => ($ai_prediction_checkbox_view[$i] == '1') ? 'Y' : 'N',
+                        'can_edit' => ($ai_prediction_checkbox_edit[$i] == '1') ? 'Y' : 'N',
+                        'can_delete' => ($ai_prediction_checkbox_delete[$i] == '1') ? 'Y' : 'N',
+                    );
+                }             
+            }
             
             if(!empty(array_filter($roles_data_insert_data)))
             {
@@ -411,10 +429,15 @@ class company_role_model extends Model
             {
                 $subscription_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($subscription_data_insert_data));
             } 
+
+            if(!empty(array_filter($ai_prediction_data_insert_data)))
+            {
+                $ai_prediction_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($ai_prediction_data_insert_data));
+            }
             
             $this->mysqldb->transComplete();       
 
-            if($roles_data_insert_data_id || $users_data_insert_data_id || $groups_data_insert_data_id || $opc_data_insert_data_id || $tag_data_insert_data_id || $aggregation_data_insert_data_id ||  $mqtt_data_insert_data_id || $http_data_insert_data_id || $bulk_data_insert_data_id || $dashboard_data_insert_data_id || $reports_data_insert_data_id || $notification_data_insert_data_id || $subscription_data_insert_data_id)
+            if($roles_data_insert_data_id || $users_data_insert_data_id || $groups_data_insert_data_id || $opc_data_insert_data_id || $tag_data_insert_data_id || $aggregation_data_insert_data_id ||  $mqtt_data_insert_data_id || $http_data_insert_data_id || $bulk_data_insert_data_id || $dashboard_data_insert_data_id || $reports_data_insert_data_id || $notification_data_insert_data_id || $subscription_data_insert_data_id || $ai_prediction_data_insert_data_id)
             {
                 return true;
             }            
@@ -426,7 +449,7 @@ class company_role_model extends Model
     }
 
     //Update Tag Data Configuration
-    public function update_page_roles_details($role_id = 0, $role_name = '', $description = '', $status = '', $roles_checkbox_id = array(), $roles_all_checkbox_value = '', $roles_checkbox_view = array(), $roles_checkbox_edit = array(), $roles_checkbox_delete = array(), $users_checkbox_id = array(), $users_all_checkbox_value = '', $users_checkbox_view = array(), $users_checkbox_edit = array(), $users_checkbox_delete = array(), $groups_checkbox_id = array(), $groups_all_checkbox_value = '', $groups_checkbox_view = array(), $groups_checkbox_edit = array(), $groups_checkbox_delete = array(), $opc_checkbox_id = array(), $opc_all_checkbox_value = '', $opc_checkbox_view = array(), $opc_checkbox_edit = array(), $opc_checkbox_delete = array(), $tag_checkbox_id = array(), $tag_all_checkbox_value = '', $tag_checkbox_view = array(), $tag_checkbox_edit = array(), $tag_checkbox_delete = array(), $aggregation_checkbox_id = array(), $aggregation_all_checkbox_value = '', $aggregation_checkbox_view = array(), $aggregation_checkbox_edit = array(), $aggregation_checkbox_delete = array(),$mqtt_checkbox_id = array(), $mqtt_all_checkbox_value = '', $mqtt_checkbox_view = array(), $mqtt_checkbox_edit = array(), $mqtt_checkbox_delete = array(), $http_checkbox_id = array(), $http_all_checkbox_value = '', $http_checkbox_view = array(), $http_checkbox_edit = array(), $http_checkbox_delete = array(), $bulk_checkbox_id = array(), $bulk_all_checkbox_value = '', $bulk_checkbox_view = array(), $bulk_checkbox_edit = array(), $bulk_checkbox_delete = array(), $dashboard_checkbox_id = array(), $dashboard_all_checkbox_value = '', $dashboard_checkbox_view = array(), $dashboard_checkbox_edit = array(), $dashboard_checkbox_delete = array(), $reports_checkbox_id = array(), $reports_all_checkbox_value = '', $reports_checkbox_view = array(), $reports_checkbox_edit = array(), $reports_checkbox_delete = array(), $notification_checkbox_id = array(), $notification_all_checkbox_value = '', $notification_checkbox_view = array(), $notification_checkbox_edit = array(), $notification_checkbox_delete = array(), $subscription_checkbox_id = array(), $subscription_all_checkbox_value = '', $subscription_checkbox_view = array(), $subscription_checkbox_edit = array(), $subscription_checkbox_delete = array())
+    public function update_page_roles_details($role_id = 0, $role_name = '', $description = '', $status = '', $roles_checkbox_id = array(), $roles_all_checkbox_value = '', $roles_checkbox_view = array(), $roles_checkbox_edit = array(), $roles_checkbox_delete = array(), $users_checkbox_id = array(), $users_all_checkbox_value = '', $users_checkbox_view = array(), $users_checkbox_edit = array(), $users_checkbox_delete = array(), $groups_checkbox_id = array(), $groups_all_checkbox_value = '', $groups_checkbox_view = array(), $groups_checkbox_edit = array(), $groups_checkbox_delete = array(), $opc_checkbox_id = array(), $opc_all_checkbox_value = '', $opc_checkbox_view = array(), $opc_checkbox_edit = array(), $opc_checkbox_delete = array(), $tag_checkbox_id = array(), $tag_all_checkbox_value = '', $tag_checkbox_view = array(), $tag_checkbox_edit = array(), $tag_checkbox_delete = array(), $aggregation_checkbox_id = array(), $aggregation_all_checkbox_value = '', $aggregation_checkbox_view = array(), $aggregation_checkbox_edit = array(), $aggregation_checkbox_delete = array(),$mqtt_checkbox_id = array(), $mqtt_all_checkbox_value = '', $mqtt_checkbox_view = array(), $mqtt_checkbox_edit = array(), $mqtt_checkbox_delete = array(), $http_checkbox_id = array(), $http_all_checkbox_value = '', $http_checkbox_view = array(), $http_checkbox_edit = array(), $http_checkbox_delete = array(), $bulk_checkbox_id = array(), $bulk_all_checkbox_value = '', $bulk_checkbox_view = array(), $bulk_checkbox_edit = array(), $bulk_checkbox_delete = array(), $dashboard_checkbox_id = array(), $dashboard_all_checkbox_value = '', $dashboard_checkbox_view = array(), $dashboard_checkbox_edit = array(), $dashboard_checkbox_delete = array(), $reports_checkbox_id = array(), $reports_all_checkbox_value = '', $reports_checkbox_view = array(), $reports_checkbox_edit = array(), $reports_checkbox_delete = array(), $notification_checkbox_id = array(), $notification_all_checkbox_value = '', $notification_checkbox_view = array(), $notification_checkbox_edit = array(), $notification_checkbox_delete = array(), $subscription_checkbox_id = array(), $subscription_all_checkbox_value = '', $subscription_checkbox_view = array(), $subscription_checkbox_edit = array(), $subscription_checkbox_delete = array(),$ai_prediction_checkbox_id = array(), $ai_prediction_all_checkbox_value = '', $ai_prediction_checkbox_view = array(), $ai_prediction_checkbox_edit = array(), $ai_prediction_checkbox_delete = array())
     {
         try {
 
@@ -453,6 +476,7 @@ class company_role_model extends Model
             'reports_status_all_pages' => ($reports_all_checkbox_value == '1') ? 'Y' : 'N',
             'notify_all_checkbox_value' => ($notification_all_checkbox_value == '1') ? 'Y' : 'N',
             'subscription_all_pages' => ($subscription_all_checkbox_value == '1') ? 'Y' : 'N',
+            'ai_prediction_all_pages' => ($ai_prediction_all_checkbox_value == '1') ? 'Y' : 'N',
             'status' => $status,
             'utc_updated_at' => date('Y-m-d H:i:s'),
             'local_updated_at' => $this->local_date_time,
@@ -687,6 +711,23 @@ class company_role_model extends Model
                     );
                 }             
             }
+
+            $ai_prediction_data_insert_data[] = '';
+            if(!empty($ai_prediction_checkbox_id))
+            {
+                for($i=0; $i < count($ai_prediction_checkbox_id); $i++)
+                {
+                    $ai_prediction_data_insert_data[] = array(
+                        'company_id' => $this->customer_id,
+                        'role_id'=> $role_id,
+                        'page_id' => $ai_prediction_checkbox_id[$i],
+                        'type' => 'page',
+                        'can_view' => ($ai_prediction_checkbox_view[$i] == '1') ? 'Y' : 'N',
+                        'can_edit' => ($ai_prediction_checkbox_edit[$i] == '1') ? 'Y' : 'N',
+                        'can_delete' => ($ai_prediction_checkbox_delete[$i] == '1') ? 'Y' : 'N',
+                    );
+                }             
+            }
             
             if(!empty(array_filter($roles_data_insert_data)))
             {
@@ -752,10 +793,15 @@ class company_role_model extends Model
             {
                 $subscription_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($subscription_data_insert_data));
             } 
+
+            if(!empty(array_filter($ai_prediction_data_insert_data)))
+            {
+                $ai_prediction_data_insert_data_id = $this->insertBatchData('tbl_role_permissions', array_filter($ai_prediction_data_insert_data));
+            } 
             
             $this->mysqldb->transComplete();
 
-            if($roles_data_insert_data_id || $users_data_insert_data_id || $groups_data_insert_data_id || $opc_data_insert_data_id || $tag_data_insert_data_id || $aggregation_data_insert_data_id || $mqtt_data_insert_data_id || $http_data_insert_data_id || $bulk_data_insert_data_id || $dashboard_data_insert_data_id || $reports_data_insert_data_id || $notification_data_insert_data_id || $subscription_data_insert_data_id)
+            if($roles_data_insert_data_id || $users_data_insert_data_id || $groups_data_insert_data_id || $opc_data_insert_data_id || $tag_data_insert_data_id || $aggregation_data_insert_data_id || $mqtt_data_insert_data_id || $http_data_insert_data_id || $bulk_data_insert_data_id || $dashboard_data_insert_data_id || $reports_data_insert_data_id || $notification_data_insert_data_id || $subscription_data_insert_data_id || $ai_prediction_data_insert_data_id)
             {
                 return true;
             }            
