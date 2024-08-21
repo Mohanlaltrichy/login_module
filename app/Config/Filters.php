@@ -36,7 +36,7 @@ class Filters extends BaseConfig
     public array $globals = [
         'before' => [
             // 'honeypot',
-            'csrf' => ['except' => ['company_role/company_role_duplicate_check', 'company_role/roledelete', 'group/groupdelete', 'group/group_user_update', 'group/group_duplicate_check', 'templates/getnotification','templates/acknowledge_notification','api/number_of_tag_update','api/number_of_dashboard_template_update','api/number_of_historian_table_update','api/number_of_parameter_count_update','api/number_of_reports_count_update','api/number_of_email_sms_count_update','api/number_of_count_get','api/number_of_count_get_laravel','api/company_page_access_log_laravel']],
+            'csrf' => ['except' => ['company_role/company_role_duplicate_check', 'company_role/roledelete', 'group/groupdelete', 'group/group_user_update', 'group/group_duplicate_check', 'templates/getnotification','templates/acknowledge_notification','api/number_of_tag_update','api/number_of_dashboard_template_update','api/number_of_historian_table_update','api/number_of_aggregator_update', 'api/number_of_parameter_count_update','api/number_of_reports_count_update','api/number_of_email_sms_count_update','api/number_of_count_get','api/number_of_count_get_laravel','api/company_page_access_log_laravel']],
             // 'invalidchars',
         ],
         'after' => [

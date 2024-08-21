@@ -699,6 +699,101 @@ class templates_controller extends BaseController
     }
     //Number Of Historian Table Count Add/Update Code End
 
+    //Number Of Aggregator Count Add/Update Code Start
+    public function number_of_aggregator_update()
+    {
+        $data = $this->request->getPost();       
+
+        if (isset($data['company_id']) && isset($data['login_key'])) {
+            $company_id = $data['company_id'];
+            $login_key  = $data['login_key'];
+           
+        } else {
+            $company_id = $data['company_id'];
+            $login_key  = '';
+        }
+
+        $login_key_verify_pass = '';
+        if($login_key != '')
+        {
+            $login_key_whereConditions = [
+                'login_key' => $login_key,                            
+            ];
+
+            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+            
+            if(!empty($user_login_key))
+            {
+                $user_login_whereConditions = [
+                    'id' => $user_login_key[0]['user_id'], 
+                    'status' => 'active',          
+                ];           
+                
+                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
+                
+                if(!empty($userData))
+                {
+                    $login_key_verify_pass = $userData[0]['id'];
+                }                               
+            }
+        }
+        else
+        {
+            $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+        }
+
+        if($login_key_verify_pass != ''){
+
+            $aggregator_whereConditions = [
+                'customer_id' =>$company_id,  
+                'status' => 'active'         
+            ];   
+
+            $aggregator_ids = $this->templates_model->GetTableValue_whereIn_pgsql('cont_aggre_config', 'id', $aggregator_whereConditions);
+
+            if(!empty(array_filter($aggregator_ids)))
+            {
+                $agg_ids = array_column($aggregator_ids, 'id');
+                $aggregator_count = count($agg_ids);
+            }
+            else
+            {
+                $aggregator_count = 0;
+            }                        
+
+            $company_feature_log_whereConditions = [
+                'company_id' => $company_id,
+                'module_id' => 34,                                   
+            ];
+
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
+
+           
+            $company_feature_log_update_whereConditions = [
+                'id' => $company_feature_log_check[0]['id'],                                   
+            ];                
+
+            $company_feature_log_data = array(
+                'user_add_count' => $aggregator_count,
+            );
+
+            $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
+            
+            return $this->response->setJSON([
+                'status' => 'success',
+                'receivedData' => $dashboard_count_store
+            ]);
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'receivedData' => ''
+            ]);
+        }
+    }
+    //Number Of Aggregator Count Add/Update Code End
+
     //Number Of Dashboard Template Count Add/Update Code Start
     public function number_of_dashboard_template_update()
     {

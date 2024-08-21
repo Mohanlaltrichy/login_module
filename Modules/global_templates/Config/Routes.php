@@ -38,6 +38,7 @@ $routes->group('api', ['namespace' => '\Modules\global_templates\Controllers'], 
 	$routes->post('number_of_tag_update', 'templates_controller::number_of_tag_update', ['as' => 'number_of_tag_update']);
 	$routes->post('number_of_dashboard_template_update', 'templates_controller::number_of_dashboard_template_update', ['as' => 'number_of_dashboard_template_update']);
 	$routes->post('number_of_historian_table_update', 'templates_controller::number_of_historian_table_update', ['as' => 'number_of_historian_table_update']);
+	$routes->post('number_of_aggregator_update', 'templates_controller::number_of_aggregator_update', ['as' => 'number_of_aggregator_update']);
 	$routes->post('number_of_parameter_count_update','templates_controller::number_of_parameter_count_update', ['as' => 'number_of_parameter_count_update']);
 	$routes->post('number_of_reports_count_update','templates_controller::number_of_reports_count_update', ['as' => 'number_of_reports_count_update']);
 	$routes->post('number_of_email_sms_count_update','templates_controller::number_of_email_sms_count_update', ['as' => 'number_of_email_sms_count_update']);
