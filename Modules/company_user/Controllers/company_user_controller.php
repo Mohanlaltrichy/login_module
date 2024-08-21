@@ -327,23 +327,7 @@ class company_user_controller extends BaseController
                 $notification_user = $this->request->getPost("notification_user");
                 $location = $this->request->getPost("location");
                 $department = $this->request->getPost("department");
-                $notification_user_id = $this->request->getPost("notification_user_id");
-
-                if($old_email != $email)
-                {
-                    $user_email_whereConditions = [
-                        'email' => $email,  
-                        'id !=' => $user_id,
-                        'status' => 'active'                   
-                    ];
-                        
-                    $email_check = $this->company_user_model->GetTableValue('users', 'id', $user_email_whereConditions); 
-    
-                    if (!empty($email_check)) {
-                        session()->setFlashdata('duplicate_record_found', 'Email ID already exists');
-                        return redirect()->route('company_user_edit',array($user_id));
-                    }
-                }                
+                $notification_user_id = $this->request->getPost("notification_user_id");                               
 
                 if($old_mobile != $mobile_code)
                 {
@@ -388,7 +372,6 @@ class company_user_controller extends BaseController
 
                 $data = [
                     'name' => $fullname,
-                    'email' => $email,
                     'phone' => ($phone != '') ? $phone_code : null,
                     'mobile' => ($mobile != '') ? $mobile_code : null,
                     'address' => ($address != '') ? $address : null,

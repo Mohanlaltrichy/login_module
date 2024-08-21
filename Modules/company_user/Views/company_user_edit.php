@@ -114,8 +114,8 @@ height: 35px;
                                         <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="email">Email<span>*</span></label>
                                             <div class="col-sm-3">
-                                            <input type="email"  name="email" class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' id="email" required>
-                                            <input type="hidden" name="old_email"  class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' required>
+                                            <input type="email"  name="email" class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' id="email" required disabled>
+                                            <input type="hidden" name="old_email"  class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' required disabled>
                                             </div>
 
                                             <label class="col-sm-1 control-label" for="phone">Phone</label>
