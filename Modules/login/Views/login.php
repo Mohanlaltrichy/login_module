@@ -10,6 +10,9 @@ $base_url = rtrim(base_url(), '/');
 <!-- ============================================================== -->
 <link rel="icon" href="<?php echo base_url(); ?>assets/images/logo-dark.svg" type="image/gif">
 <style>
+body {
+    background: white !important;    
+}
 h1 {
     font-size: 2.5rem;
     margin-bottom: 10px;
@@ -46,7 +49,7 @@ h2 {
                 <h1>Welcome to Solware IIoT</h1>
                 <h4>A robust, cloud based IIoT Data analytics for your Industrial Digital Transformation.</h4>
                 <ul class="list-unstyled">
-                    <li>✔ Build on no code approach.</li>
+                    <li>✔ Built on no code approach.</li>
                     <li>✔ Template based reports, and dashboards.</li>
                     <li>✔ High performance cloud historian.</li>
                     <li>✔ AI prediction without data science background.</li>
