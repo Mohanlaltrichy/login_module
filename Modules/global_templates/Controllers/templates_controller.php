@@ -745,8 +745,7 @@ class templates_controller extends BaseController
         if($login_key_verify_pass != ''){
 
             $aggregator_whereConditions = [
-                'customer_id' =>$company_id,  
-                'status' => 'active'         
+                'customer_id' =>$company_id,                         
             ];   
 
             $aggregator_ids = $this->templates_model->GetTableValue_whereIn_pgsql('cont_aggre_config', 'id', $aggregator_whereConditions);
@@ -793,6 +792,187 @@ class templates_controller extends BaseController
         }
     }
     //Number Of Aggregator Count Add/Update Code End
+
+    //Number Of AI Template Count Add/Update Code Start
+    public function number_of_ai_template_update()
+    {
+        $data = $this->request->getPost();  
+        
+        if (isset($data['company_id']) && isset($data['login_key'])) {
+            $company_id = $data['company_id'];
+            $login_key  = $data['login_key'];
+           
+        } else {
+            $company_id = $data['company_id'];
+            $login_key  = '';
+        }
+
+        $login_key_verify_pass = '';
+        if($login_key != '')
+        {
+            $login_key_whereConditions = [
+                'login_key' => $login_key,                            
+            ];
+
+            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+            
+            if(!empty($user_login_key))
+            {
+                $user_login_whereConditions = [
+                    'id' => $user_login_key[0]['user_id'], 
+                    'status' => 'active',          
+                ];           
+                
+                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
+                
+                if(!empty($userData))
+                {
+                    $login_key_verify_pass = $userData[0]['id'];
+                }                               
+            }
+        }
+        else
+        {
+            $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+        }
+
+        if($login_key_verify_pass != ''){
+
+            $ai_template_whereConditions = [
+                'customer_id' =>$company_id,                         
+            ];   
+
+            $ai_template_ids = $this->templates_model->GetTableValue_whereIn_pgsql('ai_create_model', 'id', $ai_template_whereConditions);
+
+            if(!empty(array_filter($ai_template_ids)))
+            {
+                $ai_ids = array_column($ai_template_ids, 'id');
+                $ai_template_count = count($ai_ids);
+            }
+            else
+            {
+                $ai_template_count = 0;
+            }                        
+
+            $company_feature_log_whereConditions = [
+                'company_id' => $company_id,
+                'module_id' => 31,                                   
+            ];
+
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
+           
+            $company_feature_log_update_whereConditions = [
+                'id' => $company_feature_log_check[0]['id'],                                   
+            ];                
+
+            $company_feature_log_data = array(
+                'user_add_count' => $ai_template_count,
+            );
+
+            $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
+            
+            return $this->response->setJSON([
+                'status' => 'success',
+                'receivedData' => $dashboard_count_store
+            ]);
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'receivedData' => ''
+            ]);
+        }
+    }
+    //Number Of AI Template Count Add/Update Code End
+
+    //Number Of AI Prediction Count Add/Update Code Start
+    public function number_of_ai_prediction_update()
+    {
+        $data = $this->request->getPost();  
+
+        if (isset($data['company_id']) && isset($data['login_key'])) {
+            $company_id = $data['company_id'];
+            $login_key  = $data['login_key'];
+           
+        } else {
+            $company_id = $data['company_id'];
+            $login_key  = '';
+        }
+
+        $login_key_verify_pass = '';
+        if($login_key != '')
+        {
+            $login_key_whereConditions = [
+                'login_key' => $login_key,                            
+            ];
+
+            $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+            
+            if(!empty($user_login_key))
+            {
+                $user_login_whereConditions = [
+                    'id' => $user_login_key[0]['user_id'], 
+                    'status' => 'active',          
+                ];           
+                
+                $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
+                
+                if(!empty($userData))
+                {
+                    $login_key_verify_pass = $userData[0]['id'];
+                }                               
+            }
+        }
+        else
+        {
+            $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+        }
+
+        if($login_key_verify_pass != ''){
+
+            $company_feature_log_whereConditions = [
+                'company_id' => $company_id,
+                'module_id' => 32,                                   
+            ];
+
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
+           
+            if(!empty(array_filter($company_feature_log_check)))
+            {
+                $ai_ids = array_column($company_feature_log_check, 'id');
+                $ai_prediction_count = count($ai_ids);
+            }
+            else
+            {
+                $ai_prediction_count = 0;
+            }                        
+
+
+            $company_feature_log_update_whereConditions = [
+                'id' => $company_feature_log_check[0]['id'],                                   
+            ];                
+
+            $company_feature_log_data = array(
+                'user_add_count' => $ai_prediction_count+1,
+            );
+
+            $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
+            
+            return $this->response->setJSON([
+                'status' => 'success',
+                'receivedData' => $dashboard_count_store
+            ]);
+        }
+        else
+        {
+            return $this->response->setJSON([
+                'status' => 'failed',
+                'receivedData' => ''
+            ]);
+        }
+    }
+    //Number Of AI Prediction Count Add/Update Code End
 
     //Number Of Dashboard Template Count Add/Update Code Start
     public function number_of_dashboard_template_update()
@@ -1232,12 +1412,14 @@ class templates_controller extends BaseController
                 'module_id' => $module_id,                                   
             ];
     
-            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count', $company_feature_log_whereConditions);
+            $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count, start_month, end_month', $company_feature_log_whereConditions);
 
             return $this->response->setJSON([
                 'status' => 'success',
                 'actual_value' => $company_feature_log_check[0]['actual_value'],
-                'user_add_count' => $company_feature_log_check[0]['user_add_count']
+                'user_add_count' => $company_feature_log_check[0]['user_add_count'],
+                'start_month' => $company_feature_log_check[0]['start_month'],
+                'end_month' => $company_feature_log_check[0]['end_month'],
             ]);
         }
         else
@@ -1245,7 +1427,9 @@ class templates_controller extends BaseController
             return $this->response->setJSON([
                 'status' => 'failed',
                 'actual_value' => '',
-                'user_add_count' => ''
+                'user_add_count' => '',
+                'start_month' => "",
+                'end_month' => "",
             ]);
         }           
     }  

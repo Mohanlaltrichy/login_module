@@ -45,5 +45,7 @@ $routes->group('api', ['namespace' => '\Modules\global_templates\Controllers'], 
 	$routes->post('number_of_count_get', 'templates_controller::number_of_count_get', ['as' => 'number_of_count_get']);
 	$routes->post('number_of_count_get_laravel', 'templates_controller::number_of_count_get_laravel', ['as' => 'number_of_count_get_laravel']);
 	$routes->post('company_page_access_log_laravel', 'templates_controller::company_page_access_log_laravel', ['as' => 'company_page_access_log_laravel']);
+	$routes->post('number_of_ai_template_update', 'templates_controller::number_of_ai_template_update', ['as' => 'number_of_ai_template_update']);
+	$routes->post('number_of_ai_prediction_update', 'templates_controller::number_of_ai_prediction_update', ['as' => 'number_of_ai_prediction_update']);
 });
 ?>
