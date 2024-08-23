@@ -18,7 +18,7 @@ if ($page_title != '') {
     <meta content="ThemeDesign" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <link rel="icon" href="<?php echo base_url(); ?>assets/images/logo-dark.svg" type="image/gif">
+    <link rel="icon" href="<?php echo base_url(); ?>assets/images/solware_fav.png" type="image/png">
 
     <?php
     echo view('\Modules\global_templates\Views\global_css_files'); // Global CSS File Included
@@ -33,22 +33,21 @@ if ($page_title != '') {
         <header id="topnav">
             <div class="topbar-main">
                 <div class="container-fluid container-fluid-custom">
-                <div>
-                        <a href="<?php echo "javascript:void(0);" ?>" class="logo">
-                        <?php if(session('logo')) : ?>
-                            <img src="data:image;base64,<?php echo htmlspecialchars(session('logo')); ?>" title="Company Logo" alt="Company Logo" width="55" height="50">
+                    <!-- logo start -->
+                    <div>
                             <a href="<?php echo "javascript:void(0);" ?>" class="logo">
-                                <h5 style="padding: 15px 10px;margin-left: -35px;color: white;"><?php echo session('company_name') ?></h5>
+                            <?php if(session('logo')) : ?>
+                                <img src="data:image;base64,<?php echo htmlspecialchars(session('logo')); ?>" title="Company Logo" alt="Company Logo" width="55" height="50">
+                                <a href="<?php echo "javascript:void(0);" ?>" class="logo">
+                                    <h5 style="padding: 15px 10px;margin-left: -35px;color: white;"><?php echo session('company_name') ?></h5>
+                                </a>
+                            <?php else: ?>
+                                <a href="<?php echo "javascript:void(0);" ?>"  class="logo">
+                                    <h5 style="padding: 15px 10px;margin-left: 0px;color: white;"><?php echo session('company_name') ?></h5>
+                                </a>
+                            <?php endif; ?>
                             </a>
-                        <?php else: ?>
-                            <a href="<?php echo "javascript:void(0);" ?>"  class="logo">
-                                <h5 style="padding: 15px 10px;margin-left: 0px;color: white;"><?php echo session('company_name') ?></h5>
-                            </a>
-                        <?php endif; ?>
-                        </a>
-   
-                        
-                </div>
+                    </div>
                     <!-- End Logo-->
                        
                     <div class="menu-extras topbar-custom navbar p-0">

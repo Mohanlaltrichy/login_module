@@ -8,7 +8,7 @@ $base_url = rtrim(base_url(), '/');
 <!-- ============================================================== -->
 <!-- Content here -->
 <!-- ============================================================== -->
-<link rel="icon" href="<?php echo base_url(); ?>assets/images/logo-dark.svg" type="image/gif">
+<link rel="icon" href="<?php echo base_url(); ?>assets/images/solware_fav.png" type="image/png">
 <style>
 body {
     background: white !important;    
