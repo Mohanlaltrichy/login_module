@@ -113,16 +113,29 @@ class login_controller extends BaseController
                         $imagePath = (LOGO_PATH . $userCompanyData['company_logo']);
                         $imagePath2 = (WRITEPATH . $userCompanyData['company_logo']);
 
-                        if (file_exists($imagePath)) {
-                        $imageData = file_get_contents($imagePath);
-                        }else{
+                        if (file_exists($imagePath)){
+                            $imageData = file_get_contents($imagePath);
+                        }
+                        else if(file_exists($imagePath2)){
                             $imageData = file_get_contents($imagePath2);
                         }
+                        else
+                        {
+                            $imageData = '';
+                        }
                         
-                        $base64Image = base64_encode($imageData);
-                        } else {
+                        if($imageData != '')
+                        {
+                            $base64Image = base64_encode($imageData);
+                        }
+                        else
+                        {
                             $base64Image = '';
                         }
+                        
+                    } else {
+                        $base64Image = '';
+                    }
 
                     //Number Of User Count Set Libraries Class Call
                     $this->number_of_user;
