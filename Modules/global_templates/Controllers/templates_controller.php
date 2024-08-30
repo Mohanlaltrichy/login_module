@@ -166,7 +166,7 @@ class templates_controller extends BaseController
         ];
 
         $user_data = $this->templates_model->GetTableValue('users', 'first_name,last_name,email,mobile', $user_where);
-        $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'name');
+        $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'id,name','','name');
 
         $data = array(
             'comp_data' => $comp_data,
@@ -185,7 +185,7 @@ class templates_controller extends BaseController
             'country_id' => $country_id,
         ];
 
-        $states = $this->templates_model->GetTableValue('states', 'id,name', $state_where, [], 'name');
+        $states = $this->templates_model->GetTableValue('states', 'id,name', $state_where, [], 'id,name','','name');
 
         return response()->setJSON(['states' => $states]);
 
@@ -207,7 +207,7 @@ class templates_controller extends BaseController
             'state_id' => $states[0]['id'],
         ];
 
-        $cities = $this->templates_model->GetTableValue('cities', 'id,name', $city_where, [], 'name');
+        $cities = $this->templates_model->GetTableValue('cities', 'id,name', $city_where, [], 'id,name','','name');
 
         return response()->setJSON(['cities' => $cities]);
     }
@@ -265,7 +265,7 @@ class templates_controller extends BaseController
                     ]
                 ];
 
-                $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'name');
+                $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'id,name','','name');
 
                 $comp_data[0] = array(
                     'company_name' => $company_name,
