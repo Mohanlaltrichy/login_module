@@ -218,6 +218,119 @@ class login_controller extends BaseController
         }
     }
 
+    //User Login Key Validation
+    public function user_login_key_validation($login_key = '')
+    {
+        try
+        {            
+            $login_key_verify_pass = '';
+            if($login_key != '')
+            {
+                $login_key_whereConditions = [
+                    'login_key' => $login_key,                            
+                ];
+
+                $user_login_key =  $this->loginModel->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
+                
+                if(!empty($user_login_key))
+                {
+                    if(date('Y-m-d H:m:s',time()) < $user_login_key['key_expiry_time'])
+                    {                      
+                        $user_login_whereConditions = [
+                            'id' => $user_login_key['user_id'], 
+                            'status' => 'active',          
+                        ];                        
+                        
+                        $userData = $this->loginModel->GetTableValue('users','*',$user_login_whereConditions);
+                    
+                        if(!empty($userData))
+                        {
+                            $login_key_verify_pass = $userData['id'];
+                        }
+                    }
+
+                    $company_whereConditions = [
+                        'id' => $userData['company_id'], 
+                    ];                    
+                    
+                    $userCompanyData = $this->loginModel->GetTableValue('tbl_companies','company_name,company_logo',$company_whereConditions);
+
+                    if ($userCompanyData['company_logo'] !== null) {
+                        $imagePath = (LOGO_PATH . $userCompanyData['company_logo']);
+                        $imagePath2 = (WRITEPATH . $userCompanyData['company_logo']);
+
+                        if (file_exists($imagePath)){
+                            $imageData = file_get_contents($imagePath);
+                        }
+                        else if(file_exists($imagePath2)){
+                            $imageData = file_get_contents($imagePath2);
+                        }
+                        else
+                        {
+                            $imageData = '';
+                        }
+                        
+                        if($imageData != '')
+                        {
+                            $base64Image = base64_encode($imageData);
+                        }
+                        else
+                        {
+                            $base64Image = '';
+                        }
+                        
+                    } else {
+                        $base64Image = '';
+                    }
+                
+                }
+            }            
+
+            $session = session();
+
+            if($login_key_verify_pass != ''){     
+                
+            //Company Active Check Code Start
+            $userCompanyData = $this->loginModel->company_subscription_active_check($userData['company_id']);
+
+            if(empty($userCompanyData))
+            {
+                $redirect_url = OPEN_SUBSCRIPTION.$login_key;
+
+                return redirect()->to($redirect_url);
+            }
+            //Company Active Check Code End
+
+            $this->user_roles_set($userData['role_id']); // User Roles Session Code 
+            
+            $this->dashboard($userData['company_id']); // Dashboard Box Session Set
+                    
+            $ses_data = [
+                'Taguser_id'       => $userData['id'],
+                'Taguser_name'     => $userData['name'],
+                'Taguser_email'    => $userData['email'],
+                'Taguser_company'  => $userData['company_id'],
+                'login_key'        => $login_key,
+                'Taglogged_in'     => TRUE,
+                'logo'     => $base64Image,
+                'company_name'     => $userCompanyData['company_name'],
+            ];
+            $session->set($ses_data);
+            return redirect()->route('dashboard');              
+                
+            }else{
+                $session->setFlashdata('msg', 'Invalid credentials');
+                return redirect()->route('login');
+            }
+
+        }
+        catch (\Exception $e) {
+            $currentURL = current_url();            
+            $this->loginModel->error('login\login_controller',$currentURL,'user_login_key_validation',$e->getMessage());
+            return redirect()->route('global_catch_error');                     
+        }
+    }
+
     public function user_roles_set($role_id = 0, $company_id = 0)
     {
         try
@@ -353,6 +466,53 @@ class login_controller extends BaseController
             return redirect()->route('global_catch_error');                     
         }
     }
+
+    public function dashboard($company_id = 0)
+    {
+        $active_page_details = $this->loginModel->dashboard_subscription_active_page_details($company_id);
+        if($active_page_details)
+        {
+            $ses_active_page_data = [];
+            foreach($active_page_details as $active_page)
+            {       
+                if($active_page['feature_list'] == 'Reports')
+                {
+                    $reports_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                    $ses_active_page_data[] = array(
+                        'reports_module_view' => $reports_module_view,                                    
+                    );
+                }
+                else if($active_page['feature_list'] == 'Dashboards')
+                {
+                    $dashboard_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                    $ses_active_page_data[] = array(
+                        'dashboard_module_view' => $dashboard_module_view,                                    
+                    );
+                }
+                else if($active_page['feature_list'] == 'Alert and Notification')
+                {
+                    $alert_notification_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                    $ses_active_page_data[] = array(
+                        'alert_notification_module_view' => $alert_notification_module_view,                                    
+                    );
+                }
+                else if($active_page['feature_list'] == 'AI Prediction')
+                {
+                    $ai_prediction_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                    $ses_active_page_data[] = array(
+                        'ai_prediction_module_view' => $ai_prediction_module_view,                                    
+                    );
+                }
+            }
+
+            $module_page_mergedArray = [];
+            foreach ($ses_active_page_data as $subArray) {
+                $module_page_mergedArray = array_merge($module_page_mergedArray, $subArray);
+            }
+
+            session()->set($module_page_mergedArray);
+        }
+    }   
 
     //Random UID Gen
     function generateRandomUid() {

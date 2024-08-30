@@ -13,6 +13,9 @@ $routes->group('login', ['namespace' => '\Modules\login\Controllers'], function 
 	// login User Check
 	$routes->post('user_validation', 'login_controller::user_validation',['as' => 'user_validation',"filter" => "isloggedfilter"]);
 
+	// login key User Check
+	$routes->get('user_login_key_validation/(:any)', 'login_controller::user_login_key_validation/$1',['as' => 'user_login_key_validation']);
+
 	// User Logout
 	$routes->get('logout', 'login_controller::logout',['as' => 'logout',"filter" => "loginfilter"]);
 
