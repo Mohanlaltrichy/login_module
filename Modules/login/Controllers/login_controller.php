@@ -301,7 +301,7 @@ class login_controller extends BaseController
             }
             //Company Active Check Code End
 
-            $this->user_roles_set($userData['role_id']); // User Roles Session Code 
+            $this->user_roles_set($userData['role_id'], $userData['company_id']); // User Roles Session Code 
             
             $this->dashboard($userData['company_id']); // Dashboard Box Session Set
                     
