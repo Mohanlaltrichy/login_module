@@ -474,8 +474,15 @@ class login_controller extends BaseController
         {
             $ses_active_page_data = [];
             foreach($active_page_details as $active_page)
-            {       
-                if($active_page['feature_list'] == 'Reports')
+            {    
+                if($active_page['feature_list'] == 'Cloud Connector')
+                {
+                    $cloud_connector_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                    $ses_active_page_data[] = array(
+                        'cloud_connector_module_view' => $cloud_connector_module_view,                                    
+                    );
+                }   
+                else if($active_page['feature_list'] == 'Reports')
                 {
                     $reports_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
                     $ses_active_page_data[] = array(
