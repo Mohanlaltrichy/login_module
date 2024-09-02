@@ -35,37 +35,17 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 		<div class="row">
 			<div class="col-lg-12 ">
 				<div class="row">
-					<?php if(session('cloud_connector_module_view') == '1') { ?>
+					<?php if(session('ai_prediction_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
-						<div class="em-feature-box1 white" onclick="open_cloudconnector()" target="_blank">
+						<div class="em-feature-box1 white" onclick="open_ai()" target="_blank"> 
 							<div class="em-feature-box-inner">
 								<div class="em-feature-icon">
-                                <img src="<?php echo base_url(); ?>assets/images/Cloud1.png" alt="user-img">
-								</div>
-								<div class="em-content-text">
-									<div class="em-feature-title">
-										<h2>Cloud Connectors</h2>
-									</div>
+                                 <i class="flaticon-call" style="padding: 10px 10px;font-size: 80px;margin-top:-23px"></i> 
+                                     <h2 style="font-size: 23px;color:white;margin-top:-5px;">AI Predictions</h2>
 								</div>
 							</div>
 						</div>
 					</div>
-					<?php } ?>
-					<?php if(session('subscription_module_view') == '1') { ?>
-					<div class="col-lg-4 col-md-6 col-sm-12">
-						<div class="em-feature-box" onclick="open_subscription()" target="_blank"> 
-							<div class="em-feature-box-inner">
-								<div class="em-feature-icon">
-                                <img src="<?php echo base_url(); ?>assets/images/Subscription1.png" width='90px;' height='90px;' alt="user-img">
-								</div>
-								<div class="em-content-text">
-									<div class="em-feature-title">
-										<h2>Subscriptions</h2>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> 
 					<?php } ?>
 					<?php if(session('alert_notification_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
@@ -83,6 +63,22 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 						</div>
 					</div>
 					<?php } ?>
+					<?php if(session('cloud_connector_module_view') == '1') { ?>
+					<div class="col-lg-4 col-md-6 col-sm-12">
+						<div class="em-feature-box" onclick="open_cloudconnector()" target="_blank">
+							<div class="em-feature-box-inner">
+								<div class="em-feature-icon">
+                                <img class="color-change-image" src="<?php echo base_url(); ?>assets/images/Cloud1.png" alt="user-img">
+								</div>
+								<div class="em-content-text">
+									<div class="em-feature-title">
+										<h2>Cloud Connectors</h2>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php } ?>										
 					<?php if(session('dashboard_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
 						<div class="em-feature-box" onclick="open_dashboard()" target="_blank">
@@ -114,19 +110,23 @@ echo view('\Modules\global_templates\Views\global_header',$data); // Header File
 							</div>
 						</div>
 					</div>
-					<?php } ?>
-					<?php if(session('ai_prediction_module_view') == '1') { ?>
+					<?php } ?>	
+					<?php if(session('subscription_module_view') == '1') { ?>
 					<div class="col-lg-4 col-md-6 col-sm-12">
-						<div class="em-feature-box" onclick="open_ai()" target="_blank"> 
+						<div class="em-feature-box" onclick="open_subscription()" target="_blank"> 
 							<div class="em-feature-box-inner">
 								<div class="em-feature-icon">
-                                 <i class="flaticon-call" style="font-size: 80px;margin-top: -13px;"></i> 
-                                     <h2 style="font-size: 23px;">AI Predictions</h2>
+                                <img src="<?php echo base_url(); ?>assets/images/Subscription1.png" width='90px;' height='90px;' alt="user-img">
+								</div>
+								<div class="em-content-text">
+									<div class="em-feature-title">
+										<h2>Subscriptions</h2>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<?php } ?>
+					</div> 
+					<?php } ?>				
 				</div>
 			</div>
 		</div>
