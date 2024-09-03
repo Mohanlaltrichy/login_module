@@ -47,7 +47,7 @@ h2 {
                             src="<?php echo base_url(); ?>assets/images/Solware_IIoT.png" alt="" height="100"></a>
                 </div> -->
                 <h1>Welcome to Solware IIoT</h1>
-                <h4>A robust, cloud based IIoT Data analytics for your Industrial Digital Transformation.</h4>
+                <h4>A robust, cloud based IIoT Data analytics for Manufacturing Industry Digital Transformation.</h4>
                 <ul class="list-unstyled">
                     <li>✔ Built on no code approach.</li>
                     <li>✔ Template based reports, and dashboards.</li>

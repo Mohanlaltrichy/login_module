@@ -115,4 +115,4 @@ define('OPEN_REPORTS','http://localhost:3000/dashboard/report_login/');
 
 define('OPEN_AI','http://localhost:9001/login/user_login_key_validation/');
 
-define('LOGO_PATH','C:/wamp/www/foresight_home/writable/');
+define('LOGO_PATH','D:/wamp/www/foresight_home/writable/');

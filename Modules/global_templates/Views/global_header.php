@@ -161,6 +161,26 @@ if ($page_title != '') {
                             <li class="has-submenu">
                                 <a href="javascript:void(0)"><i class="ti-harddrives"></i> Administration <i class="mdi mdi-chevron-down mdi-drop"></i></a>
                                 <ul class="submenu">
+                                    <li>
+                                    <a href="<?php echo $base_url . route_to('edit_company'); ?>">
+                                    Company Details</a>
+                                    </li>
+                                    
+                                    <?php if (session('roles_add_view') == '1' || session('roles_view_and_edit_view') == '1') { ?>
+                                    <li class="has-submenu">
+                                        <a href="javascript:void(0)">Roles </a>
+                                        <ul class="submenu">
+                                        <?php if (session('roles_add_view') == '1') { ?>
+                                                    <li><a href="<?php echo $base_url . route_to('company_role') ?>">Add</a>
+                                                    </li>
+                                                <?php } ?>
+                                                <?php if (session('roles_view_and_edit_view') == '1') { ?>
+                                                    <li><a href="<?php echo $base_url . route_to('company_role_list') ?>">Edit And Delete</a></li>
+                                                <?php } ?>
+                                        </ul>
+                                    </li>
+                                    <?php } ?>
+
                                     <?php if (session('user_add_view') == '1' || session('user_view_and_edit_view') == '1') { ?>
                                         <li class="has-submenu">
                                             <a href="javascript:void(0)">Users</a>
@@ -191,27 +211,6 @@ if ($page_title != '') {
                                         </ul>
                                         </li>
                                     <?php } ?>
-
-                                    <?php if (session('roles_add_view') == '1' || session('roles_view_and_edit_view') == '1') { ?>
-                                    <li class="has-submenu">
-                                        <a href="javascript:void(0)">Roles </a>
-                                        <ul class="submenu">
-                                        <?php if (session('roles_add_view') == '1') { ?>
-                                                    <li><a href="<?php echo $base_url . route_to('company_role') ?>">Add</a>
-                                                    </li>
-                                                <?php } ?>
-                                                <?php if (session('roles_view_and_edit_view') == '1') { ?>
-                                                    <li><a href="<?php echo $base_url . route_to('company_role_list') ?>">Edit And Delete</a></li>
-                                                <?php } ?>
-                                        </ul>
-                                    </li>
-                                    <?php } ?>
-
-                                    <li>
-                                    <a href="<?php echo $base_url . route_to('edit_company'); ?>">
-                                    Company Details</a>
-                                    </li>
-
                                 </ul>
                             </li>
                           <!-- admin menu end -->
