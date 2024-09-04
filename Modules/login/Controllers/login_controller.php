@@ -109,33 +109,6 @@ class login_controller extends BaseController
                         $company_admin = '0';
                     }
 
-                    if ($userCompanyData['company_logo'] !== null) {
-                        $imagePath = (LOGO_PATH . $userCompanyData['company_logo']);
-                        $imagePath2 = (WRITEPATH . $userCompanyData['company_logo']);
-
-                        if (file_exists($imagePath)){
-                            $imageData = file_get_contents($imagePath);
-                        }
-                        else if(file_exists($imagePath2)){
-                            $imageData = file_get_contents($imagePath2);
-                        }
-                        else
-                        {
-                            $imageData = '';
-                        }
-                        
-                        if($imageData != '')
-                        {
-                            $base64Image = base64_encode($imageData);
-                        }
-                        else
-                        {
-                            $base64Image = '';
-                        }
-                        
-                    } else {
-                        $base64Image = '';
-                    }
 
                     //Number Of User Count Set Libraries Class Call
                     $this->number_of_user;
@@ -198,8 +171,8 @@ class login_controller extends BaseController
                         'Taguser_company'  => $userData['company_id'],
                         'company_admin'    => $company_admin,
                         'Taglogged_in'     => TRUE,
-                        'logo'     => $base64Image,
-                        'company_name'     => $userCompanyData['company_name'],
+                        'logo'     => $userCompanyData['company_logo'],
+                        'company_name'     => $userCompanyData['company_name']
                     ];
                     $session->set($ses_data);
                     return redirect()->route('dashboard');
@@ -255,33 +228,6 @@ class login_controller extends BaseController
                     
                     $userCompanyData = $this->loginModel->GetTableValue('tbl_companies','company_name,company_logo',$company_whereConditions);
 
-                    if ($userCompanyData['company_logo'] !== null) {
-                        $imagePath = (LOGO_PATH . $userCompanyData['company_logo']);
-                        $imagePath2 = (WRITEPATH . $userCompanyData['company_logo']);
-
-                        if (file_exists($imagePath)){
-                            $imageData = file_get_contents($imagePath);
-                        }
-                        else if(file_exists($imagePath2)){
-                            $imageData = file_get_contents($imagePath2);
-                        }
-                        else
-                        {
-                            $imageData = '';
-                        }
-                        
-                        if($imageData != '')
-                        {
-                            $base64Image = base64_encode($imageData);
-                        }
-                        else
-                        {
-                            $base64Image = '';
-                        }
-                        
-                    } else {
-                        $base64Image = '';
-                    }
                 
                 }
             }            
@@ -312,8 +258,8 @@ class login_controller extends BaseController
                 'Taguser_company'  => $userData['company_id'],
                 'login_key'        => $login_key,
                 'Taglogged_in'     => TRUE,
-                'logo'     => $base64Image,
-                'company_name'     => $userCompanyData['company_name'],
+                'logo'     => $userCompanyData['company_logo'],
+                'company_name'     => $userCompanyData['company_name']
             ];
             $session->set($ses_data);
             return redirect()->route('dashboard');              

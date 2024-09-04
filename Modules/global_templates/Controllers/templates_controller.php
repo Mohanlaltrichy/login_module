@@ -237,14 +237,6 @@ class templates_controller extends BaseController
                 $mobile = $this->request->getPost("mobile");
                 $logo = $this->request->getFile('logo');
 
-                if ($logo->isValid()) {
-                  $filename = $logo->getClientName();
-                  $random_name = $logo->getRandomName();
-                  $uploadPath = WRITEPATH . 'uploads/logo';
-                  $logo->move($uploadPath, $random_name);
-                  $path = 'uploads/logo/' . $random_name;
-                }
-
                 $validation = \Config\Services::validation();
                 $rules = [
                     "company_name" => [
@@ -278,7 +270,7 @@ class templates_controller extends BaseController
                     'state' => $state,
                     'country' => $country,
                     'zipcode' => $pincode,
-                    'logo' => $filename ?? null,
+                    'logo' => $logo ?? null,
                     'firstname' => $firstname,
                     'middle_name' => $middlename,
                     'lastname' => $lastname,
@@ -300,6 +292,16 @@ class templates_controller extends BaseController
 
                 // if (!$validation->setRules($rules)->withRequest($this->request)->run()) {
                 if (!$this->validate($rules)) {
+                    if ($logo->isValid()){
+                        $imageData = $logo->getTempName();
+                        $file = file_get_contents($imageData);
+                        $base64Image = base64_encode($file);
+    
+                            $set_logo = [
+                                'firstlogo'     => $base64Image
+                            ];
+                            $session->set($set_logo);
+                    }
                     $session->setFlashdata('msg', $validation->getErrors());
                     return view("\Modules\global_templates\Views/edit_company",$data); 
                 }
@@ -312,7 +314,7 @@ class templates_controller extends BaseController
                     'company_email' => $email_address
                 ];
 
-                $comp_data = $this->templates_model->GetTableValue('tbl_companies', 'id', $company_name_check, $or_where);
+                $comp_data_check = $this->templates_model->GetTableValue('tbl_companies', 'id', $company_name_check, $or_where);
       
                 $user_where = [
                     'mobile' => $mobile
@@ -320,11 +322,31 @@ class templates_controller extends BaseController
 
                 $user_email_check = $this->templates_model->GetTableValue('users', 'id', $user_where);
 
-                if (count($comp_data) > 1) {
+                if (count($comp_data_check) > 1) {
+                    if ($logo->isValid()){
+                        $imageData = $logo->getTempName();
+                        $file = file_get_contents($imageData);
+                        $base64Image = base64_encode($file);
+    
+                            $set_logo = [
+                                'firstlogo'     => $base64Image
+                            ];
+                            $session->set($set_logo);
+                    }
                     $session->setFlashdata('msg', 'Company name or Email already found');
                     return view("\Modules\global_templates\Views/edit_company",$data); 
                 }
                 if (count($user_email_check) > 1) {
+                    if ($logo->isValid()){
+                        $imageData = $logo->getTempName();
+                        $file = file_get_contents($imageData);
+                        $base64Image = base64_encode($file);
+    
+                            $set_logo = [
+                                'firstlogo'     => $base64Image
+                            ];
+                            $session->set($set_logo);
+                    }
                     $session->setFlashdata('msg', 'Contact mobile number already found');
                     return view("\Modules\global_templates\Views/edit_company",$data); 
                 }
@@ -355,17 +377,27 @@ class templates_controller extends BaseController
                 ];
                 $session->set($set_companyname);
 
-                if (isset($path)) {
-                    $company_data['company_logo'] = $path;
-                        $imagePath = (WRITEPATH . $path);
-                        $imageData = file_get_contents($imagePath);
-                        $base64Image = base64_encode($imageData);
+                if ($logo->isValid()){
+                    $imageData = $logo->getTempName();
+                    $file = file_get_contents($imageData);
+                    $base64Image = base64_encode($file);
 
                         $set_logo = [
                             'logo'     => $base64Image
                         ];
                         $session->set($set_logo);
+                        $company_data['company_logo'] = $base64Image;
+                }elseif(session('firstlogo')){
+                    $firstlogo = session('firstlogo');
+
+                        $set_logo = [
+                            'logo'     => $firstlogo
+                        ];
+                        $session->set($set_logo);
+                        $company_data['company_logo'] = $firstlogo;
                 }
+
+                $session->remove('firstlogo');
 
                 $comp_update_where = [
                     'id' => session('Taguser_company'),
