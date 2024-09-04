@@ -222,7 +222,7 @@ class group_controller extends BaseController
                 'company_id' => $this->customer_id,
                 'status' => 'active'
             ];
-            $result = $this->group_model->GetTableValue('users', 'id,name,city,designation,mobile,email', $group_mapped_user_data_whereConditions, '', '', '', 'id', 'desc');
+            $result = $this->group_model->GetTableValue('users', 'id,name,city,department,designation,mobile,email', $group_mapped_user_data_whereConditions, '', '', '', 'id', 'desc');
 
             $data = array('group_details' => $group_details, 'result' => $result, 'group_id' => $id);
 

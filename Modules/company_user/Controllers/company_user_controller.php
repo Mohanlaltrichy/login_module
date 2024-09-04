@@ -77,6 +77,7 @@ class company_user_controller extends BaseController
                 $status = $this->request->getPost("status");
                 $phone_code = $this->request->getPost("phone_code");
                 $mobile_code = $this->request->getPost("mobile_code");
+                $user_department = $this->request->getPost("user_department");
 
 
                 $notification_user = $this->request->getPost("notification_user");             
@@ -164,6 +165,7 @@ class company_user_controller extends BaseController
                     'address' => ($address != '') ? $address : null,
                     'mobile' => ($mobile_code != '') ? $mobile_code : null,
                     'phone' => ($phone_code != '') ? $phone_code : null,
+                    'department' => ($user_department != '') ? $user_department : null,
                     'designation' => ($designation != '') ? $designation : null,
                     'role_id' => $role,
                     'company_id' => $this->customer_id, //
@@ -315,6 +317,7 @@ class company_user_controller extends BaseController
                 $phone = $this->request->getPost("phone");
                 $password = $this->request->getPost('password');
                 $conf_password = $this->request->getPost("conf_password");
+                $user_department = $this->request->getPost("user_department");
                 $designation = $this->request->getPost("designation");
                 $mobile = $this->request->getPost("mobile");
                 $old_mobile = $this->request->getPost("old_mobile");
@@ -376,6 +379,7 @@ class company_user_controller extends BaseController
                     'mobile' => ($mobile != '') ? $mobile_code : null,
                     'address' => ($address != '') ? $address : null,
                     'role_id' => $role,
+                    'department' => ($department != '') ? $department : null,
                     'designation' => ($designation != '') ? $designation : null,
                     'status' => $status,
                     'notification_user' => ($notification_user == '1') ? 1 : 0,

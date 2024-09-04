@@ -81,6 +81,7 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                                             <th><input class="col-md-2" type="checkbox" id="checkAll">Select All</th>
                                             <th>Name</th>
                                             <th>Location</th>
+                                            <th>Department</th>
                                             <th>Designation</th>
                                             <th>Mobile Number</th>
                                             <th>User Email</th>
@@ -104,6 +105,7 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                                                     </td>
                                                     <td><?= $item['name']; ?></td>
                                                     <td><?= $item['city']; ?></td>
+                                                    <td><?= $item['department']; ?></td>
                                                     <td><?= $item['designation']; ?></td>
                                                     <td><?= $item['mobile']; ?></td>
                                                     <td><?= $item['email']; ?></td>

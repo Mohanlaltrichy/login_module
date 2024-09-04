@@ -156,10 +156,10 @@ height: 35px;
                                         </div>
                                             
                                         <div class="form-group row">
-                                            <label class="col-sm-1 control-label" for="zone">Address</label>
+                                        <label class="col-sm-1 control-label" for="user_department">Department</label>
                                             <div class="col-sm-3">
-                                                <textarea name="address" class="form-control form-control-custom" id="address" value="" maxlength="100"></textarea>
-                                            </div>
+                                                <input type="text" name="user_department"  class="form-control form-control-custom" value="" id="user_department">
+                                            </div>                                     
 
                                             <label class="col-sm-1 control-label" for="role">Role<span>*</span></label>
                                             <div class="col-sm-3"> 
@@ -178,6 +178,13 @@ height: 35px;
                                                 </select>
                                             </div>
 
+                                            <label class="col-sm-1 control-label" for="zone">Address</label>
+                                            <div class="col-sm-3">
+                                                <textarea name="address" class="form-control form-control-custom" id="address" value="" maxlength="100"></textarea>
+                                            </div>
+                                        </div>      
+
+                                        <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="status">Status<span>*</span></label>
                                             <div class="col-sm-3">
                                                 <select name="status" class="form-control form-control-custom" id="status" required>
