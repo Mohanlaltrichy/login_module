@@ -104,14 +104,23 @@ $base_url = rtrim(base_url(), '/');
                                         </div>
 
                                         <div class="form-group row">
+                                        <label class="col-sm-1 control-label">Time zone<span>*</span></label>
+                                        <div class="col-sm-3 mb-3" id="zone_div">
+                                                <select name="zone" class="form-control form-control-custom" id="zone" required>
+                                                <?php if (isset($comp_data[0]['time_zone'])): ?>
+											<option value="<?php echo $comp_data[0]['time_zone']; ?>" selected><?php echo $comp_data[0]['time_zone']; ?></option>
+										<?php endif; ?>
+                                                </select>
+                                        </div>
+
                                         <label class="col-sm-1 control-label">State<span>*</span></label>
-                                        <div class="col-sm-3" id="state_div">
+                                        <div class="col-sm-3 mb-3" id="state_div">
                                                 <select name="state" class="form-control form-control-custom" id="state" required>
                                                 <?php if (isset($comp_data[0]['state'])): ?>
 											<option value="<?php echo $comp_data[0]['state']; ?>" selected><?php echo $comp_data[0]['state']; ?></option>
 										<?php endif; ?>
                                                 </select>
-                                            </div>
+                                        </div>
                                         
                                         <label class="col-sm-1 control-label">City<span>*</span></label>
                                         <div class="col-sm-3" id="city_div">
@@ -121,14 +130,14 @@ $base_url = rtrim(base_url(), '/');
 										<?php endif; ?>
                                             </select>
                                         </div>
+                                    </div>
 
+                                    <div class="form-group row">
                                         <label class="col-sm-1 control-label">Address<span>*</span></label>
                                             <div class="col-sm-3 mb-3">
                                                 <input type="text" name="address" class="form-control form-control-custom" value='<?= $comp_data[0]['company_address']; ?>' id="Address" required>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group row">                                        
                                         <label class="col-sm-1 control-label">Pincode<span>*</span></label>
                                             <div class="col-sm-3 mb-3">
                                                 <input type="text" name="pincode" class="form-control form-control-custom" value='<?= $comp_data[0]['zipcode']; ?>' id="pincode" required>
@@ -268,15 +277,18 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
     $('#country').on('change', function () {
         var selectedOption = $(this).find('option:selected');
         var country_id = selectedOption.data('id');
+        var country_name = selectedOption.val();
 
         $.ajax({
             url: base_url+'templates/get_states',
             method: 'GET',
-            data: { country_id: country_id },
+            data: { country_id: country_id, country_name:country_name },
             dataType: 'json',
             success: function (response) {
                 var states = response.states;
-                var sta = '';
+					var zones = response.zones;
+					var sta = '';
+					var zon = '';
                 $('#state_div').html('');
 
                 sta += '<select name="state" id="state" class="form-control form-control-custom" required>';
@@ -287,6 +299,18 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
                 sta += '</select>';
                 $('#state_div').append(sta);
                 $('#state').editableSelect();
+
+				$('#zone_div').html('');
+				if (zones.length > 0) {
+					zon += '<select name="zone" id="zone" class="form-control form-control-custom" required>';
+					$.each(zones, function (index, zone) {
+						zon += '<option value="' + zone.time_zone + '">' + zone.time_zone + '</option>';
+					});
+					zon += '</select>';
+				} else {
+					zon += '<input type="text" class="form-control form-control-custom" name="zone" id="zone" placeholder="Enter time zone" required>';
+				}
+					$('#zone_div').append(zon);
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching states:', error);

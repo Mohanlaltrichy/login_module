@@ -180,6 +180,7 @@ class templates_controller extends BaseController
     public function get_states()
     {
         $country_id = $this->request->getGet('country_id');
+        $country_name = $this->request->getGet('country_name');
 
         $state_where = [
             'country_id' => $country_id,
@@ -187,7 +188,14 @@ class templates_controller extends BaseController
 
         $states = $this->templates_model->GetTableValue('states', 'id,name', $state_where, [], 'id,name','','name');
 
-        return response()->setJSON(['states' => $states]);
+        $zone_where = [
+            'country' => $country_name,
+        ];
+
+        $zones = $this->templates_model->GetTableValue('timezone', 'time_zone', $zone_where,  $zone_where, [], ['time_zone'],'time_zone','asc');
+
+        $data = array('states' => $states , 'zones'=> $zones);
+        return response()->setJSON($data);
 
     }
     public function get_cities()
@@ -229,6 +237,7 @@ class templates_controller extends BaseController
                 $city = $this->request->getPost("city");
                 $state = $this->request->getPost("state");
                 $country = $this->request->getPost("country");
+                $zone = $this->request->getPost("zone");
                 $pincode = $this->request->getPost("pincode");
                 $firstname = $this->request->getPost("firstname");
                 $middlename = $this->request->getPost("middlename");
@@ -269,6 +278,7 @@ class templates_controller extends BaseController
                     'city' => $city,
                     'state' => $state,
                     'country' => $country,
+                    'time_zone' => $zone,
                     'zipcode' => $pincode,
                     'logo' => $logo ?? null,
                     'firstname' => $firstname,
@@ -360,6 +370,7 @@ class templates_controller extends BaseController
                     'city' => $city,
                     'state' => $state,
                     'country' => $country,
+                    'time_zone' => $zone,
                     'zipcode' => $pincode,
                     'company_email' => $email_address,
                     'company_phone' => ($phone != '') ? $phone : null,
