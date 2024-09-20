@@ -143,9 +143,9 @@ $base_url = rtrim(base_url(), '/');
                                                 <input type="text" name="pincode" class="form-control form-control-custom" value='<?= $comp_data[0]['zipcode']; ?>' id="pincode" required>
                                             </div>
 
-                                        <label class="col-sm-1 control-label">Company Logo </label>
+                                        <label class="col-sm-1 control-label">Company Logo (jpg, png)</label>
                                             <div class="col-sm-3 mb-3">
-                                                <input type="file" name="logo" class="form-control form-control-custom" id="logo">
+                                                <input type="file" name="logo" accept=".jpg, .png" class="form-control form-control-custom" id="logo">
                                             </div>
                                         </div>
                                         <h3 class="m-b-30">User Details*</h3>
