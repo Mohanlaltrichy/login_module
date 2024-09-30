@@ -523,9 +523,9 @@ class templates_controller extends BaseController
             ];
 
             $opc_nodes_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('opc_nodes','id',$cutomer_whereConditions);
-            $opc_events_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('opc_events','id',$cutomer_whereConditions);
+            $opc_events_property_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('events_sub_property','id',$cutomer_whereConditions);
             $opc_history_data_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('opc_history_data','id',$cutomer_whereConditions);
-            $opc_history_event_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('opc_history_event','id',$cutomer_whereConditions);
+            $opc_history_event_property_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('history_event_property','id',$cutomer_whereConditions);
 
             $mqtt_device_node_mapping_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('mqtt_device_node_mapping','id',$cutomer_whereConditions);
             $mqtt_device_event_mapping_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('mqtt_device_event_mapping','id',$cutomer_whereConditions);
@@ -543,9 +543,9 @@ class templates_controller extends BaseController
                 $opc_nodes_count = 0;
             } 
 
-            if(!empty(array_filter($opc_events_count_check)))
+            if(!empty(array_filter($opc_events_property_count_check)))
             {
-                $opc_events_ids = array_column($opc_events_count_check, 'id');
+                $opc_events_ids = array_column($opc_events_property_count_check, 'id');
                 $opc_events_count = count($opc_events_ids);
             }
             else
@@ -563,9 +563,9 @@ class templates_controller extends BaseController
                 $opc_history_data_count = 0;
             }
 
-            if(!empty(array_filter($opc_history_event_count_check)))
+            if(!empty(array_filter($opc_history_event_property_count_check)))
             {
-                $opc_history_event_ids = array_column($opc_history_event_count_check, 'id');
+                $opc_history_event_ids = array_column($opc_history_event_property_count_check, 'id');
                 $opc_history_event_count = count($opc_history_event_ids);
             }
             else
