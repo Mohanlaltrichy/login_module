@@ -58,7 +58,7 @@ if ($page_title != '') {
                                     <a href="#" data-target="#"
                                         class="dropdown-toggle waves-effect waves-light notification-icon-box"
                                         data-toggle="dropdown" aria-expanded="true">
-                                        <i class="fa fa-bell"></i> <span id="reddot"
+                                        <i class="fa fa-bell"></i> <span id="reddot" style="visibility: hidden;"
                                             class="badge badge-xs badge-danger"></span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-lg">
