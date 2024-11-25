@@ -157,9 +157,17 @@ if ($page_title != '') {
                             </li>
                             <!-- Dashboard Navbar Code End -->
 
+                            <!-- Bread Crum Navigation Code Start -->
+                            <nav aria-label="breadcrumb">
+                                <ul class="breadcrumb">
+                                <li><a href="javascript:void(0)">Administration</a></li>                               
+                                </ul>
+                            </nav>
+                            <!-- Bread Crum Navigation Code End -->
+
                             <!-- admin menu start -->
                             <li class="has-submenu">
-                                <a href="javascript:void(0)"><i class="ti-harddrives"></i> Administration <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                <a href="javascript:void(0)"><i class="ti-harddrives"></i> Access Management <i class="mdi mdi-chevron-down mdi-drop"></i></a>
                                 <ul class="submenu">
                                     <li>
                                     <a href="<?php echo $base_url . route_to('edit_company'); ?>">

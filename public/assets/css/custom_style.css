@@ -408,3 +408,25 @@ cursor: pointer;
 font-size: 15px;
 color: #6cbafa ;
 }
+
+/*breadcrumb css start*/
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 20px 0;
+}
+.breadcrumb li {
+  margin: 0 5px;
+}
+.breadcrumb li a {
+  text-decoration: none;
+  color: #686B73;
+}
+.breadcrumb li::after {
+  content: "›";
+  margin-left: 5px;
+  color: #6c757d;   
+}
+/*breadcrum css end*/
