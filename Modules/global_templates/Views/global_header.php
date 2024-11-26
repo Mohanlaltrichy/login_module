@@ -167,7 +167,7 @@ if ($page_title != '') {
 
                             <!-- admin menu start -->
                             <li class="has-submenu">
-                                <a href="javascript:void(0)"><i class="ti-harddrives"></i> Access Management <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                <a href="javascript:void(0)"><i class="ti-user"></i> Access Management <i class="mdi mdi-chevron-down mdi-drop"></i></a>
                                 <ul class="submenu">
                                     <li>
                                     <a href="<?php echo $base_url . route_to('edit_company'); ?>">
