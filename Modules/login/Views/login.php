@@ -41,7 +41,7 @@ h2 {
     <div class="container-fluid vh-100">
         <div class="row h-100 align-items-center justify-content-center">
             <!-- Left content -->
-            <div class="col-lg-6 d-flex flex-column justify-content-center p-5">
+            <div class="col-lg-7 d-flex flex-column justify-content-center">
             <!-- <div class="text-left m-t-20 m-b-30">
                     <a href="<?php echo $base_url . route_to('login'); ?>" class="logo logo-admin"><img
                             src="<?php echo base_url(); ?>assets/images/Solware_IIoT.png" alt="" height="100"></a>

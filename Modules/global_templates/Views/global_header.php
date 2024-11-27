@@ -158,11 +158,12 @@ if ($page_title != '') {
                             <!-- Dashboard Navbar Code End -->
 
                             <!-- Bread Crum Navigation Code Start -->
-                            <nav aria-label="breadcrumb">
-                                <ul class="breadcrumb">
-                                <li><a href="javascript:void(0)">Administration</a></li>                               
-                                </ul>
-                            </nav>
+                            <li class="has-submenu">
+                                <p style="font-size: larger; font-weight: bold; margin-top: 15px; display: inline-flex; align-items: center;">
+                                    Administration
+                                    <i class="mdi mdi-chevron-double-right" style="margin-left: 2px;margin-top: 3px;"></i>
+                                </p>
+                            </li>
                             <!-- Bread Crum Navigation Code End -->
 
                             <!-- admin menu start -->
