@@ -155,16 +155,7 @@ if ($page_title != '') {
                                 <a href="<?php echo $base_url . route_to('dashboard'); ?>"><i class="ti-home"></i>
                                     Quick Access</a>
                             </li>
-                            <!-- Dashboard Navbar Code End -->
-
-                            <!-- Bread Crum Navigation Code Start -->
-                            <li class="has-submenu">
-                                <p style="font-size: larger; font-weight: bold; margin-top: 15px; display: inline-flex; align-items: center;">
-                                    Administration
-                                    <i class="mdi mdi-chevron-double-right" style="margin-left: 2px;margin-top: 3px;"></i>
-                                </p>
-                            </li>
-                            <!-- Bread Crum Navigation Code End -->
+                            <!-- Dashboard Navbar Code End -->                            
 
                             <!-- admin menu start -->
                             <li class="has-submenu">
@@ -228,7 +219,15 @@ if ($page_title != '') {
                                 <!-- this menu need for design issue, dont remove -->
                             </li>
 
-                            <li class="has-submenu" style="margin-left: auto;">
+                            <!-- Module Title Navigation Code Start -->
+                            <li class="has-submenu" style="margin-left: auto;margin-top: 17px;font-weight: bold;font-size: larger;display: inline-flex; align-items: center;">
+                                <p>
+                                    Logged into Administration                                    
+                                </p>
+                            </li>
+                            <!-- Module Title Navigation Code End -->
+
+                            <li class="has-submenu">
                                 <a target="_blank" href="http://3.110.35.56/documentation/overview/"><i style="margin-right: 0;font-size: 22px;" class="mdi mdi-book-open-variant"></i>
                                     Help</a>
                             </li>
