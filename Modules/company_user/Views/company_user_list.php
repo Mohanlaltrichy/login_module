@@ -91,7 +91,7 @@ echo view('\Modules\global_templates\Views\global_datatables_css'); //Datatable 
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th data-orderable="false">Previlige</th>
+                                            <th data-orderable="false">privilege</th>
                                             <th data-orderable="false">Organization</th>
                                             <th data-orderable="false">Email</th>
                                             <th data-orderable="false">Phone</th>                                         
