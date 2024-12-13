@@ -228,7 +228,7 @@ if ($page_title != '') {
                             <!-- Module Title Navigation Code End -->
 
                             <li class="has-submenu">
-                                <a target="_blank" href="http://3.110.35.56/documentation/overview/"><i style="margin-right: 0;font-size: 22px;" class="mdi mdi-book-open-variant"></i>
+                                <a target="_blank" href="<?=WORDPRESS_URL?>"><i style="margin-right: 0;font-size: 22px;" class="mdi mdi-book-open-variant"></i>
                                     Help</a>
                             </li>
                             <!-- users Navbar Code End -->
