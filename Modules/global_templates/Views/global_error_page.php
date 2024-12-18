@@ -20,36 +20,43 @@
 
     <body>
         <!-- Begin page -->
-        <div class="accountbg"></div>
-        <div class="wrapper-page card col-sm-12 row">
-            <div class="card-body ex-page-content text-center">
+        <div class="breatcumb-area d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breatcumb-content text-center">
+                            <div class="breatcumb-title ex-page-content text-center">
+                                
+                            <?php if($error == "catch_error") { ?>
+                            <h1 style='color:#FD7E14;'><i class="mdi mdi-cloud-alert"></i></h1>
+                            <h2 style='color:#FD7E14;'>Ooops...</h2>
+                            <h4 style='color:#413C3E;'>something went wrong</h4><br>                   
+                            <?php } else if($error == "404_error") {  ?>
+                                <h1 style='color:#FD7E14;'>4<i class="mdi mdi-cloud-off-outline"></i>4</h1>
+                                <h2 style='color:#413C3E;'>OPPS! PAGE NOT FOUND</h2>
+                                <h4 style='color:#413C3E;'>Sorry, the page you're looking for doesn't exist.</h4>
+                                <h4 style='color:#413C3E;'>if you think something is broken, report a problem</h4><br>
+                            <?php }?>
 
-                <?php if($error == "catch_error") { ?>
-                    <h1 style='color:#6CBAFA;'><i class="mdi mdi-cloud-alert"></i></h1>
-                    <h2 style='color:#6CBAFA;'>Ooops...</h2>
-                    <h4 style='color:#413C3E;'>something went wrong</h4><br>                  
-                <?php } else if($error == "404_error") {  ?>
-                    <h1 style='color:#6CBAFA;'>4<i class="mdi mdi-cloud-off-outline"></i>4</h1>
-                    <h2 style='color:#413C3E;'>OPPS! PAGE NOT FOUND</h2>
-                    <h4 style='color:#413C3E;'>Sorry, the page you're looking for doesn't exist. if you think something is broken, report a problem</h4><br>
-                <?php }?>
+                            <?php
+                            if(!empty(session('Taglogged_in')))
+                            {
+                                $back_url = 'dashboard';
+                            }
+                            else
+                            {
+                                $back_url = 'login';
+                            }
+                            ?>
 
-                <?php
-                if(!empty(session('Taglogged_in')))
-                {
-                    $back_url = 'dashboard';
-                }
-                else
-                {
-                    $back_url = 'login';
-                }
-                ?>
+                            <a class="btn waves-effect waves-light" style='background-color:#FD7E14;color: white;' href="<?php echo $base_url.route_to($back_url)?>">BACK</a>
 
-                <a class="btn btn-primary waves-effect waves-light" href="<?php echo $base_url.route_to($back_url)?>">Back</a>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-
 
         <?php
             echo view('\Modules\global_templates\Views\global_js_files'); // Global JS File Included

@@ -20,31 +20,36 @@
 
     <body>
         <!-- Begin page -->
-        <div class="accountbg"></div>
-        <div class="wrapper-page card col-sm-12 row">
-            <div class="card-body ex-page-content text-center">
-            
-                <h1 style='color:#6CBAFA;'>4<i style="font-size: smaller;" class="mdi mdi-block-helper"></i>3</h1>
-                <h2 style='color:#413C3E;'>ACCESS DENIED</h2>
-                <h4 style='color:#413C3E;'>Oops, You don't have permission to access this page.</h4><br>
-             
+        <div class="breatcumb-area d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breatcumb-content text-center">
+                            <div class="breatcumb-title ex-page-content text-center">
+                                <h1 style='color:#FD7E14;'>4<i style="font-size: smaller;" class="mdi mdi-block-helper"></i>3</h1>
+                                <h2 style='color:#413C3E;'>ACCESS DENIED</h2>
+                                <h4 style='color:#413C3E;'>Oops, You don't have permission to access this page.</h4>
+                                <h4 style='color:#413C3E;'>please contact administrator.</h4></br>
 
-                <?php
-                if(!empty(session('Taglogged_in')))
-                {
-                    $back_url = 'dashboard';
-                }
-                else
-                {
-                    $back_url = 'login';
-                }
-                ?>
+                                <?php
+                                if(!empty(session('Taglogged_in')))
+                                {
+                                    $back_url = 'dashboard';
+                                }
+                                else
+                                {
+                                    $back_url = 'login';
+                                }
+                                ?>
 
-                <a class="btn btn-primary waves-effect waves-light" href="<?php echo $base_url.route_to($back_url)?>">BACK</a>
+                                <a class="btn waves-effect waves-light" style='background-color:#FD7E14;color: white;' href="<?php echo $base_url.route_to($back_url)?>">BACK</a>
+
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-
 
         <?php
             echo view('\Modules\global_templates\Views\global_js_files'); // Global JS File Included

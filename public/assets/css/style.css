@@ -3172,15 +3172,24 @@ File: Pages
 /* ==============
   Account Pages
 ===================*/
-.accountbg {
-  background: url(../images/global_bg.jpg);
-  /* background: linear-gradient(#9CC2D5,#77B1D9); */
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
+.breatcumb-area {
+  padding: 215px 0 143px;
+  background: #f1f6fc url(../images/brid.png);
   background-size: cover;
   background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: center center;
+  position: relative;
+}
+.breatcumb-area:before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(41,52,92,.0);
 }
 
 .wrapper-page {
