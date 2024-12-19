@@ -9,7 +9,7 @@
     <meta content="ThemeDesign" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <link rel="icon" href="<?php echo base_url(); ?>assets/images/logo-dark.svg" type="image/gif">
+    <link rel="icon" href="<?php echo base_url(); ?>assets/images/solware_fav.png" type="image/png">
 
         <?php
         echo view('\Modules\global_templates\Views\global_css_files'); // Global CSS File Included
