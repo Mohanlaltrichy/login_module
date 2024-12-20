@@ -52,6 +52,7 @@ class login_controller extends BaseController
 
                 $login_whereConditions = [
                     'email' => $email_address, 
+                    'company_id >' => 0,
                     'status' => 'active',          
                 ];
                 
@@ -195,7 +196,8 @@ class login_controller extends BaseController
     public function user_login_key_validation($login_key = '')
     {
         try
-        {            
+        {    
+            $session = session();        
             $login_key_verify_pass = '';
             if($login_key != '')
             {
@@ -211,6 +213,7 @@ class login_controller extends BaseController
                     {                      
                         $user_login_whereConditions = [
                             'id' => $user_login_key['user_id'], 
+                            'company_id >' => 0,
                             'status' => 'active',          
                         ];                        
                         
@@ -219,6 +222,11 @@ class login_controller extends BaseController
                         if(!empty($userData))
                         {
                             $login_key_verify_pass = $userData['id'];
+                        }
+                        else
+                        {
+                            $session->setFlashdata('msg', 'Invalid credentials');
+                            return redirect()->route('login');
                         }
                     }
 
@@ -230,9 +238,7 @@ class login_controller extends BaseController
 
                 
                 }
-            }            
-
-            $session = session();
+            }         
 
             if($login_key_verify_pass != ''){     
                 
