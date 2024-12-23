@@ -1639,21 +1639,72 @@ class templates_controller extends BaseController
     }
     //Company Page Access Log Get Laravel Code End
 
-    //SES SMTP MAIL Test
-    public function sendEmail()
+    //Mysql Error Message Send Code Start
+    public function mysql_error_alert_send_email()
     {
-        $email = \Config\Services::email();
+        $mysql_error_alert_check = $this->templates_model->mysql_error_alert_check();
+        if(!empty($mysql_error_alert_check))
+        {
+            $email = \Config\Services::email();
 
-        $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
-        $email->setTo(SUPPORT_MAIL_TO_ADDRESS);
-        $email->setSubject(MAIL_SUBJECT);
-        $email->setMessage('<p>This is a test email sent via Amazon SES in CodeIgniter 4.</p>');
+            $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
+            $email->setTo(SUPPORT_MAIL_TO_ADDRESS);
+            $email->setSubject(MAIL_SUBJECT);
+            $email->setMessage('Mysql Error Table Some issues were detected!...');
 
-        if ($email->send()) {
-            return 'Email successfully sent!';
-        } else {
-            return $email->printDebugger(['headers']);
-        }
+            if ($email->send()) {
+
+                $mail_status_whereConditions = [
+                    'mail_status' => 0,                                                        
+                ];
+
+                $data = [           
+                    'mail_status' => 1,               
+                ];  
+
+                $this->templates_model->updateData('error_exception_log',$mail_status_whereConditions, $data);
+
+                return true;
+            } else {
+                return false;
+                // return $email->printDebugger(['headers']);
+            }
+        }         
     }
-    //SES SMTP MAIL Test
+    //Mysql Error Message Send Code End
+
+    //Pgsql Error Message Send Code Start
+    public function pgsql_error_alert_send_email()
+    {
+        $pgsql_error_alert_check = $this->templates_model->pgsql_error_alert_check();
+   
+        if(!empty($pgsql_error_alert_check))
+        {
+            $email = \Config\Services::email();
+
+            $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
+            $email->setTo(SUPPORT_MAIL_TO_ADDRESS);
+            $email->setSubject(MAIL_SUBJECT);
+            $email->setMessage('PostgreSQL Error Table Some issues were detected!...');
+
+            if ($email->send()) {
+
+                $mail_status_whereConditions = [
+                    'mail_status' => 0,                                                        
+                ];
+
+                $data = [           
+                    'mail_status' => 1,               
+                ];  
+
+                $this->templates_model->pgsql_updateData('error_exception_log',$mail_status_whereConditions, $data);
+
+                return true;
+            } else {
+                return false;
+                // return $email->printDebugger(['headers']);
+            }
+        }         
+    }
+    //Pgsql Error Message Send Code End
 }

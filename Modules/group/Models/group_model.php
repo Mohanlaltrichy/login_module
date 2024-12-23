@@ -228,17 +228,7 @@ class group_model extends Model
         ];
 
         $builder = $this->mysqldb->table('error_exception_log');
-        $builder->insert($data);
-
-        //Error Alert Message Code Start
-        $message = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        $email = \Config\Services::email();
-        $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
-        $email->setTo(SUPPORT_MAIL_TO_ADDRESS);
-        $email->setSubject(MAIL_SUBJECT);
-        $email->setMessage($message);
-        $email->send();
-        //Error Alert Message Code End
+        $builder->insert($data);     
 
         $this->mysqldb->transComplete();
 

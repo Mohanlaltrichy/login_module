@@ -88,6 +88,40 @@ class templates_model extends Model
         }
     }
 
+    public function mysql_error_alert_check()
+    {
+        try {
+            $last_15_minutes = date('Y-m-d H:i:s', strtotime('-15 minutes'));
+            $builder = $this->mysqldb->table('error_exception_log');
+            $builder->select('id');      
+            $builder->where('mail_status',0);  
+            $builder->where('utc_created_at >=', $last_15_minutes);
+            $result = $builder->get()->getRowArray();
+            return $result;
+
+       } catch (\Exception $e) {            
+            $currentURL = current_url();            
+            $this->error('global_templates\templates_model',$currentURL,'mysql_error_alert_check',$e->getMessage());                       
+       }
+    }
+
+    public function pgsql_error_alert_check()
+    {
+        try {
+            $last_15_minutes = date('Y-m-d H:i:s', strtotime('-15 minutes'));
+            $builder = $this->pgdb->table('error_exception_log');
+            $builder->select('id');      
+            $builder->where('mail_status',0);  
+            $builder->where('utc_created_at >=', $last_15_minutes);
+            $result = $builder->get()->getRowArray();
+            return $result;
+
+       } catch (\Exception $e) {            
+            $currentURL = current_url();            
+            $this->error('global_templates\templates_model',$currentURL,'pgsql_error_alert_check',$e->getMessage());                       
+       }
+    }
+
     //GetTableValuewithjoin
     public function getsearchvaluewithjoin($from_table = '', $from_table_id = '', $select_column = '', $to_table = '', $to_table_id = '', $whereConditions = array(), $order_col = '', $filter = '', $like = '', $limit ='', $offset = '')
     {
@@ -329,6 +363,21 @@ class templates_model extends Model
          }
      }
 
+     //Update Table Value
+    public function pgsql_updateData($table = '',$update_whereConditions = array(), $data = array())
+    {
+        try {
+            $this->pgdb->transException(true)->transStart();
+            $builder = $this->pgdb->table($table);
+            $builder->where($update_whereConditions);
+            $builder->update($data);
+            $this->pgdb->transComplete();
+        } catch (\Exception $e) {            
+            $currentURL = current_url();            
+            $this->error('global_templates\templates_model',$currentURL,'pgsql_updateData',$e->getMessage());                      
+        }
+    }
+
     //Error Exception Stored Function
     public function error($module_name = '',$current_url = '', $function_name ='', $error_msg = '')
     {
@@ -342,17 +391,7 @@ class templates_model extends Model
         ];         
                             
         $builder = $this->mysqldb->table('error_exception_log');
-        $builder->insert($data);
-
-        //Error Alert Message Code Start
-        $message = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        $email = \Config\Services::email();
-        $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
-        $email->setTo(SUPPORT_MAIL_TO_ADDRESS);
-        $email->setSubject(MAIL_SUBJECT);
-        $email->setMessage($message);
-        $email->send();
-        //Error Alert Message Code End
+        $builder->insert($data);   
 
         $this->mysqldb->transComplete();
 
