@@ -118,3 +118,14 @@ define('OPEN_AI','http://localhost:9001/login/user_login_key_validation/');
 define('LOGO_PATH','D:/wamp/www/foresight_home/writable/');
 
 define('WORDPRESS_URL','http://3.110.35.56/documentation/overview/');
+
+define('MAIL_MAILER','smtp');
+define('MAIL_HOST','email-smtp.us-east-1.amazonaws.com');
+define('MAIL_PORT',587);
+define('MAIL_USERNAME','AKIAXFX3KYPCT5XS7B6A');
+define('MAIL_PASSWORD','BFWnYUgHYVIy4QbqkEuXVQvGjNDqndQCl8JXFFOFIYGo');
+define('MAIL_ENCRYPTION','tls');
+define('ERROR_MAIL_FROM_ADDRESS','no-reply-erroralert@solwareiiot.com');
+define('MAIL_FROM_NAME','SolwareIIOT Error Alert');
+define('SUPPORT_MAIL_TO_ADDRESS','mohanlal@unfoldtec.com');
+define('MAIL_SUBJECT','Error Alert');

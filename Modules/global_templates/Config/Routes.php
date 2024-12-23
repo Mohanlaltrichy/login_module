@@ -4,6 +4,9 @@
 
 $routes->group('templates', ['namespace' => '\Modules\global_templates\Controllers'], function ($routes) {
 
+	//SES SMTP MAIL Test
+	$routes->get('sendEmail', 'templates_controller::sendEmail', ['as' => 'sendEmail']);
+
 	//Global 404 Error Page
 	$routes->get('error', 'templates_controller::global_error_page', ['as' => 'global_error_page']);
 

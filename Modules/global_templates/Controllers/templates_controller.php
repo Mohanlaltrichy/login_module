@@ -1638,4 +1638,22 @@ class templates_controller extends BaseController
         }             
     }
     //Company Page Access Log Get Laravel Code End
+
+    //SES SMTP MAIL Test
+    public function sendEmail()
+    {
+        $email = \Config\Services::email();
+
+        $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
+        $email->setTo(SUPPORT_MAIL_TO_ADDRESS);
+        $email->setSubject(MAIL_SUBJECT);
+        $email->setMessage('<p>This is a test email sent via Amazon SES in CodeIgniter 4.</p>');
+
+        if ($email->send()) {
+            return 'Email successfully sent!';
+        } else {
+            return $email->printDebugger(['headers']);
+        }
+    }
+    //SES SMTP MAIL Test
 }

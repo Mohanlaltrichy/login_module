@@ -329,6 +329,38 @@ class templates_model extends Model
          }
      }
 
+    //Error Exception Stored Function
+    public function error($module_name = '',$current_url = '', $function_name ='', $error_msg = '')
+    {
+    
+        $this->mysqldb->transException(true)->transStart();
+        $data = [           
+            'module_name' => $module_name,
+            'current_url' => $current_url,
+            'function_name' => $function_name,
+            'error_msg' => $error_msg,   
+        ];         
+                            
+        $builder = $this->mysqldb->table('error_exception_log');
+        $builder->insert($data);
+
+        //Error Alert Message Code Start
+        $message = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $email = \Config\Services::email();
+        $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
+        $email->setTo(SUPPORT_MAIL_TO_ADDRESS);
+        $email->setSubject(MAIL_SUBJECT);
+        $email->setMessage($message);
+        $email->send();
+        //Error Alert Message Code End
+
+        $this->mysqldb->transComplete();
+
+        if ($this->mysqldb->transStatus() === true) {
+            return redirect()->route('global_catch_error');
+        } 
+    }
+
     
 }
 
