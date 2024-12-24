@@ -77,7 +77,7 @@ $base_url = rtrim(base_url(), '/');
                                         </div>
 
                                         <div class="form-group row">
-                                        <label class="col-sm-1 control-label">Contact Phone</label>
+                                        <label class="col-sm-1 control-label">Contact Phone*</label>
                                             <div class="col-sm-3 mb-3">
                                                 <input type="text" name="phone" class="form-control form-control-custom" value='<?= $comp_data[0]['company_phone']; ?>' style="width: 130%;" id="phone">
                                             </div>
