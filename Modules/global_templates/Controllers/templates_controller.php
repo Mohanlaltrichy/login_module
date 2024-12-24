@@ -5,6 +5,8 @@ use Modules\global_templates\Models\templates_model;
 use App\Helpers\Validationrules;
 use App\Controllers\BaseController;
 use PhpParser\Node\Expr\FuncCall;
+use DateTime;
+use DateTimeZone;
 
 class templates_controller extends BaseController
 {
@@ -1643,14 +1645,46 @@ class templates_controller extends BaseController
     public function mysql_error_alert_send_email()
     {
         $mysql_error_alert_check = $this->templates_model->mysql_error_alert_check();
+       
         if(!empty($mysql_error_alert_check))
         {
+            $formattedData = [];
+            $i=1;
+            foreach ($mysql_error_alert_check as $item) {
+
+                $utcTime = $item["utc_created_at"]; 
+                $utcTimezone = new DateTimeZone('UTC');
+                $kolkataTimezone = new DateTimeZone('Asia/Kolkata');
+
+                // Create a DateTime object with UTC timezone
+                $dateTime = new DateTime($utcTime, $utcTimezone);
+
+                // Convert to Asia/Kolkata timezone
+                $dateTime->setTimezone($kolkataTimezone);           
+           
+                $formattedData[] = [
+                    "Error Number" => $i,
+                    "Table Row ID"=> $item['id'],
+                    "Data Base" => 'MySQL',
+                    "Module Name" => $item["module_name"],
+                    "Current Url" => $item["current_url"],
+                    "Function Name" => $item["function_name"],
+                    "Error Message" => $item["error_msg"],
+                    "UTC created at" => $item["utc_created_at"], 
+                    "local created at" => $dateTime->format('Y-m-d H:i:s'), 
+                ]; 
+                
+                $i++;
+            }                      
+
+            $message = json_encode($formattedData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);                  
+
             $email = \Config\Services::email();
 
             $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
             $email->setTo(SUPPORT_MAIL_TO_ADDRESS);
             $email->setSubject(MAIL_SUBJECT);
-            $email->setMessage('Mysql Error Table Some issues were detected!...');
+            $email->setMessage($message);
 
             if ($email->send()) {
 
@@ -1663,7 +1697,6 @@ class templates_controller extends BaseController
                 ];  
 
                 $this->templates_model->updateData('error_exception_log',$mail_status_whereConditions, $data);
-
                 return true;
             } else {
                 return false;
@@ -1680,12 +1713,43 @@ class templates_controller extends BaseController
    
         if(!empty($pgsql_error_alert_check))
         {
+            $formattedData = [];
+            $i=1;
+            foreach ($pgsql_error_alert_check as $item) {
+
+                $utcTime = $item["utc_created_at"]; 
+                $utcTimezone = new DateTimeZone('UTC');
+                $kolkataTimezone = new DateTimeZone('Asia/Kolkata');
+
+                // Create a DateTime object with UTC timezone
+                $dateTime = new DateTime($utcTime, $utcTimezone);
+
+                // Convert to Asia/Kolkata timezone
+                $dateTime->setTimezone($kolkataTimezone);           
+           
+                $formattedData[] = [
+                    "Error Number" => $i,
+                    "Table Row ID"=> $item['id'],
+                    "Data Base" => 'PostgreSQL',
+                    "Module Name" => $item["module_name"],
+                    "Current Url" => $item["current_url"],
+                    "Function Name" => $item["function_name"],
+                    "Error Message" => $item["error_msg"],
+                    "UTC created at" => $item["utc_created_at"], 
+                    "local created at" => $dateTime->format('Y-m-d H:i:s'), 
+                ]; 
+                
+                $i++;
+            }                      
+
+            $message = json_encode($formattedData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);  
+
             $email = \Config\Services::email();
 
             $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
             $email->setTo(SUPPORT_MAIL_TO_ADDRESS);
             $email->setSubject(MAIL_SUBJECT);
-            $email->setMessage('PostgreSQL Error Table Some issues were detected!...');
+            $email->setMessage($message);
 
             if ($email->send()) {
 

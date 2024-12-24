@@ -91,12 +91,13 @@ class templates_model extends Model
     public function mysql_error_alert_check()
     {
         try {
-            $last_15_minutes = date('Y-m-d H:i:s', strtotime('-15 minutes'));
+            $last_minutes = date('Y-m-d H:i:s', strtotime(ERROR_LAST_MINUTES));
             $builder = $this->mysqldb->table('error_exception_log');
-            $builder->select('id');      
+            $builder->select('id,module_name,current_url,function_name,error_msg,utc_created_at');      
             $builder->where('mail_status',0);  
-            $builder->where('utc_created_at >=', $last_15_minutes);
-            $result = $builder->get()->getRowArray();
+            $builder->where('utc_created_at >=', $last_minutes);
+            $builder->orderBy('id','desc');
+            $result = $builder->get()->getResultArray();
             return $result;
 
        } catch (\Exception $e) {            
@@ -108,12 +109,13 @@ class templates_model extends Model
     public function pgsql_error_alert_check()
     {
         try {
-            $last_15_minutes = date('Y-m-d H:i:s', strtotime('-15 minutes'));
+            $last_minutes = date('Y-m-d H:i:s', strtotime(ERROR_LAST_MINUTES));
             $builder = $this->pgdb->table('error_exception_log');
-            $builder->select('id');      
+            $builder->select('id,module_name,current_url,function_name,error_msg,utc_created_at');      
             $builder->where('mail_status',0);  
-            $builder->where('utc_created_at >=', $last_15_minutes);
-            $result = $builder->get()->getRowArray();
+            $builder->where('utc_created_at >=', $last_minutes);
+            $builder->orderBy('id','desc');
+            $result = $builder->get()->getResultArray();
             return $result;
 
        } catch (\Exception $e) {            
