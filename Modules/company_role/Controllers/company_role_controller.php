@@ -12,6 +12,7 @@ class company_role_controller extends BaseController
     protected $customer_id;
     protected $logged_user_id;
     protected $local_date_time;
+    protected $error_log;
     
     public function __construct()
     {
@@ -19,7 +20,8 @@ class company_role_controller extends BaseController
         $this->customer_id = session('Taguser_company');
         $this->logged_user_id = session('Taguser_id'); 
         $customlibraries = new customlibraries();
-        $this->local_date_time = $customlibraries->local_date_time();    
+        $this->local_date_time = $customlibraries->local_date_time();  
+        $this->error_log = new customlibraries();  
     }
 
     //company role add View
@@ -140,7 +142,7 @@ class company_role_controller extends BaseController
 
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->company_role_model->error('company_role\company_role_controller', $currentURL, 'index', $e->getMessage());
+            $this->error_log->error_exception_log('company_role\company_role_controller', $currentURL, 'index', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     } 
@@ -260,7 +262,7 @@ class company_role_controller extends BaseController
 
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->company_role_model->error('company_role\company_role_controller', $currentURL, 'company_role_save', $e->getMessage());
+            $this->error_log->error_exception_log('company_role\company_role_controller', $currentURL, 'company_role_save', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -294,7 +296,7 @@ class company_role_controller extends BaseController
             }
         }catch(\Exception $e){
             $currentURL = current_url();
-            $this->company_role_model->error('company_role\company_role_controller', $currentURL, 'company_role_duplicate_check', $e->getMessage());
+            $this->error_log->error_exception_log('company_role\company_role_controller', $currentURL, 'company_role_duplicate_check', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -319,7 +321,7 @@ class company_role_controller extends BaseController
 
         }catch(\Exception $e){
             $currentURL = current_url();
-            $this->company_role_model->error('company_role\company_role_controller', $currentURL, 'company_role_list', $e->getMessage());
+            $this->error_log->error_exception_log('company_role\company_role_controller', $currentURL, 'company_role_list', $e->getMessage());
             return redirect()->route('global_catch_error');
         }        
     }
@@ -450,7 +452,7 @@ class company_role_controller extends BaseController
 
         }catch(\Exception $e){
             $currentURL = current_url();
-            $this->company_role_model->error('company_role\company_role_controller', $currentURL, 'company_role_edit', $e->getMessage());
+            $this->error_log->error_exception_log('company_role\company_role_controller', $currentURL, 'company_role_edit', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -566,7 +568,7 @@ class company_role_controller extends BaseController
 
         }catch(\Exception $e){
             $currentURL = current_url();
-            $this->company_role_model->error('company_role\company_role_controller', $currentURL, 'company_role_update', $e->getMessage());
+            $this->error_log->error_exception_log('company_role\company_role_controller', $currentURL, 'company_role_update', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
         
@@ -611,7 +613,7 @@ class company_role_controller extends BaseController
 
         }catch(\Exception $e){
             $currentURL = current_url();
-            $this->company_role_model->error('company_role\company_role_controller', $currentURL, 'roledelete', $e->getMessage());
+            $this->error_log->error_exception_log('company_role\company_role_controller', $currentURL, 'roledelete', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     } 
@@ -620,10 +622,17 @@ class company_role_controller extends BaseController
     //JS Vesrioning File Get
     public function versioning($page_type='')
 	{
-        $data = [
-            'page_type' => $page_type,            
-        ];
+        try
+        {
+            $data = [
+                'page_type' => $page_type,            
+            ];
 
-        return view('\Modules\company_role\Views\versioning',$data);
+            return view('\Modules\company_role\Views\versioning',$data);
+        }catch(\Exception $e){
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('company_role\company_role_controller', $currentURL, 'versioning', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
 	}
 }

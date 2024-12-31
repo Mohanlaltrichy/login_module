@@ -131,3 +131,9 @@ define('SUPPORT_MAIL_TO_ADDRESS','mohanlal@unfoldtec.com');
 define('MAIL_SUBJECT','Error Alert');
 
 define('ERROR_LAST_MINUTES','-15 minutes');
+
+define('MYSQL_ERROR','mysql');
+
+define('POSTGRESQL_ERROR','postgrsql');
+
+define('CODE_ERROR','code');

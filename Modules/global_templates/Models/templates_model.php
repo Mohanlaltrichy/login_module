@@ -1,5 +1,6 @@
 <?php
 namespace Modules\global_templates\Models;
+use App\Libraries\customlibraries;
 
 use CodeIgniter\Model;
 
@@ -7,12 +8,14 @@ class templates_model extends Model
 {
     public $mysqldb;
     public $pgdb;
+    protected $error_log;
 
     public function __construct()
     {
         parent::__construct();
         $this->mysqldb = \Config\Database::connect('mysqldb');
         $this->pgdb = \Config\Database::connect('default');
+        $this->error_log = new customlibraries(); 
     }
 
     //get notification Last 1 Hour Data
@@ -84,7 +87,7 @@ class templates_model extends Model
 
         } catch(\Exception $e){
             $currentURL = current_url();   
-            $this->error('global_templates\templates_model',$currentURL,'get_notification',$e->getMessage());
+            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'get_notification',$e->getMessage(), CODE_ERROR);
         }
     }
 
@@ -102,27 +105,9 @@ class templates_model extends Model
 
        } catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('global_templates\templates_model',$currentURL,'mysql_error_alert_check',$e->getMessage());                       
+            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'mysql_error_alert_check',$e->getMessage());                       
        }
-    }
-
-    public function pgsql_error_alert_check()
-    {
-        try {
-            $last_minutes = date('Y-m-d H:i:s', strtotime(ERROR_LAST_MINUTES));
-            $builder = $this->pgdb->table('error_exception_log');
-            $builder->select('id,module_name,current_url,function_name,error_msg,utc_created_at');      
-            $builder->where('mail_status',0);  
-            $builder->where('utc_created_at >=', $last_minutes);
-            $builder->orderBy('id','desc');
-            $result = $builder->get()->getResultArray();
-            return $result;
-
-       } catch (\Exception $e) {            
-            $currentURL = current_url();            
-            $this->error('global_templates\templates_model',$currentURL,'pgsql_error_alert_check',$e->getMessage());                       
-       }
-    }
+    }    
 
     //GetTableValuewithjoin
     public function getsearchvaluewithjoin($from_table = '', $from_table_id = '', $select_column = '', $to_table = '', $to_table_id = '', $whereConditions = array(), $order_col = '', $filter = '', $like = '', $limit ='', $offset = '')
@@ -166,7 +151,7 @@ class templates_model extends Model
             return $result; 
         } catch(\Exception $e){
             $currentURL = current_url();            
-            $this->error('global_templates\templates_model',$currentURL,'getsearchvaluewithjoin',$e->getMessage());
+            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'getsearchvaluewithjoin',$e->getMessage());
         }
     }
 
@@ -221,7 +206,7 @@ class templates_model extends Model
             return $result; 
         } catch(\Exception $e){
             $currentURL = current_url();   
-            $this->error('global_templates\templates_model',$currentURL,'GetTableValue',$e->getMessage());
+            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'GetTableValue',$e->getMessage());
         }
     }
 
@@ -269,7 +254,7 @@ class templates_model extends Model
             return $result; 
        } catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('global_templates\templates_model',$currentURL,'GetTableValue_whereIn',$e->getMessage());                       
+            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'GetTableValue_whereIn',$e->getMessage());                       
        }
     }
 
@@ -316,7 +301,7 @@ class templates_model extends Model
             return $result; 
        } catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('global_templates\templates_model',$currentURL,'GetTableValue_whereIn_pgsql',$e->getMessage());                       
+            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'GetTableValue_whereIn_pgsql',$e->getMessage(), POSTGRESQL_ERROR);                       
        }
     }
 
@@ -331,7 +316,7 @@ class templates_model extends Model
              $this->pgdb->transComplete();
          } catch (\Exception $e) {            
              $currentURL = current_url();            
-             $this->error('global_templates\templates_model',$currentURL,'updateData_whereIn',$e->getMessage());                      
+             $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'updateData_whereIn',$e->getMessage());                      
          }
      }
 
@@ -346,7 +331,7 @@ class templates_model extends Model
             return $this->mysqldb->insertID();
         } catch (\Exception $e) { 
             $currentURL = current_url();            
-            $this->error('global_templates\templates_model',$currentURL,'insertData',$e->getMessage());            
+            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'insertData',$e->getMessage());            
         }
     }
 
@@ -361,7 +346,7 @@ class templates_model extends Model
              $this->mysqldb->transComplete();
          } catch (\Exception $e) {            
              $currentURL = current_url();            
-             $this->error('global_templates\templates_model',$currentURL,'updateData',$e->getMessage());                      
+             $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'updateData',$e->getMessage());                      
          }
      }
 
@@ -376,33 +361,9 @@ class templates_model extends Model
             $this->pgdb->transComplete();
         } catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('global_templates\templates_model',$currentURL,'pgsql_updateData',$e->getMessage());                      
+            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'pgsql_updateData',$e->getMessage(), POSTGRESQL_ERROR);                      
         }
     }
-
-    //Error Exception Stored Function
-    public function error($module_name = '',$current_url = '', $function_name ='', $error_msg = '')
-    {
-    
-        $this->mysqldb->transException(true)->transStart();
-        $data = [           
-            'module_name' => $module_name,
-            'current_url' => $current_url,
-            'function_name' => $function_name,
-            'error_msg' => $error_msg,   
-        ];         
-                            
-        $builder = $this->mysqldb->table('error_exception_log');
-        $builder->insert($data);   
-
-        $this->mysqldb->transComplete();
-
-        if ($this->mysqldb->transStatus() === true) {
-            return redirect()->route('global_catch_error');
-        } 
-    }
-
-    
 }
 
 ?>

@@ -12,6 +12,7 @@ class group_controller extends BaseController
     protected $customer_id;
     protected $logged_user_id;
     protected $local_date_time;
+    protected $error_log;
 
     public function __construct()
     {
@@ -20,6 +21,7 @@ class group_controller extends BaseController
         $this->logged_user_id = session('Taguser_id');
         $customlibraries = new customlibraries();
         $this->local_date_time = $customlibraries->local_date_time();
+        $this->error_log = new customlibraries();  
     }
 
     //Group add View
@@ -44,7 +46,7 @@ class group_controller extends BaseController
             return view("\Modules\group\Views\group_add", $data);
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'index', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'index', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -106,7 +108,7 @@ class group_controller extends BaseController
             exit();
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'group_save', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'group_save', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -138,7 +140,7 @@ class group_controller extends BaseController
             }
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'group_duplicate_check', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'group_duplicate_check', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -169,7 +171,7 @@ class group_controller extends BaseController
             return view("\Modules\group\Views\group_list", $data);
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'group_list', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'group_list', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -199,7 +201,7 @@ class group_controller extends BaseController
             return view("\Modules\group\Views\group_user_view", $data);
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'group_user_view', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'group_user_view', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -229,7 +231,7 @@ class group_controller extends BaseController
             return view("\Modules\group\Views\group_user_edit", $data);
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'group_user_edit', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'group_user_edit', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -263,7 +265,7 @@ class group_controller extends BaseController
             return view("\Modules\group\Views\group_edit", $data);
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'group_edit', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'group_edit', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -339,7 +341,7 @@ class group_controller extends BaseController
             return redirect()->route('group_list');
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'group_update', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'group_update', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -382,7 +384,7 @@ class group_controller extends BaseController
             }
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'groupdelete', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'groupdelete', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -431,20 +433,25 @@ class group_controller extends BaseController
             }
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->group_model->error('group\group_controller', $currentURL, 'groupdelete', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'groupdelete', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
 
-
-
     //JS Vesrioning File Get
     public function versioning($page_type = '')
     {
-        $data = [
-            'page_type' => $page_type,
-        ];
+        try
+        {
+            $data = [
+                'page_type' => $page_type,
+            ];
 
-        return view('\Modules\group\Views\versioning', $data);
+            return view('\Modules\group\Views\versioning', $data);
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('group\group_controller', $currentURL, 'versioning', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
     }
 }

@@ -17,6 +17,7 @@ class company_user_controller extends BaseController
     protected $logged_user_id;
     protected $local_date_time;
     protected $number_of_user_update;
+    protected $error_log;
    
     public function __construct()
     { 
@@ -26,13 +27,14 @@ class company_user_controller extends BaseController
         $this->number_of_user_update = $customlibraries->number_of_user_count_update(); 
         $this->customer_id = session('Taguser_company');
         $this->logged_user_id = session('Taguser_id');
+        $this->error_log = new customlibraries(); 
     }
 
       //company user -view
       public function index()
       {
-        //   try 
-        //   {
+          try 
+          {
 
             if(session('user_add_view') != '1') {
                 return redirect()->route('forbidden_error');
@@ -49,11 +51,11 @@ class company_user_controller extends BaseController
 
               return view("\Modules\company_user\Views\company_user",$data);
   
-        //   } catch (\Exception $e) {
-        //       $currentURL = current_url();
-        //       $this->company_user_model->error('company_user\company_user_controller', $currentURL, 'index', $e->getMessage());
-        //       return redirect()->route('global_catch_error');
-        //   }
+          } catch (\Exception $e) {
+              $currentURL = current_url();
+              $this->error_log->error_exception_log('company_user\company_user_controller', $currentURL, 'index', $e->getMessage());
+              return redirect()->route('global_catch_error');
+          }
       } 
       
       //Company User Save
@@ -236,7 +238,7 @@ class company_user_controller extends BaseController
   
           } catch (\Exception $e) {
               $currentURL = current_url();
-              $this->company_user_model->error('company_user\company_user_controller', $currentURL, 'company_user_save', $e->getMessage());
+              $this->error_log->error_exception_log('company_user\company_user_controller', $currentURL, 'company_user_save', $e->getMessage());
               return redirect()->route('global_catch_error');
           }
       }
@@ -258,7 +260,7 @@ class company_user_controller extends BaseController
 
           } catch (\Exception $e) {
               $currentURL = current_url();
-              $this->company_user_model->error('company_user\company_user_controller', $currentURL, 'company_user_list', $e->getMessage());
+              $this->error_log->error_exception_log('company_user\company_user_controller', $currentURL, 'company_user_list', $e->getMessage());
               return redirect()->route('global_catch_error');
           }
       } 
@@ -297,7 +299,7 @@ class company_user_controller extends BaseController
 
         }catch(\Exception $e){
             $currentURL = current_url();
-            $this->company_user_model->error('company_user\company_user_controller', $currentURL, 'company_user_edit', $e->getMessage());
+            $this->error_log->error_exception_log('company_user\company_user_controller', $currentURL, 'company_user_edit', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -476,7 +478,7 @@ class company_user_controller extends BaseController
 
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->company_user_model->error('company_user\company_user_controller', $currentURL, 'update_company_user', $e->getMessage());
+            $this->error_log->error_exception_log('company_user\company_user_controller', $currentURL, 'update_company_user', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -522,7 +524,7 @@ class company_user_controller extends BaseController
 
         }catch(\Exception $e){
             $currentURL = current_url();
-            $this->company_user_model->error('company_user\company_user_controller', $currentURL, 'userdelete', $e->getMessage());
+            $this->error_log->error_exception_log('company_user\company_user_controller', $currentURL, 'userdelete', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
     }
@@ -538,7 +540,7 @@ class company_user_controller extends BaseController
 
         } catch(\Exception $e){
             $currentURL = current_url();            
-            $this->company_user_model->error('company_user\company_user_controller',$currentURL,'generateRandomUid',$e->getMessage());
+            $this->error_log->error_exception_log('company_user\company_user_controller',$currentURL,'generateRandomUid',$e->getMessage());
             return redirect()->route('global_catch_error');  
         }
     }
@@ -546,11 +548,17 @@ class company_user_controller extends BaseController
     //JS Vesrioning File Get
     public function versioning($page_type = '')
     {
-        $data = [
-            'page_type' => $page_type,
-        ];
+        try{
+            $data = [
+                'page_type' => $page_type,
+            ];
 
-        return view('\Modules\company_user\Views\versioning', $data);
+            return view('\Modules\company_user\Views\versioning', $data);
+        } catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('company_user\company_user_controller',$currentURL,'versioning',$e->getMessage(), CODE_ERROR);
+            return redirect()->route('global_catch_error');  
+        }
     }    
 
 }

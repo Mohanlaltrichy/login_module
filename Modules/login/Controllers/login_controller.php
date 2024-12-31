@@ -13,29 +13,47 @@ class login_controller extends BaseController
     protected $loginModel;
     protected $templates_model;
     protected $number_of_user;
+    protected $error_log;
     
     public function __construct()
     {
         $this->loginModel = new login_model();  
         $this->templates_model = new templates_model();  
         $customlibraries = new customlibraries();
-        $this->number_of_user = $customlibraries->number_of_user_count_get();      
+        $this->number_of_user = $customlibraries->number_of_user_count_get();  
+        $this->error_log = new customlibraries();     
     }
 
     //login 
     public function login()
     {
-        return view("\Modules\login\Views\login");
+        try
+        {
+            return view("\Modules\login\Views\login");
+        }
+        catch (\Exception $e) {
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'login',$e->getMessage());
+            return redirect()->route('global_catch_error');                     
+        }
     }  
 
     //JS Vesrioning File Get
     public function versioning($page_type='')
 	{
-        $data = [
-            'page_type' => $page_type,            
-        ];
+        try
+        {
+            $data = [
+                'page_type' => $page_type,            
+            ];
 
-        return view('\Modules\login\Views\versioning',$data);
+            return view('\Modules\login\Views\versioning',$data);
+        }
+        catch (\Exception $e) {
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'versioning',$e->getMessage());
+            return redirect()->route('global_catch_error');                     
+        }
 	}
 
     //User Validation Check Code 
@@ -187,7 +205,7 @@ class login_controller extends BaseController
         }
         catch (\Exception $e) {
             $currentURL = current_url();            
-            $this->loginModel->error('login\login_controller',$currentURL,'userValidation',$e->getMessage());
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'userValidation',$e->getMessage());
             return redirect()->route('global_catch_error');                     
         }
     }
@@ -278,7 +296,7 @@ class login_controller extends BaseController
         }
         catch (\Exception $e) {
             $currentURL = current_url();            
-            $this->loginModel->error('login\login_controller',$currentURL,'user_login_key_validation',$e->getMessage());
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'user_login_key_validation',$e->getMessage());
             return redirect()->route('global_catch_error');                     
         }
     }
@@ -414,62 +432,70 @@ class login_controller extends BaseController
         }
         catch (\Exception $e) {
             $currentURL = current_url();            
-            $this->loginModel->error('login\login_controller',$currentURL,'user_roles_set',$e->getMessage());
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'user_roles_set',$e->getMessage());
             return redirect()->route('global_catch_error');                     
         }
     }
 
     public function dashboard($company_id = 0)
     {
-        $active_page_details = $this->loginModel->dashboard_subscription_active_page_details($company_id);
-        if($active_page_details)
+        try
         {
-            $ses_active_page_data = [];
-            foreach($active_page_details as $active_page)
-            {    
-                if($active_page['feature_list'] == 'Cloud Connector')
-                {
-                    $cloud_connector_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
-                    $ses_active_page_data[] = array(
-                        'cloud_connector_module_view' => $cloud_connector_module_view,                                    
-                    );
-                }   
-                else if($active_page['feature_list'] == 'Reports')
-                {
-                    $reports_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
-                    $ses_active_page_data[] = array(
-                        'reports_module_view' => $reports_module_view,                                    
-                    );
+            $active_page_details = $this->loginModel->dashboard_subscription_active_page_details($company_id);
+            if($active_page_details)
+            {
+                $ses_active_page_data = [];
+                foreach($active_page_details as $active_page)
+                {    
+                    if($active_page['feature_list'] == 'Cloud Connector')
+                    {
+                        $cloud_connector_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                        $ses_active_page_data[] = array(
+                            'cloud_connector_module_view' => $cloud_connector_module_view,                                    
+                        );
+                    }   
+                    else if($active_page['feature_list'] == 'Reports')
+                    {
+                        $reports_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                        $ses_active_page_data[] = array(
+                            'reports_module_view' => $reports_module_view,                                    
+                        );
+                    }
+                    else if($active_page['feature_list'] == 'Dashboards')
+                    {
+                        $dashboard_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                        $ses_active_page_data[] = array(
+                            'dashboard_module_view' => $dashboard_module_view,                                    
+                        );
+                    }
+                    else if($active_page['feature_list'] == 'Alert and Notification')
+                    {
+                        $alert_notification_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                        $ses_active_page_data[] = array(
+                            'alert_notification_module_view' => $alert_notification_module_view,                                    
+                        );
+                    }
+                    else if($active_page['feature_list'] == 'AI Prediction')
+                    {
+                        $ai_prediction_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                        $ses_active_page_data[] = array(
+                            'ai_prediction_module_view' => $ai_prediction_module_view,                                    
+                        );
+                    }
                 }
-                else if($active_page['feature_list'] == 'Dashboards')
-                {
-                    $dashboard_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
-                    $ses_active_page_data[] = array(
-                        'dashboard_module_view' => $dashboard_module_view,                                    
-                    );
-                }
-                else if($active_page['feature_list'] == 'Alert and Notification')
-                {
-                    $alert_notification_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
-                    $ses_active_page_data[] = array(
-                        'alert_notification_module_view' => $alert_notification_module_view,                                    
-                    );
-                }
-                else if($active_page['feature_list'] == 'AI Prediction')
-                {
-                    $ai_prediction_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
-                    $ses_active_page_data[] = array(
-                        'ai_prediction_module_view' => $ai_prediction_module_view,                                    
-                    );
-                }
-            }
 
-            $module_page_mergedArray = [];
-            foreach ($ses_active_page_data as $subArray) {
-                $module_page_mergedArray = array_merge($module_page_mergedArray, $subArray);
-            }
+                $module_page_mergedArray = [];
+                foreach ($ses_active_page_data as $subArray) {
+                    $module_page_mergedArray = array_merge($module_page_mergedArray, $subArray);
+                }
 
-            session()->set($module_page_mergedArray);
+                session()->set($module_page_mergedArray);
+            }
+        }
+        catch (\Exception $e) {
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'dashboard',$e->getMessage());
+            return redirect()->route('global_catch_error');                     
         }
     }   
 
@@ -484,17 +510,26 @@ class login_controller extends BaseController
 
         } catch(\Exception $e){
             $currentURL = current_url();            
-            $this->loginModel->error('login\login_controller',$currentURL,'generateRandomUid',$e->getMessage());
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'generateRandomUid',$e->getMessage());
             return redirect()->route('global_catch_error');  
         }
     }
 
     public function password_change()
     {
-        return view('\Modules\login\Views\password_change');
+        try
+        {
+            return view('\Modules\login\Views\password_change');
+        }catch (\Exception $e) {
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'password_change',$e->getMessage(), CODE_ERROR);
+            return redirect()->route('global_catch_error');                     
+        }
     }
 
-        public function check_old_password()
+    public function check_old_password()
+    {
+        try
         {
             $old_pass = $this->request->getGet('old_pass');
 
@@ -511,8 +546,16 @@ class login_controller extends BaseController
                 } else {
                     return $this->response->setJSON(['status' => 'error', 'message' => 'Incorrect old password']);
                 }
+        }catch (\Exception $e) {
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'check_old_password',$e->getMessage());
+            return redirect()->route('global_catch_error');                     
+        }
     }
-        public function update_pwd()
+    
+    public function update_pwd()
+    {
+        try
         {
             if ($this->request->getMethod() == "post") {
 
@@ -535,14 +578,27 @@ class login_controller extends BaseController
                 session()->setFlashdata('success', 'Password Updated successfully');
                 return redirect()->route('password_change');
             }
+
+        }catch (\Exception $e) {
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'update_pwd',$e->getMessage());
+            return redirect()->route('global_catch_error');                     
+        }
     }
 
     //User Logout Code
     public function logout()
     {
-        // Destroy the user session on logout
-        $session = \Config\Services::session();
-        $session->destroy();
-        return redirect()->route('login');
+        try
+        {
+            // Destroy the user session on logout
+            $session = \Config\Services::session();
+            $session->destroy();
+            return redirect()->route('login');
+        }catch (\Exception $e) {
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('login\login_controller',$currentURL,'logout',$e->getMessage());
+            return redirect()->route('global_catch_error');                     
+        }
     }
 }

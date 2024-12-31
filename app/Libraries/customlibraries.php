@@ -5,6 +5,13 @@ use Modules\global_templates\Models\templates_model;
 
 class customlibraries
 {
+    public $mysqldb;
+
+    public function __construct()
+    {        
+        $this->mysqldb = \Config\Database::connect('mysqldb');  
+    }
+
     //Global JS Get 
     public function versioning($modules='',$page_type='')
     {
@@ -126,6 +133,28 @@ class customlibraries
         $session->set($ses_data);       
 
         return true;
+    }
+
+    //Error Exception Stored Function
+    public function error_exception_log($module_name = '',$current_url = '', $function_name ='', $error_msg = MYSQL_ERROR)
+    {
+    
+        $this->mysqldb->transException(true)->transStart();
+        $data = [           
+            'module_name' => $module_name,
+            'current_url' => $current_url,
+            'function_name' => $function_name,
+            'error_msg' => $error_msg,   
+        ];         
+                            
+        $builder = $this->mysqldb->table('error_exception_log');
+        $builder->insert($data);   
+        
+        $this->mysqldb->transComplete();
+
+        if ($this->mysqldb->transStatus() === true) {
+            return redirect()->route('global_catch_error');
+        } 
     }
 }
 

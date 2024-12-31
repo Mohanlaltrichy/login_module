@@ -12,6 +12,7 @@ class group_model extends Model
     protected $customer_id;
     protected $logged_user_id;
     protected $local_date_time;
+    protected $error_log;
 
     public function __construct()
     {
@@ -21,6 +22,7 @@ class group_model extends Model
         $this->local_date_time = $customlibraries->local_date_time();
         $this->customer_id = session('Taguser_company');
         $this->logged_user_id = session('Taguser_id');
+        $this->error_log = new customlibraries();
     }
 
     //GetTableValue
@@ -67,7 +69,7 @@ class group_model extends Model
             return $result;
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->error('group\group_model', $currentURL, 'GetTableValue', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_model', $currentURL, 'GetTableValue', $e->getMessage());
         }
     }
 
@@ -109,7 +111,7 @@ class group_model extends Model
             return $result;
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->error('group\group_model', $currentURL, 'GetTableValue_whereIn', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_model', $currentURL, 'GetTableValue_whereIn', $e->getMessage());
         }
     }
 
@@ -150,7 +152,7 @@ class group_model extends Model
             return $result;
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->error('group\group_model', $currentURL, 'getsearchvaluewithjoin', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_model', $currentURL, 'getsearchvaluewithjoin', $e->getMessage());
         }
     }
 
@@ -166,7 +168,7 @@ class group_model extends Model
             // return $this->mysqldb->insertID();
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->error('group\group_model', $currentURL, 'insertData', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_model', $currentURL, 'insertData', $e->getMessage());
         }
     }
 
@@ -181,7 +183,7 @@ class group_model extends Model
             return $this->mysqldb->insertID();
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->error('group\group_model', $currentURL, 'insertBatchData', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_model', $currentURL, 'insertBatchData', $e->getMessage());
         }
     }
 
@@ -196,7 +198,7 @@ class group_model extends Model
             $this->mysqldb->transComplete();
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->error('group\group_model', $currentURL, 'updateData', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_model', $currentURL, 'updateData', $e->getMessage());
         }
     }
 
@@ -211,29 +213,7 @@ class group_model extends Model
             $this->mysqldb->transComplete();
         } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->error('group\group_model', $currentURL, 'deleteData', $e->getMessage());
+            $this->error_log->error_exception_log('group\group_model', $currentURL, 'deleteData', $e->getMessage());
         }
-    }
-
-    //Error Exception Stored Function
-    public function error($module_name = '', $current_url = '', $function_name = '', $error_msg = '')
-    {
-
-        $this->mysqldb->transException(true)->transStart();
-        $data = [
-            'module_name' => $module_name,
-            'current_url' => $current_url,
-            'function_name' => $function_name,
-            'error_msg' => $error_msg,
-        ];
-
-        $builder = $this->mysqldb->table('error_exception_log');
-        $builder->insert($data);     
-
-        $this->mysqldb->transComplete();
-
-        if ($this->mysqldb->transStatus() === true) {
-            return redirect()->route('global_catch_error');
-        }
-    }
+    }    
 }

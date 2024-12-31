@@ -1,16 +1,19 @@
 <?php
 namespace Modules\login\Models;
+use App\Libraries\customlibraries;
 
 use CodeIgniter\Model;
 
 class login_model extends Model
 {
     public $mysqldb; 
+    protected $error_log;
 
     public function __construct()
     {
         parent::__construct();
-        $this->mysqldb = \Config\Database::connect('mysqldb');       
+        $this->mysqldb = \Config\Database::connect('mysqldb'); 
+        $this->error_log = new customlibraries();       
     }
 
     public function company_subscription_active_check($company_id = 0)
@@ -28,7 +31,7 @@ class login_model extends Model
 
        } catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('login\login_Model',$currentURL,'company_subscription_active_check',$e->getMessage());                       
+            $this->error_log->error_exception_log('login\login_Model',$currentURL,'company_subscription_active_check',$e->getMessage());                       
        }
     }
 
@@ -46,7 +49,7 @@ class login_model extends Model
 
        } catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('login\login_Model',$currentURL,'dashboard_subscription_active_page_details',$e->getMessage());                       
+            $this->error_log->error_exception_log('login\login_Model',$currentURL,'dashboard_subscription_active_page_details',$e->getMessage());                       
        }
     }
        
@@ -69,7 +72,7 @@ class login_model extends Model
 
        } catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('login\login_Model',$currentURL,'GetTableValue',$e->getMessage());                       
+            $this->error_log->error_exception_log('login\login_Model',$currentURL,'GetTableValue',$e->getMessage());                       
        }
     }
 
@@ -84,7 +87,7 @@ class login_model extends Model
             return $this->mysqldb->insertID();
         } catch (\Exception $e) { 
             $currentURL = current_url();            
-            $this->error('login\login_Model',$currentURL,'insertData',$e->getMessage());            
+            $this->error_log->error_exception_log('login\login_Model',$currentURL,'insertData',$e->getMessage());            
         }
     }
 
@@ -107,30 +110,8 @@ class login_model extends Model
             return $result; 
         } catch(\Exception $e){
             $currentURL = current_url();            
-            $this->error('login\login_Model',$currentURL,'get_user_roles_details',$e->getMessage());
+            $this->error_log->error_exception_log('login\login_Model',$currentURL,'get_user_roles_details',$e->getMessage());
         }
-    }
-
-   //Error Exception Stored Function
-   public function error($module_name = '',$current_url = '', $function_name ='', $error_msg = '')
-   {
-       $this->mysqldb->transException(true)->transStart();
-       $data = [
-           
-           'module_name' => $module_name,
-           'current_url' => $current_url,
-           'function_name' => $function_name,
-           'error_msg' => $error_msg,   
-       ];         
-                         
-       $builder = $this->mysqldb->table('error_exception_log');
-       $builder->insert($data);      
-
-       $this->mysqldb->transComplete();
-
-       if ($this->mysqldb->transStatus() === true) {
-           return redirect()->route('global_catch_error');
-       } 
-   }
+    }   
 }
 ?>

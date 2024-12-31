@@ -8,7 +8,8 @@ class company_user_model extends Model
     public $mysqldb;   
     protected $customer_id;
     protected $logged_user_id;
-    protected $local_date_time;    
+    protected $local_date_time;
+    protected $error_log;    
 
     public function __construct()
     {
@@ -18,6 +19,7 @@ class company_user_model extends Model
         $this->local_date_time = $customlibraries->local_date_time();       
         $this->customer_id = session('Taguser_company');
         $this->logged_user_id = session('Taguser_id');
+        $this->error_log = new customlibraries();
     }
 
 
@@ -34,7 +36,7 @@ class company_user_model extends Model
 
         }catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('company_user\company_user_model',$currentURL,'saveUsersConfiguration',$e->getMessage());                      
+            $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'saveUsersConfiguration',$e->getMessage());                      
         }
 
     }
@@ -57,7 +59,7 @@ class company_user_model extends Model
 
         }catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('company_user\company_user_model',$currentURL,'updateUsersConfiguration',$e->getMessage());                      
+            $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'updateUsersConfiguration',$e->getMessage());                      
         }
     }
 
@@ -84,7 +86,7 @@ class company_user_model extends Model
 
         } catch(\Exception $e){
             $currentURL = current_url();            
-            $this->error('company_user\company_user_model',$currentURL,'get_data_using_join',$e->getMessage());
+            $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'get_data_using_join',$e->getMessage());
         }
     }    
 
@@ -139,7 +141,7 @@ class company_user_model extends Model
             return $result; 
         } catch(\Exception $e){
             $currentURL = current_url();            
-            $this->error('company_user\company_user_model',$currentURL,'GetTableValue',$e->getMessage());
+            $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'GetTableValue',$e->getMessage());
         }
     }
  
@@ -186,7 +188,7 @@ class company_user_model extends Model
             return $result; 
     } catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('company_user\company_user_model',$currentURL,'GetTableValue_whereIn',$e->getMessage());                       
+            $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'GetTableValue_whereIn',$e->getMessage());                       
     }
     }
  
@@ -232,7 +234,7 @@ class company_user_model extends Model
             return $result; 
         } catch(\Exception $e){
             $currentURL = current_url();            
-            $this->error('company_user\company_user_model',$currentURL,'getsearchvaluewithjoin',$e->getMessage());
+            $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'getsearchvaluewithjoin',$e->getMessage());
         }
     }
 
@@ -247,7 +249,7 @@ class company_user_model extends Model
             return $this->mysqldb->insertID();
         } catch (\Exception $e) { 
             $currentURL = current_url();            
-            $this->error('company_user\company_user_model',$currentURL,'insertData',$e->getMessage());            
+            $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'insertData',$e->getMessage());            
         }
     }   
 
@@ -262,7 +264,7 @@ class company_user_model extends Model
              return $this->mysqldb->insertID();
         } catch (\Exception $e) { 
             $currentURL = current_url();            
-            $this->error('company_user\company_user_model',$currentURL,'insertBatchData',$e->getMessage());          
+            $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'insertBatchData',$e->getMessage());          
         }
     }
 
@@ -277,7 +279,7 @@ class company_user_model extends Model
              $this->mysqldb->transComplete();
          } catch (\Exception $e) {            
              $currentURL = current_url();            
-             $this->error('company_user\company_user_model',$currentURL,'updateData',$e->getMessage());                      
+             $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'updateData',$e->getMessage());                      
          }
      }
 
@@ -291,30 +293,8 @@ class company_user_model extends Model
             $this->mysqldb->transComplete();
         } catch (\Exception $e) {            
             $currentURL = current_url();            
-            $this->error('company_user\company_user_model',$currentURL,'deleteData',$e->getMessage());                       
+            $this->error_log->error_exception_log('company_user\company_user_model',$currentURL,'deleteData',$e->getMessage());                       
         }
-    }
-
-   //Error Exception Stored Function
-   public function error($module_name = '',$current_url = '', $function_name ='', $error_msg = '')
-   {
-  
-       $this->mysqldb->transException(true)->transStart();
-       $data = [           
-           'module_name' => $module_name,
-           'current_url' => $current_url,
-           'function_name' => $function_name,
-           'error_msg' => $error_msg,   
-       ];         
-                         
-       $builder = $this->mysqldb->table('error_exception_log');
-       $builder->insert($data);       
-
-       $this->mysqldb->transComplete();
-
-       if ($this->mysqldb->transStatus() === true) {
-           return redirect()->route('global_catch_error');
-       } 
-   }
+    }   
 }
 ?>

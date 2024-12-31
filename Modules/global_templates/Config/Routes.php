@@ -7,9 +7,6 @@ $routes->group('templates', ['namespace' => '\Modules\global_templates\Controlle
 	//Mysql Error Message
 	$routes->get('mysql_error_alert_send_email', 'templates_controller::mysql_error_alert_send_email', ['as' => 'mysql_error_alert_send_email']);
 	
-	//Pgsql Error Message
-	$routes->get('pgsql_error_alert_send_email', 'templates_controller::pgsql_error_alert_send_email', ['as' => 'pgsql_error_alert_send_email']);
-
 	//Global 404 Error Page
 	$routes->get('error', 'templates_controller::global_error_page', ['as' => 'global_error_page']);
 
