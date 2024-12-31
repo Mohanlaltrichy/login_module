@@ -136,7 +136,7 @@ class customlibraries
     }
 
     //Error Exception Stored Function
-    public function error_exception_log($module_name = '',$current_url = '', $function_name ='', $error_msg = MYSQL_ERROR)
+    public function error_exception_log($module_name = '',$current_url = '', $function_name ='', $error_msg = '', $error_source = MYSQL_ERROR)
     {
     
         $this->mysqldb->transException(true)->transStart();
@@ -145,6 +145,7 @@ class customlibraries
             'current_url' => $current_url,
             'function_name' => $function_name,
             'error_msg' => $error_msg,   
+            'error_source' => $error_source,
         ];         
                             
         $builder = $this->mysqldb->table('error_exception_log');
