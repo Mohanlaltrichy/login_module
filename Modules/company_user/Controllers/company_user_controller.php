@@ -128,22 +128,7 @@ class company_user_controller extends BaseController
                 if (!empty($mob_check)) {
                     session()->setFlashdata('duplicate_record_found', 'Mobile Number already exists');
                     return redirect()->route('company_user_add');
-                }
-
-                $notification_email_whereConditions = [
-                    'user_email' => $email,
-                    'active' => 'yes'                    
-                ];
-
-                if($notification_user == '1')
-                {
-                    $notification_email_check = $this->company_user_model->GetTableValue('tbl_notification_users', 'id', $notification_email_whereConditions);
-                
-                    if (!empty($notification_email_check)) {
-                        session()->setFlashdata('duplicate_record_found', 'This email id notification user already exists');
-                        return redirect()->route('company_user_add');
-                    }
-                }
+                }           
 
                 if($middle_name != '')
                 {
@@ -156,6 +141,22 @@ class company_user_controller extends BaseController
 
                 $hashed_password = ($password) ? password_hash((string)$password, PASSWORD_DEFAULT) : $password;
                 $randomUid = $this->generateRandomUid();
+
+                $notification_email_whereConditions = [
+                    'user_email' => $email,
+                    'active' => 'yes'                    
+                ];
+               
+                $notification_email_check = $this->company_user_model->GetTableValue('tbl_notification_users', 'id', $notification_email_whereConditions);
+
+                if(!empty($notification_email_check))
+                {
+                    $notification_user_id = $notification_email_check[0]['id'];
+                }
+                else
+                {
+                    $notification_user_id = '';
+                }                
 
                 $data = [
                     'uuid' => $randomUid,
@@ -175,7 +176,8 @@ class company_user_controller extends BaseController
                     'password' => $hashed_password,
                     'status' => $status,
                     'remember_token' => null, //
-                    'notification_user' => ($notification_user == '1') ? 1 : 0,
+                    'notification_user' => ($notification_user == '1' || $notification_user_id > 0) ? 1 : 0,
+                    'notification_user_id' => ($notification_user_id > 0) ? $notification_user_id : 0,
                     'utc_created_at' => date('Y-m-d H:i:s'),
                     'local_created_at' => $this->local_date_time, //
                     'created_by'  => $this->logged_user_id,
@@ -189,39 +191,68 @@ class company_user_controller extends BaseController
                     $this->number_of_user_update;
                 }
 
-                if($notification_user == '1')
+                if($notification_user == '1' || $notification_user_id > 0)
                 {
-                    $data = [
-                    'company_id' => $this->customer_id,
-                    'name' => $fullname,
-                    'first_name' => $first_name,
-                    'last_name' => $last_name,
-                    'middle_name' => $middle_name,
-                    'location' => $location,
-                    'department' => $department,
-                    'mobile_no' => ($mobile_code != '') ? $mobile_code : null,
-                    'user_email' => $email,
-                    'notify_email' => 'inactive',
-                    'notify_sms' => 'inactive',
-                    'national_flag' => '1',
-                    'login_user' =>  1,
-                    'login_user_id' => $user_id,
-                    'login_user_role' => $role,
-                    'active' => 'yes', 
-                    'created_by' => $this->logged_user_id
-                    ];
+                    if($notification_user_id > 0)
+                    {
+                        $notification_update_data = [
+                        'company_id' => $this->customer_id,
+                        'name' => $fullname,
+                        'first_name' => $first_name,
+                        'last_name' => $last_name,
+                        'middle_name' => $middle_name,
+                        'location' => $location,
+                        'department' => $department,
+                        'mobile_no' => ($mobile_code != '') ? $mobile_code : null,
+                        'user_email' => $email,                        
+                        'national_flag' => '1',
+                        'login_user' =>  1,
+                        'login_user_id' => $user_id,
+                        'login_user_role' => $role,
+                        'active' => 'yes', 
+                        'updated_by' => $this->logged_user_id
+                        ];
 
-                    $notification_user_id = $this->company_user_model->saveUsersConfiguration('tbl_notification_users', $data);                    
+                        $notification_user_update_where = [
+                            'id' => $notification_user_id,
+                        ]; 
+                        
+                        $this->company_user_model->updateData('tbl_notification_users', $notification_user_update_where, $notification_update_data);
+                    }
+                    else 
+                    {
+                        $data = [
+                        'company_id' => $this->customer_id,
+                        'name' => $fullname,
+                        'first_name' => $first_name,
+                        'last_name' => $last_name,
+                        'middle_name' => $middle_name,
+                        'location' => $location,
+                        'department' => $department,
+                        'mobile_no' => ($mobile_code != '') ? $mobile_code : null,
+                        'user_email' => $email,
+                        'notify_email' => 'inactive',
+                        'notify_sms' => 'inactive',
+                        'national_flag' => '1',
+                        'login_user' =>  1,
+                        'login_user_id' => $user_id,
+                        'login_user_role' => $role,
+                        'active' => 'yes', 
+                        'created_by' => $this->logged_user_id
+                        ];
 
-                    $user_update_where = [
-                        'id' => $user_id,
-                    ];
+                        $notification_user_id = $this->company_user_model->saveUsersConfiguration('tbl_notification_users', $data);                    
 
-                    $user_update_data = [
-                        'notification_user_id' => $notification_user_id,
-                    ];
+                        $user_update_where = [
+                            'id' => $user_id,
+                        ];
 
-                    $this->company_user_model->updateData('users', $user_update_where, $user_update_data);                   
+                        $user_update_data = [
+                            'notification_user_id' => $notification_user_id,
+                        ];
+
+                        $this->company_user_model->updateData('users', $user_update_where, $user_update_data); 
+                    }                  
                 }
                 
 
@@ -349,23 +380,7 @@ class company_user_controller extends BaseController
                         session()->setFlashdata('duplicate_record_found', 'Mobile Number already exists');
                         return redirect()->route('company_user_edit',array($user_id));
                     }  
-                }              
-
-                if($notification_user == '1' && $old_email != $email)
-                {
-                    $notification_email_whereConditions = [
-                        'user_email' => $email,
-                        'id !=' => $notification_user_id,
-                        'active' => 'yes'                    
-                    ];
-
-                    $notification_email_check = $this->company_user_model->GetTableValue('tbl_notification_users', 'id', $notification_email_whereConditions);
-                
-                    if (!empty($notification_email_check)) {
-                        session()->setFlashdata('duplicate_record_found', 'This email id notification user already exists');
-                        return redirect()->route('company_user_edit',array($user_id));
-                    }
-                } 
+                }     
                 
                 if($middle_name != '')
                 {
@@ -385,7 +400,7 @@ class company_user_controller extends BaseController
                     'department' => ($department != '') ? $department : null,
                     'designation' => ($designation != '') ? $designation : null,
                     'status' => $status,
-                    'notification_user' => ($notification_user == '1') ? 1 : 0,
+                    'notification_user' => ($notification_user == '1' || $notification_user_id > 0) ? 1 : 0,
                     'notification_user_id' => ($notification_user_id > 0) ? $notification_user_id : 0,
                     'utc_updated_at' => date('Y-m-d H:i:s'),
                     'local_updated_at' => $this->local_date_time,
@@ -400,7 +415,7 @@ class company_user_controller extends BaseController
 
                 $this->company_user_model->updateUsersConfiguration($data,$user_id);
 
-                if($notification_user == '1')
+                if($notification_user == '1' || $notification_user_id > 0)
                 {
 
                     if($notification_user_id > 0)
