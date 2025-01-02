@@ -168,10 +168,10 @@ height: 35px;
                                             </div> 
                                             
                                             <label class="col-sm-1 control-label" for="role">Role<span>*</span></label>
-                                            <div class="col-sm-3"> 
-                                                <?php if($user_details[0]['role_id'] != '3') { ?>
+                                            <div class="col-sm-3">                                               
                                                 <select name="role" class="form-control form-control-custom" id="role" required>
                                                     <option value="" readonly>Select</option>
+                                                    <option value="3" <?=($user_details[0]['role_id'] == 3) ? 'selected' : '';?>>Company Admin</option>
                                                     <?php 
                                                     if(!empty($role_details)) {
                                                         foreach($role_details as $role_name)
@@ -182,12 +182,7 @@ height: 35px;
                                                         }
                                                     }
                                                     ?>
-                                                </select> 
-                                                <?php } else { ?>
-                                                <select name="role" class="form-control form-control-custom" readonly>
-                                                    <option value="<?=$user_details[0]['role_id'];?>" selected>Company Admin</option>                                                  
-                                                </select> 
-                                            <?php } ?>                                           
+                                                </select>                                                                                          
                                             </div>
                                             
 

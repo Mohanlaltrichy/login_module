@@ -165,6 +165,7 @@ height: 35px;
                                             <div class="col-sm-3"> 
                                                      <select name="role" class="form-control form-control-custom" id="role" required>
                                                     <option value="" readonly>Select</option>
+                                                    <option value="3">Company Admin</option>
                                                     <?php 
                                                     if(!empty($role)) {
                                                         foreach($role as $role_name)

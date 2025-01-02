@@ -235,7 +235,7 @@ class company_role_controller extends BaseController
 
                 $result = $this->company_role_model->GetTableValue('tbl_roles', 'role_name', $role_data_whereConditions); 
 
-                if(empty($result))
+                if(empty($result) && $role_name != COMPANY_ADMIN_ROLE_NAME)
                 {
                     $roles_add = $this->company_role_model->add_page_roles_details($role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $groups_checkbox_id, $groups_all_checkbox_value, $groups_checkbox_view, $groups_checkbox_edit, $groups_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $aggregation_checkbox_id, $aggregation_all_checkbox_value, $aggregation_checkbox_view, $aggregation_checkbox_edit, $aggregation_checkbox_delete, $mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete, $reports_checkbox_id, $reports_all_checkbox_value, $reports_checkbox_view, $reports_checkbox_edit, $reports_checkbox_delete, $notification_checkbox_id, $notification_all_checkbox_value, $notification_checkbox_view, $notification_checkbox_edit, $notification_checkbox_delete, $subscription_checkbox_id, $subscription_all_checkbox_value, $subscription_checkbox_view, $subscription_checkbox_edit, $subscription_checkbox_delete, $ai_prediction_checkbox_id, $ai_prediction_all_checkbox_value, $ai_prediction_checkbox_view, $ai_prediction_checkbox_edit, $ai_prediction_checkbox_delete);
 
@@ -284,6 +284,10 @@ class company_role_controller extends BaseController
                 if(!empty($result))
                 {
                     $role_name = $result[0]['role_name'];
+                }
+                else if($role_name == COMPANY_ADMIN_ROLE_NAME)
+                {
+                    $role_name = COMPANY_ADMIN_ROLE_NAME;
                 }
                 else
                 {

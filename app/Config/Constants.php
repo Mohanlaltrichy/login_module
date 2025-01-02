@@ -137,3 +137,5 @@ define('MYSQL_ERROR','mysql');
 define('POSTGRESQL_ERROR','postgrsql');
 
 define('CODE_ERROR','code');
+
+define('COMPANY_ADMIN_ROLE_NAME','Company Admin');
