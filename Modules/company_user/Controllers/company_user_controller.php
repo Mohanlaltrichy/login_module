@@ -144,6 +144,7 @@ class company_user_controller extends BaseController
 
                 $notification_email_whereConditions = [
                     'user_email' => $email,
+                    'company_id' => $this->customer_id, 
                     'active' => 'yes'                    
                 ];
                
@@ -316,6 +317,7 @@ class company_user_controller extends BaseController
             
             $notification_user_data_whereConditions = [
                 'user_email' => $user_data[0]['email'],
+                'company_id' => $this->customer_id,
                 'active' => 'yes',  
             ];
 
