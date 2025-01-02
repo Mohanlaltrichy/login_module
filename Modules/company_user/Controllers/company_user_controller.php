@@ -386,6 +386,7 @@ class company_user_controller extends BaseController
                     'designation' => ($designation != '') ? $designation : null,
                     'status' => $status,
                     'notification_user' => ($notification_user == '1') ? 1 : 0,
+                    'notification_user_id' => ($notification_user_id > 0) ? $notification_user_id : 0,
                     'utc_updated_at' => date('Y-m-d H:i:s'),
                     'local_updated_at' => $this->local_date_time,
                     'updated_by'  => $this->logged_user_id,
