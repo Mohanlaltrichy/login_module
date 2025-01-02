@@ -92,7 +92,20 @@ height: 35px;
                                     <form class="form-horizontal" id="update_company_user_client_config" action="<?php echo $base_url.route_to('update_company_user'); ?>" method="post" data-parsley-validate>
                                         <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                                         <input type="hidden" name="user_id" value="<?=$user_details[0]['id'];?>">
-                                        <input type="hidden" name="notification_user_id" value="<?=$user_details[0]['notification_user_id'];?>">
+
+                                        <?php
+                                            if(!empty($notification_user_data))
+                                            {                                               
+                                                $notification_user_id = $notification_user_data[0]['id'];
+                                                                                              
+                                            }
+                                            else
+                                            {                                                   
+                                                $notification_user_id = $user_details[0]['notification_user_id'];                                                                                             
+                                            }
+                                        ?>
+
+                                        <input type="hidden" name="notification_user_id" value="<?=$notification_user_id;?>">
 
                                         <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="first_name">First Name*</label>

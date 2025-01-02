@@ -284,11 +284,12 @@ class company_user_controller extends BaseController
             $role_data = $this->company_user_model->GetTableValue('tbl_roles', 'id,role_name', $role_data_whereConditions);
             
             $notification_user_data_whereConditions = [
-                'login_user_id' => $id,  
+                'user_email' => $user_data[0]['email'],
+                'active' => 'yes',  
             ];
-            
-            $notification_user_data = $this->company_user_model->GetTableValue('tbl_notification_users', 'location,department', $notification_user_data_whereConditions);
-                      
+
+            $notification_user_data = $this->company_user_model->GetTableValue('tbl_notification_users', 'id,location,department', $notification_user_data_whereConditions);
+        
             $data = array(
                 'user_details' => $user_data,
                 'role_details' => $role_data,
