@@ -403,7 +403,7 @@ class company_user_controller extends BaseController
 
                     if($notification_user_id > 0)
                     {
-                        $nitification_update_data = [
+                        $notification_update_data = [
                         'company_id' => $this->customer_id,
                         'name' => $fullname,
                         'first_name' => $first_name,
@@ -412,7 +412,7 @@ class company_user_controller extends BaseController
                         'location' => $location,
                         'department' => $department,
                         'mobile_no' => ($mobile_code != '') ? $mobile_code : null,
-                        'user_email' => $email,                        
+                        'user_email' => $old_email,                        
                         'national_flag' => '1',
                         'login_user' =>  1,
                         'login_user_id' => $user_id,
@@ -423,10 +423,9 @@ class company_user_controller extends BaseController
 
                         $notification_user_update_where = [
                             'id' => $notification_user_id,
-                        ];   
+                        ]; 
                         
-    
-                        $this->company_user_model->updateData('tbl_notification_users', $notification_user_update_where, $nitification_update_data);
+                        $this->company_user_model->updateData('tbl_notification_users', $notification_user_update_where, $notification_update_data);
                     }
                     else 
                     {
@@ -439,7 +438,7 @@ class company_user_controller extends BaseController
                             'location' => $location,
                             'department' => $department,
                             'mobile_no' => ($mobile_code != '') ? $mobile_code : null,
-                            'user_email' => $email,
+                            'user_email' => $old_email,
                             'notify_email' => 'inactive',
                             'notify_sms' => 'inactive',
                             'national_flag' => '1',

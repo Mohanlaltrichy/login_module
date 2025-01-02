@@ -115,7 +115,7 @@ height: 35px;
                                             <label class="col-sm-1 control-label" for="email">Email<span>*</span></label>
                                             <div class="col-sm-3">
                                             <input type="email"  name="email" class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' id="email" required disabled>
-                                            <input type="hidden" name="old_email"  class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' required disabled>
+                                            <input type="hidden" name="old_email"  class="form-control form-control-custom" value='<?=$user_details[0]['email'];?>' required>
                                             </div>
 
                                             <label class="col-sm-1 control-label" for="phone">Phone</label>
@@ -153,10 +153,11 @@ height: 35px;
                                             <div class="col-sm-3">
                                                 <input type="text" name="user_department"  class="form-control form-control-custom" value='<?=$user_details[0]['department'];?>' id="user_department">
                                             </div> 
-
+                                            
                                             <label class="col-sm-1 control-label" for="role">Role<span>*</span></label>
                                             <div class="col-sm-3"> 
-                                            <select name="role" class="form-control form-control-custom" id="role" required>
+                                                <?php if($user_details[0]['role_id'] != '3') { ?>
+                                                <select name="role" class="form-control form-control-custom" id="role" required>
                                                     <option value="" readonly>Select</option>
                                                     <?php 
                                                     if(!empty($role_details)) {
@@ -168,8 +169,14 @@ height: 35px;
                                                         }
                                                     }
                                                     ?>
-                                                </select>                                            
+                                                </select> 
+                                                <?php } else { ?>
+                                                <select name="role" class="form-control form-control-custom" readonly>
+                                                    <option value="<?=$user_details[0]['role_id'];?>" selected>Company Admin</option>                                                  
+                                                </select> 
+                                            <?php } ?>                                           
                                             </div>
+                                            
 
                                             <label class="col-sm-1 control-label" for="zone">Address</label>
                                             <div class="col-sm-3">
