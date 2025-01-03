@@ -546,6 +546,44 @@ class company_user_controller extends BaseController
             return redirect()->route('global_catch_error');
         }
     }
+    
+
+    //notify_user_email_check
+    public function notify_user_email_check()
+    {
+        try{
+            if ($this->request->isAJAX()) {               
+               
+                    $email = $this->request->getGet("email");
+
+                    $notification_user_data_whereConditions = [
+                        'user_email' => $email,
+                        'company_id' => $this->customer_id,
+                        'active' => 'yes',  
+                    ];
+
+                    $notification_user_data = $this->company_user_model->GetTableValue('tbl_notification_users', 'id', $notification_user_data_whereConditions);
+                            
+                    if(!empty($notification_user_data))
+                    {
+                        $notify_user_available = "yes";
+                    }
+                    else
+                    {
+                        $notify_user_available = "no";
+                    }                   
+
+                    $result = array('success' => 'success', 'notify_user_available' => $notify_user_available);
+                    echo json_encode($result);
+                
+            }
+
+        }catch(\Exception $e){
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('company_user\company_user_controller', $currentURL, 'userdelete', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
    
     //Random UID Gen
     function generateRandomUid() {

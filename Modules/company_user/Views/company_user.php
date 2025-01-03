@@ -120,7 +120,7 @@ height: 35px;
                                         <div class="form-group row">
                                             <label class="col-sm-1 control-label" for="email">Email<span>*</span></label>
                                             <div class="col-sm-3">
-                                            <input type="email" name="email" class="form-control form-control-custom" value="" id="email" required>
+                                            <input type="email" name="email" class="form-control form-control-custom notify_user_email_check" value="" id="email" required>
                                             </div>
 
                                             <label class="col-sm-1 control-label" for="phone">Phone</label>
@@ -163,9 +163,8 @@ height: 35px;
 
                                             <label class="col-sm-1 control-label" for="role">Role<span>*</span></label>
                                             <div class="col-sm-3"> 
-                                                     <select name="role" class="form-control form-control-custom" id="role" required>
-                                                    <option value="" readonly>Select</option>
-                                                    <option value="3">Company Admin</option>
+                                                <select name="role" class="form-control form-control-custom" id="role" required>
+                                                    <option value="" readonly>Select</option>                                                    
                                                     <?php 
                                                     if(!empty($role)) {
                                                         foreach($role as $role_name)
@@ -201,28 +200,32 @@ height: 35px;
 
                                         <hr></hr>
 
-                                        <div class="form-group row">                                        
-                                        <label class="col-md-2" for="notification_user">Do you want to create a notification user?</label> 
-                                        <div class="col-sm-1">
-                                        <input type="checkbox" style="vertical-align: middle;" name="notification_user" value="" id="notification_user">  
-                                        </div>                                   
-                                        </div>
-                                            
-                                        <div id="notification_user_div" class="dis_none">                                            
+                                        <div id="notify_user_div" class="dis_none">
 
-                                            <div class="form-group row">
-                                                <label class="col-sm-1 control-label" for="location">Location*</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="location"  class="form-control form-control-custom" value="" id="location">
-                                                </div>
+                                            <div class="form-group row">                                        
+                                            <label class="col-md-2" for="notification_user">Do you want to create a notification user?</label> 
+                                            <div class="col-sm-1">
+                                            <input type="checkbox" style="vertical-align: middle;" name="notification_user" value="" id="notification_user">  
+                                            </div>                                   
+                                            </div>
+                                                
+                                            <div id="notification_user_div" class="dis_none">                                            
 
-                                                <label class="col-sm-1 control-label" for="department">Department*</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="department"  class="form-control form-control-custom" value="" id="department">
-                                                </div>                                              
+                                                <div class="form-group row">
+                                                    <label class="col-sm-1 control-label" for="location">Location*</label>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" name="location"  class="form-control form-control-custom" value="" id="location">
+                                                    </div>
+
+                                                    <label class="col-sm-1 control-label" for="department">Department*</label>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" name="department"  class="form-control form-control-custom" value="" id="department">
+                                                    </div>                                              
+                                                </div> 
+
                                             </div> 
-
-                                        </div>                                      
+                                           
+                                        </div>    
 
                                         <?php } ?>
 

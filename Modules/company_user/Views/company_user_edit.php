@@ -168,21 +168,28 @@ height: 35px;
                                             </div> 
                                             
                                             <label class="col-sm-1 control-label" for="role">Role<span>*</span></label>
-                                            <div class="col-sm-3">                                               
-                                                <select name="role" class="form-control form-control-custom" id="role" required>
-                                                    <option value="" readonly>Select</option>
-                                                    <option value="3" <?=($user_details[0]['role_id'] == 3) ? 'selected' : '';?>>Company Admin</option>
-                                                    <?php 
-                                                    if(!empty($role_details)) {
-                                                        foreach($role_details as $role_name)
-                                                        {                                       
-                                                    ?>
-                                                        <option value="<?php echo $role_name['id']?>" <?=($user_details[0]['role_id'] == $role_name['id']) ? 'selected' : '';?>><?php echo $role_name['role_name']?></option>                                       
-                                                    <?php
+                                            <div class="col-sm-3">          
+                                                <?php if($user_details[0]['role_id'] != 3) { ?>                                     
+                                                    <select name="role" class="form-control form-control-custom" id="role" required>
+                                                        <option value="" readonly>Select</option>
+                                                        <?php 
+                                                        if(!empty($role_details)) {
+                                                            foreach($role_details as $role_name)
+                                                            {                                       
+                                                        ?>
+                                                            <option value="<?php echo $role_name['id']?>" <?=($user_details[0]['role_id'] == $role_name['id']) ? 'selected' : '';?>><?php echo $role_name['role_name']?></option>                                       
+                                                        <?php
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </select>                                                                                          
+                                                        ?>
+                                                    </select>  
+                                                <?php } else {  ?>
+                                                    <input type="hidden" name="role" value="<?=$user_details[0]['role_id'];?>">
+                                                    <select class="form-control form-control-custom" disabled>
+                                                        <option value="" readonly>Select</option>
+                                                        <option value="3" <?=($user_details[0]['role_id'] == 3) ? 'selected' : '';?>>Company Admin</option>                                                        
+                                                    </select> 
+                                                <?php } ?>                                                                                            
                                             </div>
                                             
 
@@ -207,41 +214,42 @@ height: 35px;
 
                                         <hr></hr>
 
-                                        <div class="form-group row">                                        
-                                        <label class="col-md-2" for="notification_user">Do you want to create a notification user?</label> 
-                                        <div class="col-sm-1">
-                                        <input type="checkbox" style="vertical-align: middle;" name="notification_user" value="<?=($user_details[0]['notification_user'])?>" id="notification_user" <?=($user_details[0]['notification_user'] == '1') ? 'checked' : '';?>>  
-                                        </div>                                   
-                                        </div>
-                                            
-                                        <div id="notification_user_div" class="<?=($user_details[0]['notification_user'] != '1') ? 'dis_none' : '';?>">
-
-                                            <?php
-                                                if(!empty($notification_user_data))
-                                                {                                               
-                                                    $location = $notification_user_data[0]['location'];
-                                                    $department = $notification_user_data[0]['department'];                                                 
-                                                }
-                                                else
-                                                {                                                   
-                                                    $location = '';
-                                                    $department = '';                                                   
-                                                }
-                                            ?>
-
-                                            <div class="form-group row">
-                                                <label class="col-sm-1 control-label" for="location">Location*</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="location"  class="form-control form-control-custom" value="<?=$location;?>" id="location">
-                                                </div>
-
-                                                <label class="col-sm-1 control-label" for="department">Department*</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="department"  class="form-control form-control-custom" value="<?=$department;?>" id="department">
-                                                </div>                                                
+                                        <div id="notify_user_div" class="<?=($user_details[0]['notification_user'] == '1') ? 'dis_none' : ''?>">
+                                            <div class="form-group row">                                        
+                                            <label class="col-md-2" for="notification_user">Do you want to create a notification user?</label> 
+                                            <div class="col-sm-1">
+                                            <input type="checkbox" style="vertical-align: middle;" name="notification_user" value="<?=($user_details[0]['notification_user'])?>" id="notification_user" <?=($user_details[0]['notification_user'] == '1') ? 'checked' : '';?>>  
+                                            </div>                                   
                                             </div>
-                                        </div>                                      
+                                                
+                                            <div id="notification_user_div" class="<?=($user_details[0]['notification_user'] != '1') ? 'dis_none' : '';?>">
 
+                                                <?php
+                                                    if(!empty($notification_user_data))
+                                                    {                                               
+                                                        $location = $notification_user_data[0]['location'];
+                                                        $department = $notification_user_data[0]['department'];                                                 
+                                                    }
+                                                    else
+                                                    {                                                   
+                                                        $location = '';
+                                                        $department = '';                                                   
+                                                    }
+                                                ?>
+
+                                                <div class="form-group row">
+                                                    <label class="col-sm-1 control-label" for="location">Location*</label>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" name="location"  class="form-control form-control-custom" value="<?=$location;?>" id="location">
+                                                    </div>
+
+                                                    <label class="col-sm-1 control-label" for="department">Department*</label>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" name="department"  class="form-control form-control-custom" value="<?=$department;?>" id="department">
+                                                    </div>                                                
+                                                </div>
+                                            </div>
+                                        </div>
                                         <?php } ?>
 
 

@@ -3,7 +3,7 @@ if($page_type=='company_user')
 {     
 ?>
 <!--- company_user Modules Custom Js File -->
-<script src="<?php echo base_url(); ?>assets/md_js/company_user.js?v=1.2"></script>
+<script src="<?php echo base_url(); ?>assets/md_js/company_user.js?v=1.3"></script>
 <!--- company_user Modules Custom Js File -->
 <?php 
 } 

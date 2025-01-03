@@ -20,6 +20,9 @@ $routes->group('company_user', ['namespace' => '\Modules\company_user\Controller
 
 	// //role delete
 	$routes->get('userdelete', 'company_user_controller::userdelete', ['as' => 'userdelete']);
+
+	//
+	$routes->get('notify_user_email_check', 'company_user_controller::notify_user_email_check', ['as' => 'notify_user_email_check']);
 });
 
 

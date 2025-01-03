@@ -103,6 +103,33 @@
       });
       //Delete Role  
 
+    //Notification User Email Check
+    $(document).on('change','.notify_user_email_check', function(){    
+        var email = $(this).val();
+        $.ajax({
+            url: base_url+'company_user/notify_user_email_check',
+            method: 'GET',
+            data: {email: email},
+            dataType: 'json',
+            success: function(data){ 
+                
+                if(data.notify_user_available == 'yes')
+                {
+                    $('#notify_user_div').addClass('dis_none');
+                }
+                else
+                {
+                    $('#notify_user_div').removeClass('dis_none');
+                }
+                                          
+            },
+            error: function(xhr, status, error) {
+                // Handle errors, if any
+                console.log(error);                            
+            }
+        });
+    });
+
 //Notification User Enabled 
 $("#notification_user").change(function(){
     if ($(this).is(":checked")) {   
