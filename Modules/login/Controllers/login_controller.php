@@ -247,6 +247,11 @@ class login_controller extends BaseController
                             return redirect()->route('login');
                         }
                     }
+                    else
+                    {
+                        $session->setFlashdata('msg', 'Invalid credentials');
+                        return redirect()->route('login');
+                    }
 
                     $company_whereConditions = [
                         'id' => $userData['company_id'], 
