@@ -336,6 +336,7 @@ class templates_controller extends BaseController
                 $lastname = $this->request->getPost("lastname");
                 $useremail = $this->request->getPost("useremail");
                 $mobile = $this->request->getPost("mobile");
+                $old_mobile = $this->request->getPost("old_mobile");
                 $logo = $this->request->getFile('logo');
 
                 $validation = \Config\Services::validation();
@@ -438,7 +439,7 @@ class templates_controller extends BaseController
                     $session->setFlashdata('msg', 'Company name or Email already found');
                     return view("\Modules\global_templates\Views/edit_company",$data); 
                 }
-                if (count($user_email_check) > 1) {
+                if (count($user_email_check) > 1 && $mobile != $old_mobile) {
                     if ($logo->isValid()){
                         $imageData = $logo->getTempName();
                         $file = file_get_contents($imageData);

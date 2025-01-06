@@ -175,6 +175,7 @@ $base_url = rtrim(base_url(), '/');
 
                                         <label class="col-sm-1 control-label">Contact Mobile<span>*</span></label>
                                             <div class="col-sm-3 mb-3">
+                                                <input type="hidden" name="old_mobile" value="<?= $user_data[0]['mobile']; ?>">
                                                 <input type="text" name="mobile" style="width: 130%;" class="form-control form-control-custom" value='<?= $user_data[0]['mobile']; ?>' id="mobile">
                                             </div>
                                         </div>
