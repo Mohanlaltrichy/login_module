@@ -89,7 +89,8 @@ $base_url = rtrim(base_url(), '/');
 
                                             <label class="col-sm-1 control-label">Country<span>*</span></label>
                                             <div class="col-sm-3">
-                                                <select name="country" class="form-control form-control-custom" id="country" required data-parsley-errors-container="#country_error" data-parsley-error-message="Please select your country" disabled>
+                                                <input type="hidden" name="country" value="<?=$comp_data[0]['country'];?>">
+                                                <select  class="form-control form-control-custom" id="country" required data-parsley-errors-container="#country_error" data-parsley-error-message="Please select your country" disabled>
                                                 <option value="" disabled selected>Select your country</option>
                                                 <?php foreach ($countries as $countryOption): ?>
                                                     <option data-id="<?php echo $countryOption['id'] ?>"
