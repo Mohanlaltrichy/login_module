@@ -127,7 +127,7 @@ define('MAIL_PASSWORD','BFWnYUgHYVIy4QbqkEuXVQvGjNDqndQCl8JXFFOFIYGo');
 define('MAIL_ENCRYPTION','tls');
 define('ERROR_MAIL_FROM_ADDRESS','no-reply-erroralert@solwareiiot.com');
 define('MAIL_FROM_NAME','SolwareIIOT Error Alert');
-define('SUPPORT_MAIL_TO_ADDRESS','mohanlal@unfoldtec.com');
+define('SUPPORT_MAIL_TO_ADDRESS','support@foresightiiot.com');
 define('MAIL_SUBJECT','Error Alert');
 
 define('ERROR_LAST_MINUTES','-15 minutes');
