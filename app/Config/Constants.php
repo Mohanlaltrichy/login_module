@@ -134,7 +134,7 @@ define('ERROR_LAST_MINUTES','-15 minutes');
 
 define('MYSQL_ERROR','mysql');
 
-define('POSTGRESQL_ERROR','postgrsql');
+define('POSTGRESQL_ERROR','postgresql');
 
 define('CODE_ERROR','code');
 
