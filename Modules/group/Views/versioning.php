@@ -10,7 +10,7 @@ if ($page_type == 'group') {
 
 <?php if ($page_type == 'group_custom_css') { ?>
 <!-- group Modules Custom CSS -->
-<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/custom_style.css?v=1.1">
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/custom_style.css?v=1.2">
 <!-- group Modules Custom CSS -->
 <?php } ?>
 
