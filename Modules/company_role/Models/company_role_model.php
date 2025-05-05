@@ -1,12 +1,14 @@
 <?php
 namespace Modules\company_role\Models;
 use App\Libraries\customlibraries;
+use Ramsey\Uuid\Uuid;
 
 use CodeIgniter\Model;
 
 class company_role_model extends Model
 {
     public $mysqldb;   
+    public $pgdb;
     protected $customer_id;
     protected $logged_user_id;
     protected $local_date_time;
@@ -15,7 +17,8 @@ class company_role_model extends Model
     public function __construct()
     {
         parent::__construct();
-        $this->mysqldb = \Config\Database::connect('mysqldb');       
+        $this->mysqldb = \Config\Database::connect('mysqldb');   
+        $this->pgdb = \Config\Database::connect('default');    
         $customlibraries = new customlibraries();
         $this->local_date_time = $customlibraries->local_date_time();
         $this->customer_id = session('Taguser_company');
@@ -461,7 +464,189 @@ class company_role_model extends Model
                 'id' => $role_id,
                 'role_name' => $role_name,
                 'company_id' => $this->customer_id,
-            ];         
+            ];     
+            
+            //Update audit trail code start
+            $old_role_data = $this->GetTableValue('tbl_roles', 'description,roles_all_pages,users_all_pages,groups_all_pages,opc_all_pages,tag_all_pages,data_aggregation_all_pages,mqtt_all_pages,http_all_pages,bulk_import_status_all_pages,dashboard_status_all_pages,reports_status_all_pages,notify_all_checkbox_value,subscription_all_pages,ai_prediction_all_pages,status', $role_update_where); 
+
+            if(!empty($old_role_data))
+            {
+                $old_description = $old_role_data[0]['description'];
+                $old_roles_all_pages = $old_role_data[0]['roles_all_pages'];
+                $old_users_all_pages = $old_role_data[0]['users_all_pages'];
+                $old_groups_all_pages = $old_role_data[0]['groups_all_pages'];
+                $old_opc_all_pages = $old_role_data[0]['opc_all_pages'];
+                $old_tag_all_pages = $old_role_data[0]['tag_all_pages'];
+                $old_data_aggregation_all_pages = $old_role_data[0]['data_aggregation_all_pages'];
+                $old_mqtt_all_pages = $old_role_data[0]['mqtt_all_pages'];
+                $old_http_all_pages = $old_role_data[0]['http_all_pages'];
+                $old_bulk_import_status_all_pages = $old_role_data[0]['bulk_import_status_all_pages'];
+                $old_dashboard_status_all_pages = $old_role_data[0]['dashboard_status_all_pages'];
+                $old_reports_status_all_pages = $old_role_data[0]['reports_status_all_pages'];
+                $old_notify_all_checkbox_value = $old_role_data[0]['notify_all_checkbox_value'];
+                $old_subscription_all_pages = $old_role_data[0]['subscription_all_pages'];
+                $old_ai_prediction_all_pages = $old_role_data[0]['ai_prediction_all_pages'];
+                $old_status = $old_role_data[0]['status'];
+            }
+            else
+            {
+                $old_description = '';
+                $old_roles_all_pages = '';
+                $old_users_all_pages = '';
+                $old_groups_all_pages = '';
+                $old_opc_all_pages = '';
+                $old_tag_all_pages =  '';
+                $old_data_aggregation_all_pages = '';
+                $old_mqtt_all_pages = '';
+                $old_http_all_pages = '';
+                $old_bulk_import_status_all_pages = '';
+                $old_dashboard_status_all_pages = '';
+                $old_reports_status_all_pages = '';
+                $old_notify_all_checkbox_value = '';
+                $old_subscription_all_pages = '';
+                $old_ai_prediction_all_pages = '';
+                $old_status = '';
+            }
+
+            $randomUid = $this->generateRandomUid();
+
+            $role_update_audit_data = [
+                'update_key' => $randomUid,
+                'customer_id' => session('Taguser_company'),
+                'config_type' => 'roles',
+                'server_id' => session('Taguser_company'),
+                'update_type' => 'edit',
+                'created_by' => session('Taguser_id'),
+                'utc_created_at' => date('Y-m-d H:i:s'),
+                'local_created_at' => $this->local_date_time,
+            ];
+
+            if (trim($description) != trim($old_description)) {
+                $role_update_audit_data['update_field'] = 'description';
+                $role_update_audit_data['old_value'] = ($old_description) ? $old_description : null;
+                $role_update_audit_data['new_value'] = ($description) ? $description : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_roles_all_pages = ($roles_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_roles_all_pages) != trim($old_roles_all_pages)) {
+                $role_update_audit_data['update_field'] = 'roles_all_pages';
+                $role_update_audit_data['old_value'] = ($old_roles_all_pages) ? $old_roles_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_roles_all_pages) ? $new_roles_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_users_all_pages = ($users_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_users_all_pages) != trim($old_users_all_pages)) {
+                $role_update_audit_data['update_field'] = 'users_all_pages';
+                $role_update_audit_data['old_value'] = ($old_users_all_pages) ? $old_users_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_users_all_pages) ? $new_users_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_groups_all_pages = ($groups_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_groups_all_pages) != trim($old_groups_all_pages)) {
+                $role_update_audit_data['update_field'] = 'groups_all_pages';
+                $role_update_audit_data['old_value'] = ($old_groups_all_pages) ? $old_groups_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_groups_all_pages) ? $new_groups_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_opc_all_pages = ($opc_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_opc_all_pages) != trim($old_opc_all_pages)) {
+                $role_update_audit_data['update_field'] = 'opc_all_pages';
+                $role_update_audit_data['old_value'] = ($old_opc_all_pages) ? $old_opc_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_opc_all_pages) ? $new_opc_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_tag_all_pages = ($tag_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_tag_all_pages) != trim($old_tag_all_pages)) {
+                $role_update_audit_data['update_field'] = 'tag_all_pages';
+                $role_update_audit_data['old_value'] = ($old_tag_all_pages) ? $old_tag_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_tag_all_pages) ? $new_tag_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_data_aggregation_all_pages = ($aggregation_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_data_aggregation_all_pages) != trim($old_data_aggregation_all_pages)) {
+                $role_update_audit_data['update_field'] = 'data_aggregation_all_pages';
+                $role_update_audit_data['old_value'] = ($old_data_aggregation_all_pages) ? $old_data_aggregation_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_data_aggregation_all_pages) ? $new_data_aggregation_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_mqtt_all_pages = ($mqtt_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_mqtt_all_pages) != trim($old_mqtt_all_pages)) {
+                $role_update_audit_data['update_field'] = 'mqtt_all_pages';
+                $role_update_audit_data['old_value'] = ($old_mqtt_all_pages) ? $old_mqtt_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_mqtt_all_pages) ? $new_mqtt_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_http_all_pages = ($http_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_http_all_pages) != trim($old_http_all_pages)) {
+                $role_update_audit_data['update_field'] = 'http_all_pages';
+                $role_update_audit_data['old_value'] = ($old_http_all_pages) ? $old_http_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_http_all_pages) ? $new_http_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_bulk_import_status_all_pages = ($bulk_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_bulk_import_status_all_pages) != trim($old_bulk_import_status_all_pages)) {
+                $role_update_audit_data['update_field'] = 'bulk_import_status_all_pages';
+                $role_update_audit_data['old_value'] = ($old_bulk_import_status_all_pages) ? $old_bulk_import_status_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_bulk_import_status_all_pages) ? $new_bulk_import_status_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_dashboard_status_all_pages = ($dashboard_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_dashboard_status_all_pages) != trim($old_dashboard_status_all_pages)) {
+                $role_update_audit_data['update_field'] = 'dashboard_status_all_pages';
+                $role_update_audit_data['old_value'] = ($old_dashboard_status_all_pages) ? $old_dashboard_status_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_dashboard_status_all_pages) ? $new_dashboard_status_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_reports_status_all_pages = ($reports_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_reports_status_all_pages) != trim($old_reports_status_all_pages)) {
+                $role_update_audit_data['update_field'] = 'reports_status_all_pages';
+                $role_update_audit_data['old_value'] = ($old_reports_status_all_pages) ? $old_reports_status_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_reports_status_all_pages) ? $new_reports_status_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_notify_all_checkbox_value = ($notification_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_notify_all_checkbox_value) != trim($old_notify_all_checkbox_value)) {
+                $role_update_audit_data['update_field'] = 'notify_all_checkbox_value';
+                $role_update_audit_data['old_value'] = ($old_notify_all_checkbox_value) ? $old_notify_all_checkbox_value : null;
+                $role_update_audit_data['new_value'] = ($new_notify_all_checkbox_value) ? $new_notify_all_checkbox_value : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_subscription_all_pages = ($subscription_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_subscription_all_pages) != trim($old_subscription_all_pages)) {
+                $role_update_audit_data['update_field'] = 'subscription_all_pages';
+                $role_update_audit_data['old_value'] = ($old_subscription_all_pages) ? $old_subscription_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_subscription_all_pages) ? $new_subscription_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            $new_ai_prediction_all_pages = ($ai_prediction_all_checkbox_value == '1') ? 'Y' : 'N';
+            if (trim($new_ai_prediction_all_pages) != trim($old_ai_prediction_all_pages)) {
+                $role_update_audit_data['update_field'] = 'ai_prediction_all_pages';
+                $role_update_audit_data['old_value'] = ($old_ai_prediction_all_pages) ? $old_ai_prediction_all_pages : null;
+                $role_update_audit_data['new_value'] = ($new_ai_prediction_all_pages) ? $new_ai_prediction_all_pages : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+
+            if (trim($status) != trim($old_status)) {
+                $role_update_audit_data['update_field'] = 'status';
+                $role_update_audit_data['old_value'] = ($old_status) ? $old_status : null;
+                $role_update_audit_data['new_value'] = ($status) ? $status : null;
+                $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+            }
+            //Update audit trail code end
 
             $role_data_update = [
             'description' => $description,           
@@ -487,17 +672,14 @@ class company_role_model extends Model
 
             $this->updateData('tbl_roles', $role_update_where,  $role_data_update);
 
-            $role_permissions_del_where = [
-                'role_id' => $role_id,
-            ];            
-            
-            $this->deleteData('tbl_role_permissions',$role_permissions_del_where);       
-            
             $roles_data_insert_data[] = '';
             if(!empty($roles_checkbox_id))
             {
                 for($i=0; $i < count($roles_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $roles_checkbox_id[$i], $roles_checkbox_view[$i], $roles_checkbox_edit[$i], $roles_checkbox_delete[$i], $role_update_audit_data);
+
                     $roles_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -515,6 +697,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($users_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $users_checkbox_id[$i], $users_checkbox_view[$i], $users_checkbox_edit[$i], $users_checkbox_delete[$i], $role_update_audit_data);
+
                     $users_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -532,6 +717,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($groups_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $groups_checkbox_id[$i], $groups_checkbox_view[$i], $groups_checkbox_edit[$i], $groups_checkbox_delete[$i], $role_update_audit_data);
+
                     $groups_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -549,6 +737,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($opc_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $opc_checkbox_id[$i], $opc_checkbox_view[$i], $opc_checkbox_edit[$i], $opc_checkbox_delete[$i], $role_update_audit_data);
+
                     $opc_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -566,6 +757,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($tag_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $tag_checkbox_id[$i], $tag_checkbox_view[$i], $tag_checkbox_edit[$i], $tag_checkbox_delete[$i], $role_update_audit_data);
+
                     $tag_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -583,6 +777,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($aggregation_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $aggregation_checkbox_id[$i], $aggregation_checkbox_view[$i], $aggregation_checkbox_edit[$i], $aggregation_checkbox_delete[$i], $role_update_audit_data);
+
                     $aggregation_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -600,6 +797,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($mqtt_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $mqtt_checkbox_id[$i], $mqtt_checkbox_view[$i], $mqtt_checkbox_edit[$i], $mqtt_checkbox_delete[$i], $role_update_audit_data);
+
                     $mqtt_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -617,6 +817,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($http_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $http_checkbox_id[$i], $http_checkbox_view[$i], $http_checkbox_edit[$i], $http_checkbox_delete[$i], $role_update_audit_data);
+
                     $http_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -634,6 +837,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($bulk_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $bulk_checkbox_id[$i], $bulk_checkbox_view[$i], $bulk_checkbox_edit[$i], $bulk_checkbox_delete[$i], $role_update_audit_data);
+
                     $bulk_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -651,6 +857,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($dashboard_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $dashboard_checkbox_id[$i], $dashboard_checkbox_view[$i], $dashboard_checkbox_edit[$i], $dashboard_checkbox_delete[$i], $role_update_audit_data);
+
                     $dashboard_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -668,6 +877,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($reports_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $reports_checkbox_id[$i], $reports_checkbox_view[$i], $reports_checkbox_edit[$i], $reports_checkbox_delete[$i], $role_update_audit_data);
+
                     $reports_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -685,6 +897,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($notification_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $notification_checkbox_id[$i], $notification_checkbox_view[$i], $notification_checkbox_edit[$i], $notification_checkbox_delete[$i], $role_update_audit_data);
+
                     $notification_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -702,6 +917,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($subscription_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $subscription_checkbox_id[$i], $subscription_checkbox_view[$i], $subscription_checkbox_edit[$i], $subscription_checkbox_delete[$i], $role_update_audit_data);
+
                     $subscription_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -719,6 +937,9 @@ class company_role_model extends Model
             {
                 for($i=0; $i < count($ai_prediction_checkbox_id); $i++)
                 {
+                    //Update Audit Trail   
+                    $this->roles_permission_update_audit_trail($role_id, $ai_prediction_checkbox_id[$i], $ai_prediction_checkbox_view[$i], $ai_prediction_checkbox_edit[$i], $ai_prediction_checkbox_delete[$i], $role_update_audit_data);
+                    
                     $ai_prediction_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id'=> $role_id,
@@ -730,6 +951,12 @@ class company_role_model extends Model
                     );
                 }             
             }
+
+            $role_permissions_del_where = [
+                'role_id' => $role_id,
+            ];            
+            
+            $this->deleteData('tbl_role_permissions',$role_permissions_del_where);  
             
             if(!empty(array_filter($roles_data_insert_data)))
             {
@@ -811,6 +1038,71 @@ class company_role_model extends Model
         } catch(\Exception $e){
             $currentURL = current_url();            
             $this->error_log->error_exception_log('company_role\company_role_model',$currentURL,'update_page_roles_details',$e->getMessage());
+        }
+    }
+
+    public function roles_permission_update_audit_trail($role_id = 0, $page_id = 0, $new_roles_can_view = '', $new_roles_can_edit = '', $new_roles_can_delete = '', $role_update_audit_data = array())
+    {
+        try
+        {
+            $role_permission_update_where = [
+                'company_id' => $this->customer_id,
+                'role_id' => $role_id,
+                'page_id' => $page_id
+            ];     
+            
+            $old_role_per_data = $this->GetTableValue('tbl_role_permissions', 'can_view,can_edit,can_delete', $role_permission_update_where); 
+
+            $role_page_update_where = [
+                'id' => $page_id
+            ];     
+            
+            $role_page_data = $this->GetTableValue('tbl_cms_pages', 'page_name', $role_page_update_where);
+
+            if(!empty($role_page_data))
+            {
+                $page_name = $role_page_data[0]['page_name'];
+            }
+            else
+            {
+                $page_name = null;
+            }
+
+            if(!empty($old_role_per_data))
+            {
+                $new_roles_can_view = ($new_roles_can_view == '1') ? 'Y' : 'N';
+                $old_roles_can_view = $old_role_per_data[0]['can_view'];
+                if (trim($new_roles_can_view) != trim($old_roles_can_view)) {
+                    $role_update_audit_data['update_field'] = $page_name.'_can_view';
+                    $role_update_audit_data['old_value'] = ($old_roles_can_view) ? $old_roles_can_view : null;
+                    $role_update_audit_data['new_value'] = $new_roles_can_view;
+                    $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+                }
+
+                $new_roles_can_edit = ($new_roles_can_edit == '1') ? 'Y' : 'N';
+                $old_roles_can_edit = $old_role_per_data[0]['can_edit'];
+                if (trim($new_roles_can_edit) != trim($old_roles_can_edit)) {
+                    $role_update_audit_data['update_field'] = $page_name.'_can_edit';
+                    $role_update_audit_data['old_value'] = ($old_roles_can_edit) ? $old_roles_can_edit : null;
+                    $role_update_audit_data['new_value'] = $new_roles_can_edit;
+                    $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+                }
+
+                $new_roles_can_delete = ($new_roles_can_delete == '1') ? 'Y' : 'N';
+                $old_roles_can_delete = $old_role_per_data[0]['can_delete'];
+                if (trim($new_roles_can_delete) != trim($old_roles_can_delete)) {
+                    $role_update_audit_data['update_field'] = $page_name.'_can_delete';
+                    $role_update_audit_data['old_value'] = ($old_roles_can_delete) ? $old_roles_can_delete : null;
+                    $role_update_audit_data['new_value'] = $new_roles_can_delete;
+                    $this->insert_data_postgresql('update_audit_trail', $role_update_audit_data);
+                }
+            }
+            
+            return;
+            
+        } catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('company_role\company_role_model',$currentURL,'roles_permission_update_audit_trail',$e->getMessage());
         }
     }
 
@@ -992,6 +1284,21 @@ class company_role_model extends Model
         }
     }
 
+    //Insert Table Value postgresql
+    public function insert_data_postgresql($table = '', $data = array())
+    {
+        try {
+             $this->pgdb->transException(true)->transStart();
+             $builder = $this->pgdb->table($table);
+             $result = $builder->insert($data);
+             $this->pgdb->transComplete();
+             return $this->pgdb->insertID();
+        } catch (\Exception $e) { 
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('company_role\company_role_model',$currentURL,'insert_data_postgresql',$e->getMessage(),POSTGRESQL_ERROR);            
+        }
+    }
+
     //Update Table Value
     public function updateData($table = '',$update_whereConditions = array(), $data = array())
     {
@@ -1020,5 +1327,21 @@ class company_role_model extends Model
             $this->error_log->error_exception_log('company_role\company_role_model',$currentURL,'deleteData',$e->getMessage());                       
         }
     }  
+
+    //Random UID Gen
+    function generateRandomUid() {
+
+        try{
+
+            $uuid = Uuid::uuid4();
+            $randomId = str_replace('-', '',$uuid->toString());
+            return $randomId;
+
+        } catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('company_role\company_role_model',$currentURL,'generateRandomUid',$e->getMessage(), CODE_ERROR);
+            return redirect()->route('global_catch_error');  
+        }
+    }
 }
 ?>

@@ -5,6 +5,7 @@ namespace Modules\group\Controllers;
 use App\Controllers\BaseController;
 use Modules\group\Models\group_model;
 use App\Libraries\customlibraries;
+use Ramsey\Uuid\Uuid;
 
 class group_controller extends BaseController
 {
@@ -289,7 +290,7 @@ class group_controller extends BaseController
                     'company_id' => $this->customer_id,
                 ];
 
-                $result = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_data_whereConditions);
+                $result = $this->group_model->GetTableValue('tbl_group', 'grp_desc, active_status', $group_data_whereConditions);
 
                 if (!empty($result)) {
 
@@ -298,6 +299,32 @@ class group_controller extends BaseController
                     ];
 
                     $modules_update = $this->group_model->GetTableValue('group_modules', 'modules_option_name', $group_modules_whereConditions);
+
+                    $old_mu_where = [
+                        'id' => $group_id,
+                        'company_id' => $this->customer_id,
+                    ];
+                    
+                    $old_mu_details = [];
+                    foreach ($modules_update as $mu) {
+                        $column_name = $mu['modules_option_name'];               
+                        $condition = $old_mu_where;
+                        $condition[$column_name] = '1';
+                    
+                        $old_details = $this->group_model->GetTableValue('tbl_group', $column_name, $condition);
+                        if(!empty($old_details))
+                        {
+                            $old_mu_details[] = $column_name;
+                        }                        
+                    }
+                    $old_mu_name = implode(',', $old_mu_details);
+                    $new_mu_name = !empty($modules) ? implode(',', $modules) : '';
+                    $old_grp_desc = $result[0]['grp_desc'];
+                    $old_active_status = $result[0]['active_status'];
+
+                    // Normalize arrays for comparison 
+                    sort($old_mu_details);
+                    sort($modules);                    
 
                     $update_whereConditions = [
                         'id' => $group_id,
@@ -311,6 +338,42 @@ class group_controller extends BaseController
                         $this->group_model->updateData('tbl_group', $update_whereConditions, $mu_update_data); //All Modules First '0' Set
                     }
 
+                    //Update Audit Trail Code Start
+                    $randomUid = $this->generateRandomUid();
+
+                    $group_audit_data = [
+                        'update_key' => $randomUid,
+                        'customer_id' => session('Taguser_company'),
+                        'config_type' => 'login_group',
+                        'server_id' => $group_id,
+                        'update_type' => 'edit',
+                        'created_by' => session('Taguser_id'),
+                        'utc_created_at' => date('Y-m-d H:i:s'),
+                        'local_created_at' => $this->local_date_time,
+                    ];
+
+                    if (trim($old_grp_desc) != trim($description)) {
+                        $group_audit_data['update_field'] = 'grp_desc';
+                        $group_audit_data['old_value'] = ($old_grp_desc) ? $old_grp_desc : null;
+                        $group_audit_data['new_value'] = ($description) ? $description : null;
+                        $this->group_model->insert_data_postgresql('update_audit_trail', $group_audit_data);
+                    }
+
+                    if ($old_mu_details != $modules) {
+                        $group_audit_data['update_field'] = 'modules';
+                        $group_audit_data['old_value'] = ($old_mu_name) ? $old_mu_name : null;
+                        $group_audit_data['new_value'] = ($new_mu_name) ? $new_mu_name : null;
+                        $this->group_model->insert_data_postgresql('update_audit_trail', $group_audit_data);
+                    }
+
+                    if (trim($old_active_status) != trim($status)) {
+                        $group_audit_data['update_field'] = 'active_status';
+                        $group_audit_data['old_value'] = ($old_active_status) ? $old_active_status : null;
+                        $group_audit_data['new_value'] = ($status) ? $status : null;
+                        $this->group_model->insert_data_postgresql('update_audit_trail', $group_audit_data);
+                    }
+                    //Update Audit Trail Code End
+                    
                     $data = array(
                         'company_id' => $this->customer_id,
                         'grp_desc' => $description,
@@ -362,6 +425,29 @@ class group_controller extends BaseController
                         'id' => $id,
                     ];
 
+                    //Delete audit trail code start
+                    $group_data = $this->group_model->GetTableValue('tbl_group', 'grp_name', $group_whereConditions);
+        
+                    if(!empty($group_data))
+                    {
+                        $randomUid = $this->generateRandomUid();
+                        $users_delete_data = [
+                            'update_key' => $randomUid,
+                            'customer_id' => $this->customer_id,
+                            'config_type' => 'login_group',
+                            'server_id' => $id,                        
+                            'created_by' => session('Taguser_id'),
+                            'utc_created_at' => date('Y-m-d H:i:s'),
+                            'local_created_at' => $this->local_date_time,
+                        ];
+
+                        $grp_name = $group_data[0]['grp_name'];
+                        $users_delete_data['delete_type'] = 'grp_name';
+                        $users_delete_data['deleted_value']  = ($grp_name) ? $grp_name : null;
+                        $this->group_model->insert_data_postgresql('delete_audit_trail', $users_delete_data);                      
+                    }
+                    //Delete audit trail code end
+
                     $data = [
                         'active_status' => 'inactive',
                         'utc_updated_at' => date('Y-m-d H:i:s'),
@@ -401,6 +487,15 @@ class group_controller extends BaseController
                     $group_id = $this->request->getGet("group_id");
                     $user_checkedIds = $this->request->getGet("user_checkedIds");
 
+                    $old_group_user_whereConditions = [
+                        'grpid' => $group_id,
+                        'active' => 'Y',
+                    ];
+
+                    $old_group_user = $this->group_model->GetTableValue('tbl_user_mapping', 'user_id', $old_group_user_whereConditions);
+                    $old_user_ids_array = array_column($old_group_user, 'user_id');
+                    $old_user_ids = implode(',', $old_user_ids_array);
+
                     $group_user_mapped_delete_whereConditions = [
                         'grpid' => $group_id,
                     ];
@@ -408,6 +503,7 @@ class group_controller extends BaseController
                     $this->group_model->deleteData('tbl_user_mapping', $group_user_mapped_delete_whereConditions);
 
                     $data = [];
+                    $new_user_ids_array = [];
                     if (!empty($user_checkedIds)) {
                         foreach ($user_checkedIds as $user_id) {
                             $data[] = array(
@@ -415,7 +511,35 @@ class group_controller extends BaseController
                                 'user_id' => $user_id,
                                 'active' => 'Y',
                             );
+
+                            $new_user_ids_array[] = $user_id;
                         }
+                    }
+                    $new_user_ids = !empty($new_user_ids_array) ? implode(',', $new_user_ids_array) : '';
+
+                    // Normalize arrays for comparison 
+                    sort($old_user_ids_array);
+                    sort($new_user_ids_array);
+
+                    if ($old_user_ids_array != $new_user_ids_array) {
+
+                        $randomUid = $this->generateRandomUid();
+
+                        $group_user_update_audit_data = [
+                            'update_key' => $randomUid,
+                            'customer_id' => session('Taguser_company'),
+                            'config_type' => 'login_group',
+                            'server_id' => $group_id,
+                            'update_field' => 'login_group_user',
+                            'old_value' => $old_user_ids ?: null,
+                            'new_value' => $new_user_ids ?: null,
+                            'update_type' => 'edit',
+                            'created_by' => session('Taguser_id'),
+                            'utc_created_at' => date('Y-m-d H:i:s'),
+                            'local_created_at' => $this->local_date_time,
+                        ];
+                        
+                        $this->group_model->insert_data_postgresql('update_audit_trail', $group_user_update_audit_data);
                     }
 
                     $this->group_model->insertBatchData('tbl_user_mapping', $data);
@@ -435,6 +559,22 @@ class group_controller extends BaseController
             $currentURL = current_url();
             $this->error_log->error_exception_log('group\group_controller', $currentURL, 'groupdelete', $e->getMessage());
             return redirect()->route('global_catch_error');
+        }
+    }
+
+    //Random UID Gen
+    function generateRandomUid() {
+
+        try{
+
+            $uuid = Uuid::uuid4();
+            $randomId = str_replace('-', '',$uuid->toString());
+            return $randomId;
+
+        } catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('group\group_controller',$currentURL,'generateRandomUid',$e->getMessage(), CODE_ERROR);
+            return redirect()->route('global_catch_error');  
         }
     }
 

@@ -5,6 +5,7 @@ namespace Modules\company_role\Controllers;
 use App\Controllers\BaseController;
 use Modules\company_role\Models\company_role_model;
 use App\Libraries\customlibraries;
+use Ramsey\Uuid\Uuid;
 
 class company_role_controller extends BaseController
 {
@@ -592,6 +593,29 @@ class company_role_controller extends BaseController
                     $role_whereConditions = [
                         'id' => $id,                                
                     ];
+
+                    //Delete audit trail code start
+                    $role_data = $this->company_role_model->GetTableValue('tbl_roles', 'role_name', $role_whereConditions);
+        
+                    if(!empty($role_data))
+                    {
+                        $randomUid = $this->generateRandomUid();
+                        $roles_delete_data = [
+                            'update_key' => $randomUid,
+                            'customer_id' => $this->customer_id,
+                            'config_type' => 'roles',
+                            'server_id' => $id,                        
+                            'created_by' => session('Taguser_id'),
+                            'utc_created_at' => date('Y-m-d H:i:s'),
+                            'local_created_at' => $this->local_date_time,
+                        ];
+
+                        $role_name = $role_data[0]['role_name'];
+                        $roles_delete_data['delete_type'] = 'role_name';
+                        $roles_delete_data['deleted_value']  = ($role_name) ? $role_name : null;
+                        $this->company_role_model->insert_data_postgresql('delete_audit_trail', $roles_delete_data);
+                    }
+                    //Delete audit trail code end
                             
                     $data = [
                         'status' => 'deleted',
@@ -621,7 +645,23 @@ class company_role_controller extends BaseController
             return redirect()->route('global_catch_error');
         }
     } 
-    
+
+
+    //Random UID Gen
+    function generateRandomUid() {
+
+        try{
+
+            $uuid = Uuid::uuid4();
+            $randomId = str_replace('-', '',$uuid->toString());
+            return $randomId;
+
+        } catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('company_role\company_role_controller',$currentURL,'generateRandomUid',$e->getMessage(), CODE_ERROR);
+            return redirect()->route('global_catch_error');  
+        }
+    }    
 
     //JS Vesrioning File Get
     public function versioning($page_type='')

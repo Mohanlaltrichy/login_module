@@ -9,6 +9,7 @@ use CodeIgniter\Model;
 class group_model extends Model
 {
     public $mysqldb;
+    public $pgdb;
     protected $customer_id;
     protected $logged_user_id;
     protected $local_date_time;
@@ -18,6 +19,7 @@ class group_model extends Model
     {
         parent::__construct();
         $this->mysqldb = \Config\Database::connect('mysqldb');
+        $this->pgdb = \Config\Database::connect('default');
         $customlibraries = new customlibraries();
         $this->local_date_time = $customlibraries->local_date_time();
         $this->customer_id = session('Taguser_company');
@@ -184,6 +186,21 @@ class group_model extends Model
         } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('group\group_model', $currentURL, 'insertBatchData', $e->getMessage());
+        }
+    }
+
+    //Insert Table Value postgresql
+    public function insert_data_postgresql($table = '', $data = array())
+    {
+        try {
+             $this->pgdb->transException(true)->transStart();
+             $builder = $this->pgdb->table($table);
+             $result = $builder->insert($data);
+             $this->pgdb->transComplete();
+             return $this->pgdb->insertID();
+        } catch (\Exception $e) { 
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('group\group_model',$currentURL,'insert_data_postgresql',$e->getMessage(),POSTGRESQL_ERROR);            
         }
     }
 

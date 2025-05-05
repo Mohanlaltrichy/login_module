@@ -335,6 +335,21 @@ class templates_model extends Model
         }
     }
 
+    //Insert Table Value postgresql
+    public function insert_data_postgresql($table = '', $data = array())
+    {
+        try {
+             $this->pgdb->transException(true)->transStart();
+             $builder = $this->pgdb->table($table);
+             $result = $builder->insert($data);
+             $this->pgdb->transComplete();
+             return $this->pgdb->insertID();
+        } catch (\Exception $e) { 
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'insert_data_postgresql',$e->getMessage(),POSTGRESQL_ERROR);            
+        }
+    }
+
     //Update Table Value
     public function updateData($table = '',$update_whereConditions = array(), $data = array())
     {

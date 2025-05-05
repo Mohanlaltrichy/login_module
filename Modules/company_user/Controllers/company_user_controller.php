@@ -395,6 +395,9 @@ class company_user_controller extends BaseController
 
                 $data = [
                     'name' => $fullname,
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'middle_name' => $middle_name,
                     'phone' => ($phone != '') ? $phone_code : null,
                     'mobile' => ($mobile != '') ? $mobile_code : null,
                     'address' => ($address != '') ? $address : null,
@@ -511,9 +514,37 @@ class company_user_controller extends BaseController
                
                     $id = $this->request->getGet("id");
 
-                    $role_whereConditions = [
+                    $user_whereConditions = [
                         'id' => $id,                                
                     ];
+
+                    //Delete audit trail code start
+                    $user_data = $this->company_user_model->GetTableValue('users', 'name, email', $user_whereConditions);
+        
+                    if(!empty($user_data))
+                    {
+                        $randomUid = $this->generateRandomUid();
+                        $users_delete_data = [
+                            'update_key' => $randomUid,
+                            'customer_id' => $this->customer_id,
+                            'config_type' => 'user',
+                            'server_id' => $id,                        
+                            'created_by' => session('Taguser_id'),
+                            'utc_created_at' => date('Y-m-d H:i:s'),
+                            'local_created_at' => $this->local_date_time,
+                        ];
+
+                        $name = $user_data[0]['name'];
+                        $users_delete_data['delete_type'] = 'name';
+                        $users_delete_data['deleted_value']  = ($name) ? $name : null;
+                        $this->company_user_model->insert_data_postgresql('delete_audit_trail', $users_delete_data);
+
+                        $email = $user_data[0]['email'];
+                        $users_delete_data['delete_type'] = 'email';
+                        $users_delete_data['deleted_value']  = ($email) ? $email : null;
+                        $this->company_user_model->insert_data_postgresql('delete_audit_trail', $users_delete_data);
+                    }
+                    //Delete audit trail code end
                             
                     $data = [
                         'status' => 'deleted',
@@ -522,7 +553,7 @@ class company_user_controller extends BaseController
                         'updated_by' => $this->logged_user_id,               
                     ];
 
-                    $this->company_user_model->updateData('users', $role_whereConditions, $data);
+                    $this->company_user_model->updateData('users', $user_whereConditions, $data);
                     
                     //Number Of User Count Update Libraries
                     $this->number_of_user_update;   

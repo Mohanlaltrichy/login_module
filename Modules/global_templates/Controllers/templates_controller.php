@@ -8,15 +8,19 @@ use App\Controllers\BaseController;
 use PhpParser\Node\Expr\FuncCall;
 use DateTime;
 use DateTimeZone;
+use Ramsey\Uuid\Uuid;
 
 class templates_controller extends BaseController
 {
     protected $templates_model;
     protected $error_log;
+    protected $local_date_time;
 
     public function __construct()
     {
         $this->templates_model = new templates_model();
+        $customlibraries = new customlibraries();
+        $this->local_date_time = $customlibraries->local_date_time();  
         $this->error_log = new customlibraries();       
     }
 
@@ -481,6 +485,7 @@ class templates_controller extends BaseController
                 ];
                 $session->set($set_companyname);
 
+                $company_logo_path = null;
                 if ($logo->isValid()){
                     $imageData = $logo->getTempName();
                     $file = file_get_contents($imageData);
@@ -491,6 +496,7 @@ class templates_controller extends BaseController
                         ];
                         $session->set($set_logo);
                         $company_data['company_logo'] = $base64Image;
+                        $company_logo_path = $base64Image;
                 }elseif(session('firstlogo')){
                     $firstlogo = session('firstlogo');
 
@@ -499,6 +505,7 @@ class templates_controller extends BaseController
                         ];
                         $session->set($set_logo);
                         $company_data['company_logo'] = $firstlogo;
+                        $company_logo_path = $firstlogo;
                 }
 
                 $session->remove('firstlogo');
@@ -506,6 +513,175 @@ class templates_controller extends BaseController
                 $comp_update_where = [
                     'id' => session('Taguser_company'),
                 ];
+
+                
+                //Update Audit Trail Code Start
+                $old_comp_data = $this->templates_model->GetTableValue('tbl_companies', 'company_name, first_name, middle_name, last_name, company_address, city, state, country, time_zone, zipcode, company_email, company_phone, contact_mobile, company_website, gstn, company_logo', $comp_update_where);
+
+                if(!empty($old_comp_data))
+                {
+                    $old_company_name = ($old_comp_data[0]['company_name']) ? $old_comp_data[0]['company_name'] : null;
+                    $old_first_name = ($old_comp_data[0]['first_name']) ? $old_comp_data[0]['first_name'] : null;
+                    $old_middle_name = ($old_comp_data[0]['middle_name']) ? $old_comp_data[0]['middle_name'] : null;
+                    $old_last_name = ($old_comp_data[0]['last_name']) ? $old_comp_data[0]['last_name'] : null;
+                    $old_company_address = ($old_comp_data[0]['company_address']) ? $old_comp_data[0]['company_address'] : null;
+                    $old_city = ($old_comp_data[0]['city']) ? $old_comp_data[0]['city'] : null;
+                    $old_state = ($old_comp_data[0]['state']) ? $old_comp_data[0]['state'] : null;
+                    $old_country = ($old_comp_data[0]['country']) ? $old_comp_data[0]['country'] : null;
+                    $old_time_zone = ($old_comp_data[0]['time_zone']) ? $old_comp_data[0]['time_zone'] : null;
+                    $old_zipcode = ($old_comp_data[0]['zipcode']) ? $old_comp_data[0]['zipcode'] : null;
+                    $old_company_email = ($old_comp_data[0]['company_email']) ? $old_comp_data[0]['company_email'] : null;
+                    $old_company_phone = ($old_comp_data[0]['company_phone']) ? $old_comp_data[0]['company_phone'] : null;
+                    $old_contact_mobile = ($old_comp_data[0]['contact_mobile']) ? $old_comp_data[0]['contact_mobile'] : null;
+                    $old_company_website = $old_comp_data[0]['company_website'];
+                    $old_gstn = ($old_comp_data[0]['gstn']) ? $old_comp_data[0]['gstn'] : null;
+                    $old_company_logo = ($old_comp_data[0]['company_logo']) ? $old_comp_data[0]['company_logo'] : null;
+                }
+                else
+                {
+                    $old_company_name = '';
+                    $old_first_name = '';
+                    $old_middle_name = '';
+                    $old_last_name = '';
+                    $old_company_address = '';
+                    $old_city = '';
+                    $old_state =  '';
+                    $old_country =  '';
+                    $old_time_zone = '';
+                    $old_zipcode =  '';
+                    $old_company_email = '';
+                    $old_company_phone = '';
+                    $old_contact_mobile = '';
+                    $old_company_website = '';
+                    $old_gstn = '';
+                    $old_company_logo = '';
+                }
+
+                $randomUid = $this->generateRandomUid();
+
+                $company_update_audit_data = [
+                    'update_key' => $randomUid,
+                    'customer_id' => session('Taguser_company'),
+                    'config_type' => 'company',
+                    'server_id' => session('Taguser_company'),
+                    'update_type' => 'edit',
+                    'created_by' => session('Taguser_id'),
+                    'utc_created_at' => date('Y-m-d H:i:s'),
+                    'local_created_at' => $this->local_date_time,
+                ];
+
+                if (trim($company_name) != trim($old_company_name)) {
+                    $company_update_audit_data['update_field'] = 'company_name';
+                    $company_update_audit_data['old_value'] = ($old_company_name) ? $old_company_name : null;
+                    $company_update_audit_data['new_value'] = ($company_name) ? $company_name : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($firstname) != trim($old_first_name)) {
+                    $company_update_audit_data['update_field'] = 'first_name';
+                    $company_update_audit_data['old_value'] = ($old_first_name) ? $old_first_name : null;
+                    $company_update_audit_data['new_value'] = ($firstname) ? $firstname : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($middlename) != trim($old_middle_name)) {
+                    $company_update_audit_data['update_field'] = 'middle_name';
+                    $company_update_audit_data['old_value'] = ($old_middle_name) ? $old_middle_name : null;
+                    $company_update_audit_data['new_value'] = ($middlename) ? $middlename : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($lastname) != trim($old_last_name)) {
+                    $company_update_audit_data['update_field'] = 'last_name';
+                    $company_update_audit_data['old_value'] = ($old_last_name) ? $old_last_name : null;
+                    $company_update_audit_data['new_value'] = ($lastname) ? $lastname : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($address) != trim($old_company_address)) {
+                    $company_update_audit_data['update_field'] = 'company_address';
+                    $company_update_audit_data['old_value'] = ($old_company_address) ? $old_company_address : null;
+                    $company_update_audit_data['new_value'] = ($address) ? $address : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($city) != trim($old_city)) {
+                    $company_update_audit_data['update_field'] = 'city';
+                    $company_update_audit_data['old_value'] = ($old_city) ? $old_city : null;
+                    $company_update_audit_data['new_value'] = ($city) ? $city : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($state) != trim($old_state)) {
+                    $company_update_audit_data['update_field'] = 'state';
+                    $company_update_audit_data['old_value'] = ($old_state) ? $old_state : null;
+                    $company_update_audit_data['new_value'] = ($state) ? $state : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($country) != trim($old_country)) {
+                    $company_update_audit_data['update_field'] = 'state';
+                    $company_update_audit_data['old_value'] = ($old_country) ? $old_country : null;
+                    $company_update_audit_data['new_value'] = ($country) ? $country : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($zone) != trim($old_time_zone)) {
+                    $company_update_audit_data['update_field'] = 'time_zone';
+                    $company_update_audit_data['old_value'] = ($old_time_zone) ? $old_time_zone : null;
+                    $company_update_audit_data['new_value'] = ($zone) ? $zone : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($pincode) != trim($old_zipcode)) {
+                    $company_update_audit_data['update_field'] = 'zipcode';
+                    $company_update_audit_data['old_value'] = ($old_zipcode) ? $old_zipcode : null;
+                    $company_update_audit_data['new_value'] = ($pincode) ? $pincode : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($email_address) != trim($old_company_email)) {
+                    $company_update_audit_data['update_field'] = 'company_email';
+                    $company_update_audit_data['old_value'] = ($old_company_email) ? $old_company_email : null;
+                    $company_update_audit_data['new_value'] = ($email_address) ? $email_address : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($phone) != trim($old_company_phone)) {
+                    $company_update_audit_data['update_field'] = 'company_phone';
+                    $company_update_audit_data['old_value'] = ($old_company_phone) ? $old_company_phone : null;
+                    $company_update_audit_data['new_value'] = ($phone) ? $phone : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($mobile) != trim($old_contact_mobile)) {
+                    $company_update_audit_data['update_field'] = 'contact_mobile';
+                    $company_update_audit_data['old_value'] = ($old_contact_mobile) ? $old_contact_mobile : null;
+                    $company_update_audit_data['new_value'] = ($mobile) ? $mobile : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($website) != trim($old_company_website)) {
+                    $company_update_audit_data['update_field'] = 'company_website';
+                    $company_update_audit_data['old_value'] = ($old_company_website) ? $old_company_website : null;
+                    $company_update_audit_data['new_value'] = ($website) ? $website : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($gstn) != trim($old_gstn)) {
+                    $company_update_audit_data['update_field'] = 'gstn';
+                    $company_update_audit_data['old_value'] = ($old_gstn) ? $old_gstn : null;
+                    $company_update_audit_data['new_value'] = ($gstn) ? $gstn : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if (trim($company_logo_path) != trim($old_company_logo)) {
+                    $company_update_audit_data['update_field'] = 'company_logo';
+                    $company_update_audit_data['old_value'] = ($old_company_logo) ? $old_company_logo : null;
+                    $company_update_audit_data['new_value'] = ($company_logo_path) ? $company_logo_path : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }             
+                //Update Audit Trail Code End
 
                 $this->templates_model->updateData('tbl_companies', $comp_update_where, $company_data);
 
@@ -518,7 +694,7 @@ class templates_controller extends BaseController
                     'mobile' => $mobile,
                     'utc_updated_at' => date('Y-m-d H:i:s'),
                     'local_updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => '0',
+                    'updated_by' => session('Taguser_id'), 
                 ];
                 
                 $user_update_where = [
@@ -1885,5 +2061,21 @@ class templates_controller extends BaseController
             return redirect()->route('global_catch_error');
         }    
     }
-    //Mysql Error Message Send Code End    
+    //Mysql Error Message Send Code End   
+    
+    //Random UID Gen
+    function generateRandomUid() {
+
+        try{
+
+            $uuid = Uuid::uuid4();
+            $randomId = str_replace('-', '',$uuid->toString());
+            return $randomId;
+
+        } catch(\Exception $e){
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('global_templates\templates_controller',$currentURL,'generateRandomUid',$e->getMessage(), CODE_ERROR);
+            return redirect()->route('global_catch_error');  
+        }
+    }
 }
