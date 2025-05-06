@@ -675,7 +675,7 @@ class templates_controller extends BaseController
                     $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
                 }
 
-                if (trim($company_logo_path) != trim($old_company_logo)) {
+                if (trim($company_logo_path) != '' && trim($company_logo_path) != trim($old_company_logo)) {
                     $company_update_audit_data['update_field'] = 'company_logo';
                     $company_update_audit_data['old_value'] = ($old_company_logo) ? $old_company_logo : null;
                     $company_update_audit_data['new_value'] = ($company_logo_path) ? $company_logo_path : null;
