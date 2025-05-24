@@ -111,7 +111,7 @@ define('OPEN_ALERT_AND_NOTIFY','http://localhost:8001/user_login_key_validation/
 
 define('OPEN_DASHBOARD','http://localhost:9002/login/user_login_key_validation/');
 
-define('OPEN_REPORTS','http://localhost:3000/dashboard/report_login/');
+define('OPEN_REPORTS','http://localhost:3000/reports/dashboard/report_login/');
 
 define('OPEN_AI','http://localhost:9001/login/user_login_key_validation/');
 
