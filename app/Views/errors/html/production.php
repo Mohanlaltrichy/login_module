@@ -9,7 +9,7 @@
     <meta content="ThemeDesign" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <link rel="icon" href="<?php echo base_url(); ?>assets/images/logo-dark.svg" type="image/gif">
+    <link rel="icon" href="<?php echo base_url(); ?>assets/images/solware_fav.png" type="image/png">
 
         <?php
         echo view('\Modules\global_templates\Views\global_css_files'); // Global CSS File Included
@@ -20,26 +20,33 @@
 
     <body>
         <!-- Begin page -->
-        <div class="accountbg"></div>
-        <div class="wrapper-page card col-sm-12 row">
-            <div class="card-body ex-page-content text-center">
+        <div class="breatcumb-area d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breatcumb-content text-center">
+                            <div class="breatcumb-title ex-page-content text-center">
               
-                <h1 style='color:#6CBAFA;'><i class="mdi mdi-cloud-alert"></i></h1>
-                <h2 style='color:#6CBAFA;'>Ooops...</h2>
-                <h4 style='color:#413C3E;'>something went wrong</h4><br>    
+                            <h1 style='color:#FD7E14;'><i class="mdi mdi-cloud-alert"></i></h1>
+                            <h2 style='color:#FD7E14;'>Ooops...</h2>
+                            <h4 style='color:#413C3E;'>something went wrong</h4><br>    
 
-                <?php
-                if(!empty(session('Taglogged_in')))
-                {
-                    $back_url = 'dashboard';
-                }
-                else
-                {
-                    $back_url = 'login';
-                }
-                ?>
+                            <?php
+                            if(!empty(session('Taglogged_in')))
+                            {
+                                $back_url = 'dashboard';
+                            }
+                            else
+                            {
+                                $back_url = 'login';
+                            }
+                            ?>
 
-                <a class="btn btn-primary waves-effect waves-light" href="<?php echo $base_url.route_to($back_url)?>">Back</a>
+                             <a class="btn waves-effect waves-light" style='background-color:#FD7E14;color: white;' href="<?php echo $base_url.route_to($back_url)?>">BACK</a>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

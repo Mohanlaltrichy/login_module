@@ -98,6 +98,7 @@ class templates_model extends Model
             $builder = $this->mysqldb->table('error_exception_log');
             $builder->select('id,module_name,current_url,function_name,error_msg,utc_created_at');      
             $builder->where('mail_status',0);  
+            $builder->whereIn('module_name',array('shutdown_fatal','uncaught_throwable'));
             $builder->where('utc_created_at >=', $last_minutes);
             $builder->orderBy('id','desc');
             $result = $builder->get()->getResultArray();

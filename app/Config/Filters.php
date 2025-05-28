@@ -11,6 +11,7 @@ use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\loginfilter;
 use App\Filters\isloggedfilter;
 use App\Filters\exceptionhook;
+use App\Filters\fatalerrorfilter;
 
 class Filters extends BaseConfig
 {
@@ -27,6 +28,7 @@ class Filters extends BaseConfig
         'loginfilter'   => loginfilter::class,
         'isloggedfilter' => isloggedfilter::class,
         'exception'     => exceptionhook::class,
+        'fatallogger'   => fatalerrorfilter::class,
     ];
 
     /**
@@ -37,6 +39,7 @@ class Filters extends BaseConfig
         'before' => [
             // 'honeypot',
             'csrf' => ['except' => ['company_role/company_role_duplicate_check', 'company_role/roledelete', 'group/groupdelete', 'group/group_user_update', 'group/group_duplicate_check', 'templates/getnotification','templates/acknowledge_notification','api/number_of_tag_update','api/number_of_dashboard_template_update','api/number_of_historian_table_update','api/number_of_aggregator_update', 'api/number_of_parameter_count_update','api/number_of_reports_count_update','api/number_of_email_sms_count_update','api/number_of_count_get','api/number_of_count_get_laravel','api/company_page_access_log_laravel','api/number_of_ai_template_update','api/number_of_ai_prediction_update','company_user/notify_user_email_check']],
+            'fatallogger',
             // 'invalidchars',
         ],
         'after' => [
