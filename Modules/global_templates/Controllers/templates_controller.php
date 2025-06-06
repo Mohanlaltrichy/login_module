@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use DateTime;
 use DateTimeZone;
 use Ramsey\Uuid\Uuid;
+use App\Libraries\ses_secret_manager;
 
 class templates_controller extends BaseController
 {
@@ -2030,7 +2031,7 @@ class templates_controller extends BaseController
                 }                      
 
                 $message = json_encode($formattedData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);                  
-
+                ses_secret_manager::getCredentials();
                 $email = \Config\Services::email();
 
                 $email->setFrom(ERROR_MAIL_FROM_ADDRESS, MAIL_FROM_NAME);

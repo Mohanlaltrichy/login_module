@@ -124,6 +124,8 @@ define('MAIL_HOST','email-smtp.us-east-1.amazonaws.com');
 define('MAIL_PORT',587);
 define('MAIL_USERNAME','empty');
 define('MAIL_PASSWORD','empty');
+define('AWS_SECRET_ID','prod_solwareiiot_ses_smtp_credentials');
+define('AWS_SES_REGION', 'us-east-1');
 define('MAIL_ENCRYPTION','tls');
 define('ERROR_MAIL_FROM_ADDRESS','no-reply-erroralert@solwareiiot.com');
 define('MAIL_FROM_NAME','SolwareIIOT Error Alert');
