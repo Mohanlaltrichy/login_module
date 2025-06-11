@@ -86,19 +86,39 @@ class login_controller extends BaseController
 
                 if($verify_pass){
 
-                    $randomUid = $this->generateRandomUid();
-                    $key_valid_start_time = time();
-                    $key_expiry_time = $key_valid_start_time + 2 * 3600;
+                    $random_uid = $this->loginModel->user_login_key_check($userData['id']);
 
-                    $data = array(
-                        'user_id' => $userData['id'],
-                        'login_key' => $randomUid,
-                        'key_valid_start_time' => date('Y-m-d H:m:s', $key_valid_start_time),
-                        'key_expiry_time' => date('Y-m-d H:m:s',$key_expiry_time),
-                        'login_time' => date('Y-m-d H:m:s',time()),
-                    );
+                    if(!empty($random_uid))
+                    {
+                        $randomUid = $random_uid['login_key'];
+                    }
+                    else
+                    {
+                        $update_whereConditions = array(
+                            'logout_time' => null,
+                            'user_id' => $userData['id']                           
+                        );
 
-                    $this->loginModel->insertData('user_login_history',$data);
+                        $update_data = array(                           
+                            'logout_time' => date('Y-m-d H:i:s')                                          
+                        );
+
+                        $this->loginModel->updateData('user_login_history',$update_whereConditions,$update_data);
+                        
+                        $randomUid = $this->generateRandomUid();
+                        $key_valid_start_time = time();
+                        $key_expiry_time = $key_valid_start_time + 2 * 3600;
+
+                        $data = array(
+                            'user_id' => $userData['id'],
+                            'login_key' => $randomUid,
+                            'key_valid_start_time' => date('Y-m-d H:m:s', $key_valid_start_time),
+                            'key_expiry_time' => date('Y-m-d H:m:s',$key_expiry_time),
+                            'login_time' => date('Y-m-d H:m:s',time()),
+                        );
+
+                        $this->loginModel->insertData('user_login_history',$data);
+                    }
 
                     //Company Active Check Code Start
                     $userCompanyData = $this->loginModel->company_subscription_active_check($userData['company_id']);

@@ -16,6 +16,25 @@ class login_model extends Model
         $this->error_log = new customlibraries();       
     }
 
+    public function user_login_key_check($user_id = 0)
+    {
+        try {
+
+            $builder = $this->mysqldb->table('user_login_history');
+            $builder->select('login_key');      
+            $builder->where('user_id', $user_id);
+            $builder->where('logout_time', null);
+            $builder->where('key_expiry_time >', date('Y-m-d H:i:s'));
+            $result = $builder->get()->getRowArray();
+
+            return $result;
+
+       } catch (\Exception $e) {            
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('login\login_Model',$currentURL,'user_login_key_check',$e->getMessage(), MYSQL_ERROR);                       
+       }
+    }
+
     public function company_subscription_active_check($company_id = 0)
     {
         try {
@@ -112,6 +131,20 @@ class login_model extends Model
             $currentURL = current_url();            
             $this->error_log->error_exception_log('login\login_Model',$currentURL,'get_user_roles_details',$e->getMessage());
         }
-    }   
+    } 
+    
+    public function updateData($table = '',$update_whereConditions = array(), $data = array())
+    {
+        try {
+            $this->mysqldb->transException(true)->transStart();
+            $builder = $this->mysqldb->table($table);
+            $builder->where($update_whereConditions);
+            $builder->update($data);
+            $this->mysqldb->transComplete();
+        } catch (\Exception $e) {            
+            $currentURL = current_url();            
+            $this->error_log->error_exception_log('login\login_Model',$currentURL,'updateData',$e->getMessage(),MYSQL_ERROR);                      
+        }
+    }
 }
 ?>
