@@ -107,7 +107,7 @@ class login_controller extends BaseController
                         
                         $randomUid = $this->generateRandomUid();
                         $key_valid_start_time = time();
-                        $key_expiry_time = $key_valid_start_time + 2 * 3600;
+                        $key_expiry_time = $key_valid_start_time + 3600;
 
                         $data = array(
                             'user_id' => $userData['id'],
