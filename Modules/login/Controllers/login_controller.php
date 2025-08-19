@@ -112,9 +112,9 @@ class login_controller extends BaseController
                         $data = array(
                             'user_id' => $userData['id'],
                             'login_key' => $randomUid,
-                            'key_valid_start_time' => date('Y-m-d H:m:s', $key_valid_start_time),
-                            'key_expiry_time' => date('Y-m-d H:m:s',$key_expiry_time),
-                            'login_time' => date('Y-m-d H:m:s',time()),
+                            'key_valid_start_time' => date('Y-m-d H:i:s', $key_valid_start_time),
+                            'key_expiry_time' => date('Y-m-d H:i:s',$key_expiry_time),
+                            'login_time' => date('Y-m-d H:i:s',time()),
                         );
 
                         $this->loginModel->insertData('user_login_history',$data);
@@ -247,7 +247,7 @@ class login_controller extends BaseController
                 
                 if(!empty($user_login_key))
                 {
-                    if(date('Y-m-d H:m:s',time()) < $user_login_key['key_expiry_time'])
+                    if(date('Y-m-d H:i:s',time()) < $user_login_key['key_expiry_time'])
                     {                      
                         $user_login_whereConditions = [
                             'id' => $user_login_key['user_id'], 
