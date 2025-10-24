@@ -119,6 +119,8 @@ define('LOGO_PATH','D:/wamp/www/foresight_home/writable/');
 
 define('WORDPRESS_URL','http://3.110.35.56/documentation/overview/');
 
+define('OPEN_MODEL_BUILDER','http://localhost:8002/login/user_login_key_validation/');
+
 define('MAIL_MAILER','smtp');
 define('MAIL_HOST','email-smtp.us-east-1.amazonaws.com');
 define('MAIL_PORT',587);
