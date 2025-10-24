@@ -193,13 +193,19 @@ class login_controller extends BaseController
                                     'ai_prediction_module_view' => $ai_prediction_module_view,                                    
                                 );
                             }
+                            else if($active_page['feature_list'] == 'Model Builder')
+                            {
+                                $ai_prediction_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                                $ses_active_page_data[] = array(
+                                    'model_builder_module_view' => $ai_prediction_module_view,                                    
+                                );
+                            }
                         }
 
                         $module_page_mergedArray = [];
                         foreach ($ses_active_page_data as $subArray) {
                             $module_page_mergedArray = array_merge($module_page_mergedArray, $subArray);
                         }
-
                         session()->set($module_page_mergedArray);
                     }                    
                     
@@ -507,6 +513,13 @@ class login_controller extends BaseController
                             'ai_prediction_module_view' => $ai_prediction_module_view,                                    
                         );
                     }
+                    else if ($active_page['feature_list'] == 'Model Builder') {
+                        $ai_prediction_module_view = ($active_page['subscription_plan_value'] == 'Y') ? '1' : '0';
+                        $ses_active_page_data[] = array(
+                            'model_builder_module_view' => $ai_prediction_module_view,
+                        );
+                    }
+                    
                 }
 
                 $module_page_mergedArray = [];

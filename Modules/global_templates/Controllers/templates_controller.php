@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\global_templates\Controllers;
+
 use Modules\global_templates\Models\templates_model;
 use App\Libraries\customlibraries;
 use App\Helpers\Validationrules;
@@ -21,17 +22,16 @@ class templates_controller extends BaseController
     {
         $this->templates_model = new templates_model();
         $customlibraries = new customlibraries();
-        $this->local_date_time = $customlibraries->local_date_time();  
-        $this->error_log = new customlibraries();       
+        $this->local_date_time = $customlibraries->local_date_time();
+        $this->error_log = new customlibraries();
     }
 
     //Header 
     public function global_header()
     {
-        try
-        {
+        try {
             return view("\Modules\global_templates\Views\global_header");
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'global_header', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
@@ -40,31 +40,29 @@ class templates_controller extends BaseController
 
     //Footer
     public function global_footer($type = '')
-	{
-        try
-        {
+    {
+        try {
             $data = [
-                'type' => $type,                      
+                'type' => $type,
             ];
-            
-            return view("\Modules\global_templates\Views\global_footer",$data);
-        }catch(\Exception $e){
+
+            return view("\Modules\global_templates\Views\global_footer", $data);
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'global_footer', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
         }
-	}
+    }
 
     //Global Error Page
     public function global_error_page()
     {
-        try
-        {
+        try {
             $data = [
                 "error" => "404_error",
             ];
-            return view("\Modules\global_templates\Views\global_error_page",$data);
-        }catch(\Exception $e){
+            return view("\Modules\global_templates\Views\global_error_page", $data);
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'global_error_page', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
@@ -73,11 +71,10 @@ class templates_controller extends BaseController
 
     //Global Forbidden Page
     public function global_forbidden_page()
-    {        
-        try
-        {
+    {
+        try {
             return view("\Modules\global_templates\Views\global_forbidden_page");
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'global_forbidden_page', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
@@ -87,13 +84,12 @@ class templates_controller extends BaseController
     //Global Catch Error Page
     public function global_catch_error()
     {
-        try
-        {
+        try {
             $data = [
                 "error" => "catch_error",
             ];
-            return view("\Modules\global_templates\Views\global_error_page",$data);
-        }catch(\Exception $e){
+            return view("\Modules\global_templates\Views\global_error_page", $data);
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'global_catch_error', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
@@ -103,10 +99,9 @@ class templates_controller extends BaseController
     //Global CSS Files
     public function global_css_files()
     {
-        try
-        {
+        try {
             return view("\Modules\global_templates\Views\global_css_files");
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'global_css_files', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
@@ -116,113 +111,103 @@ class templates_controller extends BaseController
     //Global JS Files
     public function global_js_files()
     {
-        try
-        {
+        try {
             return view("\Modules\global_templates\Views\global_js_files");
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'global_js_files', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
-        } 
-    }  
-    
+        }
+    }
+
     //Global Alert Msg
     public function global_alert_msg($data = array())
     {
-        try
-        {
+        try {
             $data = [
                 'message' => $data['message'],
                 'message2' => $data['message2'],
-                'type' => $data['type'],            
+                'type' => $data['type'],
             ];
 
-        return view("\Modules\global_templates\Views\global_alert_msg", $data);
-        
-        }catch(\Exception $e){
+            return view("\Modules\global_templates\Views\global_alert_msg", $data);
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'global_alert_msg', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
-        } 
+        }
     }
 
     //Dashboard
-    public function dashboard() {
+    public function dashboard()
+    {
 
-        try
-        {
-            if(empty(session('Taglogged_in')))
-            {   
+        try {
+            if (empty(session('Taglogged_in'))) {
                 return redirect()->route('login');
             }
 
             $user_whereConditions = [
-                'user_id' => session('Taguser_id'),                             
+                'user_id' => session('Taguser_id'),
             ];
-            
-            $user_details = $this->templates_model->GetTableValue('user_login_history', 'login_key', $user_whereConditions,'','','','id','desc');
 
-            if(!empty($user_details))
-            {
+            $user_details = $this->templates_model->GetTableValue('user_login_history', 'login_key', $user_whereConditions, '', '', '', 'id', 'desc');
+
+            if (!empty($user_details)) {
                 $data = array(
                     'login_key' => ($user_details[0]['login_key']) ? $user_details[0]['login_key'] : '',
-                    'user_id' => session('Taguser_id'), 
+                    'user_id' => session('Taguser_id'),
                 );
-            }
-            else
-            {
+            } else {
                 $data = array(
                     'login_key' => '',
-                    'user_id' => session('Taguser_id'), 
+                    'user_id' => session('Taguser_id'),
                 );
             }
 
-            return view("\Modules\global_templates\Views\dashboard",$data);  
-        }catch(\Exception $e){
+            return view("\Modules\global_templates\Views\dashboard", $data);
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'dashboard', $e->getMessage());
             return redirect()->route('global_catch_error');
-        }      
-    } 
+        }
+    }
 
     public function getnotification()
     {
-        try
-        {
-            if ($this->request->isAJAX()) {             
+        try {
+            if ($this->request->isAJAX()) {
 
                 $last_date_time = date('Y-m-d h:m:s', strtotime('-1 hour'));
 
-                $data = $this->templates_model->get_notification($last_date_time);       
-        
+                $data = $this->templates_model->get_notification($last_date_time);
+
                 return $this->response->setJSON($data);
             }
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'getnotification', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
-    }  
-    
+    }
+
     public function get_all_notification()
     {
-        try
-        {        
-            if(session('alert_notification_add_view') != '1') {
+        try {
+            if (session('alert_notification_add_view') != '1') {
                 return redirect()->route('forbidden_error');
-            }               
+            }
 
             $last_date_time = date('Y-m-d h:m:s', strtotime('-48 hour'));
 
-            $all_notification = $this->templates_model->get_notification($last_date_time);   
+            $all_notification = $this->templates_model->get_notification($last_date_time);
 
             $data = array(
                 'all_notification' => $all_notification,
             );
-           
-            return view("\Modules\global_templates\Views\all_notification",$data); 
-            
-        }catch(\Exception $e){
+
+            return view("\Modules\global_templates\Views\all_notification", $data);
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'get_all_notification', $e->getMessage());
             return redirect()->route('global_catch_error');
@@ -230,29 +215,28 @@ class templates_controller extends BaseController
     }
     public function edit_company()
     {
-        try
-        {
+        try {
             $comp_where = [
-                'id' => session('Taguser_company'), 
+                'id' => session('Taguser_company'),
             ];
 
             $comp_data = $this->templates_model->GetTableValue('tbl_companies', '*', $comp_where);
-            
+
             $user_where = [
-                'company_id' => session('Taguser_company'), 
+                'company_id' => session('Taguser_company'),
             ];
 
             $user_data = $this->templates_model->GetTableValue('users', 'first_name,last_name,email,mobile', $user_where);
-            $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'id,name','','name');
+            $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'id,name', '', 'name');
 
             $data = array(
                 'comp_data' => $comp_data,
                 'user_data' => $user_data,
                 'countries' => $countries,
             );
-            
-            return view("\Modules\global_templates\Views/edit_company",$data); 
-        }catch(\Exception $e){
+
+            return view("\Modules\global_templates\Views/edit_company", $data);
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'edit_company', $e->getMessage());
             return redirect()->route('global_catch_error');
@@ -261,8 +245,7 @@ class templates_controller extends BaseController
 
     public function get_states()
     {
-        try
-        {
+        try {
             $country_id = $this->request->getGet('country_id');
             $country_name = $this->request->getGet('country_name');
 
@@ -270,28 +253,25 @@ class templates_controller extends BaseController
                 'country_id' => $country_id,
             ];
 
-            $states = $this->templates_model->GetTableValue('states', 'id,name', $state_where, [], 'id,name','','name');
+            $states = $this->templates_model->GetTableValue('states', 'id,name', $state_where, [], 'id,name', '', 'name');
 
             $zone_where = [
                 'country' => $country_name,
             ];
 
-            $zones = $this->templates_model->GetTableValue('timezone', 'time_zone', $zone_where,  $zone_where, [], ['time_zone'],'time_zone','asc');
+            $zones = $this->templates_model->GetTableValue('timezone', 'time_zone', $zone_where,  $zone_where, [], ['time_zone'], 'time_zone', 'asc');
 
-            $data = array('states' => $states , 'zones'=> $zones);
+            $data = array('states' => $states, 'zones' => $zones);
             return response()->setJSON($data);
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'get_states', $e->getMessage());
             return redirect()->route('global_catch_error');
         }
-
     }
     public function get_cities()
     {
-        try
-        {
+        try {
             $stat_name = $this->request->getGet('state_id');
 
             $state_where = [
@@ -307,10 +287,10 @@ class templates_controller extends BaseController
                 'state_id' => $states[0]['id'],
             ];
 
-            $cities = $this->templates_model->GetTableValue('cities', 'id,name', $city_where, [], 'id,name','','name');
+            $cities = $this->templates_model->GetTableValue('cities', 'id,name', $city_where, [], 'id,name', '', 'name');
 
             return response()->setJSON(['cities' => $cities]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'get_cities', $e->getMessage());
             return redirect()->route('global_catch_error');
@@ -321,7 +301,7 @@ class templates_controller extends BaseController
     {
         try {
 
-            if ($this->request->getMethod() == "post") {
+            if ($this->request->getMethod() == "POST") {
 
                 $session = session();
 
@@ -364,7 +344,7 @@ class templates_controller extends BaseController
                     ]
                 ];
 
-                $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'id,name','','name');
+                $countries = $this->templates_model->GetTableValue('countries', 'id,name', [], [], 'id,name', '', 'name');
 
                 $comp_data[0] = array(
                     'company_name' => $company_name,
@@ -400,18 +380,18 @@ class templates_controller extends BaseController
 
                 // if (!$validation->setRules($rules)->withRequest($this->request)->run()) {
                 if (!$this->validate($rules)) {
-                    if ($logo->isValid()){
+                    if ($logo->isValid()) {
                         $imageData = $logo->getTempName();
                         $file = file_get_contents($imageData);
                         $base64Image = base64_encode($file);
-    
-                            $set_logo = [
-                                'firstlogo'     => $base64Image
-                            ];
-                            $session->set($set_logo);
+
+                        $set_logo = [
+                            'firstlogo'     => $base64Image
+                        ];
+                        $session->set($set_logo);
                     }
                     $session->setFlashdata('msg', $validation->getErrors());
-                    return view("\Modules\global_templates\Views/edit_company",$data); 
+                    return view("\Modules\global_templates\Views/edit_company", $data);
                 }
 
                 $company_name_check = [
@@ -423,7 +403,7 @@ class templates_controller extends BaseController
                 ];
 
                 $comp_data_check = $this->templates_model->GetTableValue('tbl_companies', 'id', $company_name_check, $or_where);
-      
+
                 $user_where = [
                     'mobile' => $mobile
                 ];
@@ -431,32 +411,32 @@ class templates_controller extends BaseController
                 $user_email_check = $this->templates_model->GetTableValue('users', 'id', $user_where);
 
                 if (count($comp_data_check) > 1) {
-                    if ($logo->isValid()){
+                    if ($logo->isValid()) {
                         $imageData = $logo->getTempName();
                         $file = file_get_contents($imageData);
                         $base64Image = base64_encode($file);
-    
-                            $set_logo = [
-                                'firstlogo'     => $base64Image
-                            ];
-                            $session->set($set_logo);
+
+                        $set_logo = [
+                            'firstlogo'     => $base64Image
+                        ];
+                        $session->set($set_logo);
                     }
                     $session->setFlashdata('msg', 'Company name or Email already found');
-                    return view("\Modules\global_templates\Views/edit_company",$data); 
+                    return view("\Modules\global_templates\Views/edit_company", $data);
                 }
                 if (count($user_email_check) > 1 && $mobile != $old_mobile) {
-                    if ($logo->isValid()){
+                    if ($logo->isValid()) {
                         $imageData = $logo->getTempName();
                         $file = file_get_contents($imageData);
                         $base64Image = base64_encode($file);
-    
-                            $set_logo = [
-                                'firstlogo'     => $base64Image
-                            ];
-                            $session->set($set_logo);
+
+                        $set_logo = [
+                            'firstlogo'     => $base64Image
+                        ];
+                        $session->set($set_logo);
                     }
                     $session->setFlashdata('msg', 'Contact mobile number already found');
-                    return view("\Modules\global_templates\Views/edit_company",$data); 
+                    return view("\Modules\global_templates\Views/edit_company", $data);
                 }
 
                 $company_data = [
@@ -478,7 +458,7 @@ class templates_controller extends BaseController
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => session('Taguser_id'),
                 ];
-               
+
                 $set_companyname = [
                     'company_name'     => $company_name,
                     'Taguser_name'     => $firstname,
@@ -487,26 +467,26 @@ class templates_controller extends BaseController
                 $session->set($set_companyname);
 
                 $company_logo_path = null;
-                if ($logo->isValid()){
+                if ($logo->isValid()) {
                     $imageData = $logo->getTempName();
                     $file = file_get_contents($imageData);
                     $base64Image = base64_encode($file);
 
-                        $set_logo = [
-                            'logo'     => $base64Image
-                        ];
-                        $session->set($set_logo);
-                        $company_data['company_logo'] = $base64Image;
-                        $company_logo_path = $base64Image;
-                }elseif(session('firstlogo')){
+                    $set_logo = [
+                        'logo'     => $base64Image
+                    ];
+                    $session->set($set_logo);
+                    $company_data['company_logo'] = $base64Image;
+                    $company_logo_path = $base64Image;
+                } elseif (session('firstlogo')) {
                     $firstlogo = session('firstlogo');
 
-                        $set_logo = [
-                            'logo'     => $firstlogo
-                        ];
-                        $session->set($set_logo);
-                        $company_data['company_logo'] = $firstlogo;
-                        $company_logo_path = $firstlogo;
+                    $set_logo = [
+                        'logo'     => $firstlogo
+                    ];
+                    $session->set($set_logo);
+                    $company_data['company_logo'] = $firstlogo;
+                    $company_logo_path = $firstlogo;
                 }
 
                 $session->remove('firstlogo');
@@ -515,12 +495,11 @@ class templates_controller extends BaseController
                     'id' => session('Taguser_company'),
                 ];
 
-                
+
                 //Update Audit Trail Code Start
                 $old_comp_data = $this->templates_model->GetTableValue('tbl_companies', 'company_name, first_name, middle_name, last_name, company_address, city, state, country, time_zone, zipcode, company_email, company_phone, contact_mobile, company_website, gstn, company_logo', $comp_update_where);
 
-                if(!empty($old_comp_data))
-                {
+                if (!empty($old_comp_data)) {
                     $old_company_name = ($old_comp_data[0]['company_name']) ? $old_comp_data[0]['company_name'] : null;
                     $old_first_name = ($old_comp_data[0]['first_name']) ? $old_comp_data[0]['first_name'] : null;
                     $old_middle_name = ($old_comp_data[0]['middle_name']) ? $old_comp_data[0]['middle_name'] : null;
@@ -537,9 +516,7 @@ class templates_controller extends BaseController
                     $old_company_website = $old_comp_data[0]['company_website'];
                     $old_gstn = ($old_comp_data[0]['gstn']) ? $old_comp_data[0]['gstn'] : null;
                     $old_company_logo = ($old_comp_data[0]['company_logo']) ? $old_comp_data[0]['company_logo'] : null;
-                }
-                else
-                {
+                } else {
                     $old_company_name = '';
                     $old_first_name = '';
                     $old_middle_name = '';
@@ -681,7 +658,7 @@ class templates_controller extends BaseController
                     $company_update_audit_data['old_value'] = ($old_company_logo) ? $old_company_logo : null;
                     $company_update_audit_data['new_value'] = ($company_logo_path) ? $company_logo_path : null;
                     $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
-                }             
+                }
                 //Update Audit Trail Code End
 
                 $this->templates_model->updateData('tbl_companies', $comp_update_where, $company_data);
@@ -695,9 +672,9 @@ class templates_controller extends BaseController
                     'mobile' => $mobile,
                     'utc_updated_at' => date('Y-m-d H:i:s'),
                     'local_updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => session('Taguser_id'), 
+                    'updated_by' => session('Taguser_id'),
                 ];
-                
+
                 $user_update_where = [
                     'company_id' => session('Taguser_company'),
                 ];
@@ -716,9 +693,9 @@ class templates_controller extends BaseController
 
     public function acknowledge_notification()
     {
-        try{
+        try {
 
-            if ($this->request->isAJAX()) { 
+            if ($this->request->isAJAX()) {
 
                 $selectedIds = $this->request->getPost("selectedIds");
 
@@ -726,16 +703,15 @@ class templates_controller extends BaseController
                     "acknowledge" => 1
                 );
 
-                $this->templates_model->updateData_whereIn('alert_notification','id',$selectedIds, $update_data);
+                $this->templates_model->updateData_whereIn('alert_notification', 'id', $selectedIds, $update_data);
 
-                $result = array( 
-                    "status" => 'success', 
-                    "status_msg" => 'Update Successfully', 
-                );  
+                $result = array(
+                    "status" => 'success',
+                    "status_msg" => 'Update Successfully',
+                );
                 return $this->response->setJSON($result);
             }
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'acknowledge_notification', $e->getMessage());
             return redirect()->route('global_catch_error');
@@ -745,480 +721,412 @@ class templates_controller extends BaseController
     //Number Of Tag Added Count Update Code Start
     public function number_of_tag_update()
     {
-        try{
-            $data = $this->request->getPost();       
+        try {
+            $data = $this->request->getPost();
 
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $login_key  = $data['login_key'];
-            
             } else {
                 $company_id = $data['company_id'];
                 $login_key  = '';
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
-                    $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
-                        $login_key_verify_pass = $userData[0]['id'];
-                    }                               
-                }
-            }
-            else
-            {
-                $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
-            }    
-            
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
 
-            if($login_key_verify_pass != ''){ 
+                if (!empty($user_login_key)) {
+                    $user_login_whereConditions = [
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
+                        $login_key_verify_pass = $userData[0]['id'];
+                    }
+                }
+            } else {
+                $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+            }
+
+
+            if ($login_key_verify_pass != '') {
 
                 $cutomer_whereConditions = [
-                    'customer_id' => $company_id,                            
+                    'customer_id' => $company_id,
                 ];
 
-                $opc_nodes_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('opc_nodes','id',$cutomer_whereConditions);
-                $opc_events_property_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('events_sub_property','id',$cutomer_whereConditions);
-                $opc_history_data_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('opc_history_data','id',$cutomer_whereConditions);
-                $opc_history_event_property_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('history_event_property','id',$cutomer_whereConditions);
+                $opc_nodes_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('opc_nodes', 'id', $cutomer_whereConditions);
+                $opc_events_property_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('events_sub_property', 'id', $cutomer_whereConditions);
+                $opc_history_data_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('opc_history_data', 'id', $cutomer_whereConditions);
+                $opc_history_event_property_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('history_event_property', 'id', $cutomer_whereConditions);
 
-                $mqtt_device_node_mapping_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('mqtt_device_node_mapping','id',$cutomer_whereConditions);
-                $mqtt_device_event_mapping_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('mqtt_device_event_mapping','id',$cutomer_whereConditions);
+                $mqtt_device_node_mapping_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('mqtt_device_node_mapping', 'id', $cutomer_whereConditions);
+                $mqtt_device_event_mapping_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('mqtt_device_event_mapping', 'id', $cutomer_whereConditions);
 
-                $http_node_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('http_node','id',$cutomer_whereConditions);
-                $http_event_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('http_event','id',$cutomer_whereConditions);
+                $http_node_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('http_node', 'id', $cutomer_whereConditions);
+                $http_event_count_check =  $this->templates_model->GetTableValue_whereIn_pgsql('http_event', 'id', $cutomer_whereConditions);
 
-                if(!empty(array_filter($opc_nodes_count_check)))
-                {
+                if (!empty(array_filter($opc_nodes_count_check))) {
                     $opc_nodes_ids = array_column($opc_nodes_count_check, 'id');
                     $opc_nodes_count = count($opc_nodes_ids);
-                }
-                else
-                {
+                } else {
                     $opc_nodes_count = 0;
-                } 
+                }
 
-                if(!empty(array_filter($opc_events_property_count_check)))
-                {
+                if (!empty(array_filter($opc_events_property_count_check))) {
                     $opc_events_ids = array_column($opc_events_property_count_check, 'id');
                     $opc_events_count = count($opc_events_ids);
-                }
-                else
-                {
+                } else {
                     $opc_events_count = 0;
-                } 
+                }
 
-                if(!empty(array_filter($opc_history_data_count_check)))
-                {
+                if (!empty(array_filter($opc_history_data_count_check))) {
                     $opc_history_data_ids = array_column($opc_history_data_count_check, 'id');
                     $opc_history_data_count = count($opc_history_data_ids);
-                }
-                else
-                {
+                } else {
                     $opc_history_data_count = 0;
                 }
 
-                if(!empty(array_filter($opc_history_event_property_count_check)))
-                {
+                if (!empty(array_filter($opc_history_event_property_count_check))) {
                     $opc_history_event_ids = array_column($opc_history_event_property_count_check, 'id');
                     $opc_history_event_count = count($opc_history_event_ids);
-                }
-                else
-                {
+                } else {
                     $opc_history_event_count = 0;
                 }
 
-                if(!empty(array_filter($mqtt_device_node_mapping_count_check)))
-                {
+                if (!empty(array_filter($mqtt_device_node_mapping_count_check))) {
                     $mqtt_device_node_ids = array_column($mqtt_device_node_mapping_count_check, 'id');
                     $mqtt_device_node_count = count($mqtt_device_node_ids);
-                }
-                else
-                {
+                } else {
                     $mqtt_device_node_count = 0;
                 }
 
-                if(!empty(array_filter($mqtt_device_event_mapping_count_check)))
-                {
+                if (!empty(array_filter($mqtt_device_event_mapping_count_check))) {
                     $mqtt_device_event_ids = array_column($mqtt_device_event_mapping_count_check, 'id');
                     $mqtt_device_event_count = count($mqtt_device_event_ids);
-                }
-                else
-                {
+                } else {
                     $mqtt_device_event_count = 0;
                 }
 
-                if(!empty(array_filter($http_node_count_check)))
-                {
+                if (!empty(array_filter($http_node_count_check))) {
                     $http_node_ids = array_column($http_node_count_check, 'id');
                     $http_node_count = count($http_node_ids);
-                }
-                else
-                {
+                } else {
                     $http_node_count = 0;
                 }
 
-                if(!empty(array_filter($http_event_count_check)))
-                {
+                if (!empty(array_filter($http_event_count_check))) {
                     $http_event_ids = array_column($http_event_count_check, 'id');
                     $http_event_count = count($http_event_ids);
-                }
-                else
-                {
+                } else {
                     $http_event_count = 0;
-                }            
+                }
 
-                $tag_added_count = $opc_nodes_count+$opc_events_count+$opc_history_data_count+$opc_history_event_count+$mqtt_device_node_count+$mqtt_device_event_count+$http_node_count+$http_event_count;
+                $tag_added_count = $opc_nodes_count + $opc_events_count + $opc_history_data_count + $opc_history_event_count + $mqtt_device_node_count + $mqtt_device_event_count + $http_node_count + $http_event_count;
 
                 $company_feature_log_whereConditions = [
-                    'company_id' => $company_id,                
-                    'module_id' => 14,                                   
+                    'company_id' => $company_id,
+                    'module_id' => 14,
                 ];
 
-                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
-                
+                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
+
                 $company_feature_log_update_whereConditions = [
-                    'id' => $company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $company_feature_log_check[0]['id'],
+                ];
 
                 $company_feature_log_data = array(
                     'user_add_count' => $tag_added_count,
                 );
 
-                $tag_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);            
-                
+                $tag_count_store = $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $company_feature_log_data);
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'receivedData' => $tag_count_store
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'receivedData' => ''
                 ]);
-            }  
-        }catch(\Exception $e){
+            }
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_tag_update', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
-        }      
+        }
     }
     //Number Of Tag Added Count Update Code End   
 
     //Number Of Historian Table Count Add/Update Code Start
     public function number_of_historian_table_update()
     {
-        try
-        {
-            $data = $this->request->getPost();       
+        try {
+            $data = $this->request->getPost();
 
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $login_key  = $data['login_key'];
-            
             } else {
                 $company_id = $data['company_id'];
                 $login_key  = '';
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
+
+                if (!empty($user_login_key)) {
                     $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
                         $login_key_verify_pass = $userData[0]['id'];
-                    }                               
+                    }
                 }
-            }
-            else
-            {
+            } else {
                 $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
             }
 
-            if($login_key_verify_pass != ''){
+            if ($login_key_verify_pass != '') {
 
                 $customer_tabledata_whereConditions = [
-                    'customer_id' =>$company_id,  
-                    'status' => 'Y'         
-                ];   
+                    'customer_id' => $company_id,
+                    'status' => 'Y'
+                ];
 
                 $customer_table_name = $this->templates_model->GetTableValue_whereIn_pgsql('tag_config', 'id', $customer_tabledata_whereConditions);
 
-                if(!empty(array_filter($customer_table_name)))
-                {
+                if (!empty(array_filter($customer_table_name))) {
                     $table_ids = array_column($customer_table_name, 'id');
                     $historian_table_count = count($table_ids);
-                }
-                else
-                {
+                } else {
                     $historian_table_count = 0;
-                }                        
+                }
 
                 $company_feature_log_whereConditions = [
                     'company_id' => $company_id,
-                    'module_id' => 15,                                   
+                    'module_id' => 15,
                 ];
 
-                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
+                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
 
-            
+
                 $company_feature_log_update_whereConditions = [
-                    'id' => $company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $company_feature_log_check[0]['id'],
+                ];
 
                 $company_feature_log_data = array(
                     'user_add_count' => $historian_table_count,
                 );
 
-                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
-                
+                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $company_feature_log_data);
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'receivedData' => $dashboard_count_store
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'receivedData' => ''
                 ]);
             }
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_historian_table_update', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
-        }  
+        }
     }
     //Number Of Historian Table Count Add/Update Code End
 
     //Number Of Aggregator Count Add/Update Code Start
     public function number_of_aggregator_update()
     {
-        try
-        {
-            $data = $this->request->getPost();       
+        try {
+            $data = $this->request->getPost();
 
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $login_key  = $data['login_key'];
-            
             } else {
                 $company_id = $data['company_id'];
                 $login_key  = '';
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
+
+                if (!empty($user_login_key)) {
                     $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
                         $login_key_verify_pass = $userData[0]['id'];
-                    }                               
+                    }
                 }
-            }
-            else
-            {
+            } else {
                 $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
             }
 
-            if($login_key_verify_pass != ''){
+            if ($login_key_verify_pass != '') {
 
                 $aggregator_whereConditions = [
-                    'customer_id' =>$company_id,                         
-                ];   
+                    'customer_id' => $company_id,
+                ];
 
                 $aggregator_ids = $this->templates_model->GetTableValue_whereIn_pgsql('cont_aggre_config', 'id', $aggregator_whereConditions);
 
-                if(!empty(array_filter($aggregator_ids)))
-                {
+                if (!empty(array_filter($aggregator_ids))) {
                     $agg_ids = array_column($aggregator_ids, 'id');
                     $aggregator_count = count($agg_ids);
-                }
-                else
-                {
+                } else {
                     $aggregator_count = 0;
-                }                        
+                }
 
                 $company_feature_log_whereConditions = [
                     'company_id' => $company_id,
-                    'module_id' => 34,                                   
+                    'module_id' => 34,
                 ];
 
-                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
+                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
 
-            
+
                 $company_feature_log_update_whereConditions = [
-                    'id' => $company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $company_feature_log_check[0]['id'],
+                ];
 
                 $company_feature_log_data = array(
                     'user_add_count' => $aggregator_count,
                 );
 
-                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
-                
+                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $company_feature_log_data);
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'receivedData' => $dashboard_count_store
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'receivedData' => ''
                 ]);
             }
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
-            $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_aggregator_update', $e->getMessage(),CODE_ERROR);
+            $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_aggregator_update', $e->getMessage(), CODE_ERROR);
             return redirect()->route('global_catch_error');
-        } 
+        }
     }
     //Number Of Aggregator Count Add/Update Code End
 
     //Number Of AI Template Count Add/Update Code Start
     public function number_of_ai_template_update()
     {
-        try
-        {
-            $data = $this->request->getPost();  
-            
+        try {
+            $data = $this->request->getPost();
+
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $login_key  = $data['login_key'];
-            
             } else {
                 $company_id = $data['company_id'];
                 $login_key  = '';
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
+
+                if (!empty($user_login_key)) {
                     $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
                         $login_key_verify_pass = $userData[0]['id'];
-                    }                               
+                    }
                 }
-            }
-            else
-            {
+            } else {
                 $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
             }
 
-            if($login_key_verify_pass != ''){
+            if ($login_key_verify_pass != '') {
 
                 $ai_template_whereConditions = [
-                    'customer_id' =>$company_id,                         
-                ];   
+                    'customer_id' => $company_id,
+                ];
 
                 $ai_template_ids = $this->templates_model->GetTableValue_whereIn_pgsql('ai_create_model', 'id', $ai_template_whereConditions);
 
-                if(!empty(array_filter($ai_template_ids)))
-                {
+                if (!empty(array_filter($ai_template_ids))) {
                     $ai_ids = array_column($ai_template_ids, 'id');
                     $ai_template_count = count($ai_ids);
-                }
-                else
-                {
+                } else {
                     $ai_template_count = 0;
-                }                        
+                }
 
                 $company_feature_log_whereConditions = [
                     'company_id' => $company_id,
-                    'module_id' => 31,                                   
+                    'module_id' => 31,
                 ];
 
                 $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
-            
+
                 $company_feature_log_update_whereConditions = [
-                    'id' => $company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $company_feature_log_check[0]['id'],
+                ];
 
                 $company_feature_log_data = array(
                     'user_add_count' => $ai_template_count,
                 );
 
-                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
-                
+                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $company_feature_log_data);
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'receivedData' => $dashboard_count_store
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'receivedData' => ''
                 ]);
             }
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_ai_template_update', $e->getMessage());
             return redirect()->route('global_catch_error');
@@ -1229,91 +1137,79 @@ class templates_controller extends BaseController
     //Number Of AI Prediction Count Add/Update Code Start
     public function number_of_ai_prediction_update()
     {
-        try
-        {
-            $data = $this->request->getPost();  
+        try {
+            $data = $this->request->getPost();
 
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $login_key  = $data['login_key'];
-            
             } else {
                 $company_id = $data['company_id'];
                 $login_key  = '';
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
+
+                if (!empty($user_login_key)) {
                     $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
                         $login_key_verify_pass = $userData[0]['id'];
-                    }                               
+                    }
                 }
-            }
-            else
-            {
+            } else {
                 $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
             }
 
-            if($login_key_verify_pass != ''){
+            if ($login_key_verify_pass != '') {
 
                 $company_feature_log_whereConditions = [
                     'company_id' => $company_id,
-                    'module_id' => 32,                                   
+                    'module_id' => 32,
                 ];
 
                 $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
-            
-                if(!empty(array_filter($company_feature_log_check)))
-                {
+
+                if (!empty(array_filter($company_feature_log_check))) {
                     $ai_ids = array_column($company_feature_log_check, 'id');
                     $ai_prediction_count = count($ai_ids);
-                }
-                else
-                {
+                } else {
                     $ai_prediction_count = 0;
-                }                        
+                }
 
 
                 $company_feature_log_update_whereConditions = [
-                    'id' => $company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $company_feature_log_check[0]['id'],
+                ];
 
                 $company_feature_log_data = array(
-                    'user_add_count' => $ai_prediction_count+1,
+                    'user_add_count' => $ai_prediction_count + 1,
                 );
 
-                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
-                
+                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $company_feature_log_data);
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'receivedData' => $dashboard_count_store
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'receivedData' => ''
                 ]);
             }
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_ai_prediction_update', $e->getMessage());
             return redirect()->route('global_catch_error');
@@ -1324,320 +1220,285 @@ class templates_controller extends BaseController
     //Number Of Dashboard Template Count Add/Update Code Start
     public function number_of_dashboard_template_update()
     {
-        try
-        {
-            $data = $this->request->getPost();       
+        try {
+            $data = $this->request->getPost();
 
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $login_key  = $data['login_key'];
-            
             } else {
                 $company_id = $data['company_id'];
                 $login_key  = '';
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
-                    $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
-                        $login_key_verify_pass = $userData[0]['id'];
-                    }                               
-                }
-            }          
-            
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
 
-            if($login_key_verify_pass != ''){ 
+                if (!empty($user_login_key)) {
+                    $user_login_whereConditions = [
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
+                        $login_key_verify_pass = $userData[0]['id'];
+                    }
+                }
+            }
+
+
+            if ($login_key_verify_pass != '') {
 
                 $dashboard_where = [
                     'status !=' => 'D',
                     'customer_id' => $company_id,
                 ];
-        
+
                 $dashboard_data = $this->templates_model->GetTableValue('tbl_dashboard', 'id', $dashboard_where);
 
-                if(!empty(array_filter($dashboard_data)))
-                {
+                if (!empty(array_filter($dashboard_data))) {
                     $dashboard_data_ids = array_column($dashboard_data, 'id');
                     $dashboard_data_count = count($dashboard_data_ids);
-                }
-                else
-                {
+                } else {
                     $dashboard_data_count = 0;
-                }                        
+                }
 
                 $company_feature_log_whereConditions = [
-                    'company_id' => $company_id,                
-                    'module_id' => 26,                                   
+                    'company_id' => $company_id,
+                    'module_id' => 26,
                 ];
 
-                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
-            
+                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
+
                 $company_feature_log_update_whereConditions = [
-                    'id' => $company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $company_feature_log_check[0]['id'],
+                ];
 
                 $company_feature_log_data = array(
                     'user_add_count' => $dashboard_data_count,
                 );
 
-                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
-                
+                $dashboard_count_store = $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $company_feature_log_data);
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'receivedData' => $dashboard_count_store
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'receivedData' => ''
                 ]);
-            }   
-        }catch(\Exception $e){
+            }
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_dashboard_template_update', $e->getMessage());
             return redirect()->route('global_catch_error');
-        }     
+        }
     }
     //Number Of Dashboard Template Count Add/Update Code End
 
     //Number Of Parameter Count Update Code Start
     public function number_of_parameter_count_update()
     {
-        try
-        {
+        try {
             $data_get = $this->request->getPost();
 
             $jsonKey = key($data_get); // Get the key of the JSON string
             $data = json_decode($jsonKey, true); // Decode the JSON string into an array
-            
+
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $login_key  = $data['login_key'];
-            
             } else {
                 $company_id = $data['company_id'];
                 $login_key  = '';
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
+
+                if (!empty($user_login_key)) {
                     $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
                         $login_key_verify_pass = $userData[0]['id'];
-                    }                               
+                    }
                 }
-            }
-            else
-            {
+            } else {
                 $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
             }
 
-            if($login_key_verify_pass != ''){ 
+            if ($login_key_verify_pass != '') {
 
                 $parameter_where = [
                     'company_id' => $company_id,
                 ];
-        
+
                 $parameter_data = $this->templates_model->GetTableValue('tbl_notification_trigger', 'id', $parameter_where);
 
-                if(!empty(array_filter($parameter_data)))
-                {
+                if (!empty(array_filter($parameter_data))) {
                     $parameter_data_ids = array_column($parameter_data, 'id');
                     $parameter_data_count = count($parameter_data_ids);
-                }
-                else
-                {
+                } else {
                     $parameter_data_count = 0;
-                }                        
+                }
 
                 $company_feature_log_whereConditions = [
-                    'company_id' => $company_id,                
-                    'module_id' => 27,                                   
+                    'company_id' => $company_id,
+                    'module_id' => 27,
                 ];
 
-                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
-            
+                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
+
                 $company_feature_log_update_whereConditions = [
-                    'id' => $company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $company_feature_log_check[0]['id'],
+                ];
 
                 $company_feature_log_data = array(
                     'user_add_count' => $parameter_data_count,
                 );
 
-                $parameter_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
-                
+                $parameter_count_store = $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $company_feature_log_data);
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'receivedData' => $parameter_count_store
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'receivedData' => ''
                 ]);
-            }       
-        }catch(\Exception $e){
+            }
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_parameter_count_update', $e->getMessage());
             return redirect()->route('global_catch_error');
-        } 
+        }
     }
     //Number Of Parameter Count Update Code End
-  
+
     //Number Of Reports Count Update Code Start   
     public function number_of_reports_count_update()
     {
-        try
-        {
+        try {
             $data_get = $this->request->getPost();
 
             $jsonKey = key($data_get); // Get the key of the JSON string
             $data = json_decode($jsonKey, true); // Decode the JSON string into an array
-        
+
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $login_key  = $data['login_key'];
-            
             } else {
                 $company_id = $data['company_id'];
                 $login_key  = '';
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
+
+                if (!empty($user_login_key)) {
                     $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
                         $login_key_verify_pass = $userData[0]['id'];
-                    }                               
+                    }
                 }
-            }
-            else
-            {
-                $login_key_verify_pass = $data['company_id']; 
+            } else {
+                $login_key_verify_pass = $data['company_id'];
             }
 
-            if($login_key_verify_pass != ''){ 
+            if ($login_key_verify_pass != '') {
 
                 $reports_where = [
                     'company_id' => $company_id,
                 ];
-        
+
                 $reports_data = $this->templates_model->GetTableValue('report_configurations', 'id', $reports_where);
 
-                if(!empty(array_filter($reports_data)))
-                {
+                if (!empty(array_filter($reports_data))) {
                     $reports_data_ids = array_column($reports_data, 'id');
                     $reports_data_count = count($reports_data_ids);
-                }
-                else
-                {
+                } else {
                     $reports_data_count = 0;
-                }                        
+                }
 
                 $company_feature_log_whereConditions = [
-                    'company_id' => $company_id,                
-                    'module_id' => 25,                                   
+                    'company_id' => $company_id,
+                    'module_id' => 25,
                 ];
 
-                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions); 
-            
+                $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $company_feature_log_whereConditions);
+
                 $company_feature_log_update_whereConditions = [
-                    'id' => $company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $company_feature_log_check[0]['id'],
+                ];
 
                 $company_feature_log_data = array(
                     'user_add_count' => $reports_data_count,
                 );
 
-                $reports_count_store = $this->templates_model->updateData('tbl_company_feature_log',$company_feature_log_update_whereConditions, $company_feature_log_data);
-                
+                $reports_count_store = $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $company_feature_log_data);
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'receivedData' => $reports_count_store
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'receivedData' => ''
                 ]);
-            }  
-        }catch(\Exception $e){
+            }
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_reports_count_update', $e->getMessage());
             return redirect()->route('global_catch_error');
-        }     
+        }
     }
     //Number Of Reports Count Update Code End
 
     //Number Of Email & SMS For Month Count Update Code Start
     public function number_of_email_sms_count_update()
     {
-        try
-        {
+        try {
             $data_get = $this->request->getPost();
 
             $jsonKey = key($data_get); // Get the key of the JSON string
             $data = json_decode($jsonKey, true); // Decode the JSON string into an array        
-        
+
             $company_id = $data['company_id'];
-            
-            if($company_id != ''){ 
+
+            if ($company_id != '') {
 
                 //Email Count Update
                 $email_success_where = [
@@ -1646,35 +1507,32 @@ class templates_controller extends BaseController
                 ];
 
                 $select_column = 'tbl_notification_history.id';
-        
+
                 $email_success = $this->templates_model->getsearchvaluewithjoin('tbl_notification_trigger',  'id', $select_column, 'tbl_notification_history', 'trigger_id', $email_success_where);
-            
-                if(!empty(array_filter($email_success)))
-                {
+
+                if (!empty(array_filter($email_success))) {
                     $email_data_ids = array_column($email_success, 'id');
                     $email_data_count = count($email_data_ids);
-                }
-                else
-                {
+                } else {
                     $email_data_count = 0;
                 }
 
                 $email_company_feature_log_whereConditions = [
-                    'company_id' => $company_id,                
-                    'module_id' => 28,                                   
+                    'company_id' => $company_id,
+                    'module_id' => 28,
                 ];
 
-                $email_company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $email_company_feature_log_whereConditions); 
-            
+                $email_company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $email_company_feature_log_whereConditions);
+
                 $email_company_feature_log_update_whereConditions = [
-                    'id' => $email_company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $email_company_feature_log_check[0]['id'],
+                ];
 
                 $email_company_feature_log_data = array(
                     'user_add_count' => $email_data_count,
                 );
 
-                $email_count_store = $this->templates_model->updateData('tbl_company_feature_log',$email_company_feature_log_update_whereConditions, $email_company_feature_log_data);
+                $email_count_store = $this->templates_model->updateData('tbl_company_feature_log', $email_company_feature_log_update_whereConditions, $email_company_feature_log_data);
 
                 //SMS Count Update
                 $sms_success_where = [
@@ -1683,70 +1541,63 @@ class templates_controller extends BaseController
                 ];
 
                 $select_column = 'tbl_notification_history.id';
-        
+
                 $sms_success = $this->templates_model->getsearchvaluewithjoin('tbl_notification_trigger',  'id', $select_column, 'tbl_notification_history', 'trigger_id', $sms_success_where);
-            
-                if(!empty(array_filter($sms_success)))
-                {
+
+                if (!empty(array_filter($sms_success))) {
                     $sms_data_ids = array_column($sms_success, 'id');
                     $sms_data_count = count($sms_data_ids);
-                }
-                else
-                {
+                } else {
                     $sms_data_count = 0;
                 }
 
                 $sms_company_feature_log_whereConditions = [
-                    'company_id' => $company_id,                
-                    'module_id' => 29,                                   
+                    'company_id' => $company_id,
+                    'module_id' => 29,
                 ];
 
-                $sms_company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $sms_company_feature_log_whereConditions); 
-            
+                $sms_company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'id', $sms_company_feature_log_whereConditions);
+
                 $sms_company_feature_log_update_whereConditions = [
-                    'id' => $sms_company_feature_log_check[0]['id'],                                   
-                ];                
+                    'id' => $sms_company_feature_log_check[0]['id'],
+                ];
 
                 $sms_company_feature_log_data = array(
                     'user_add_count' => $sms_data_count,
                 );
 
-                $sms_count_store = $this->templates_model->updateData('tbl_company_feature_log',$sms_company_feature_log_update_whereConditions, $sms_company_feature_log_data);
-                
+                $sms_count_store = $this->templates_model->updateData('tbl_company_feature_log', $sms_company_feature_log_update_whereConditions, $sms_company_feature_log_data);
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'receivedData' => true,
                     'email_count_store' => $email_count_store,
                     'sms_count_store' => $sms_count_store
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'receivedData' => ''
                 ]);
-            }   
-        }catch(\Exception $e){
+            }
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_email_sms_count_update', $e->getMessage());
             return redirect()->route('global_catch_error');
-        } 
+        }
     }
     //Number Of Email & SMS For Month Count Update Code End
 
     //Number Of Count Get Code Start  
     public function number_of_count_get()
     {
-        try
-        {
-            $data = $this->request->getPost();       
+        try {
+            $data = $this->request->getPost();
 
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $module_id  = $data['module_id'];
-                $login_key  = $data['login_key'];            
-            
+                $login_key  = $data['login_key'];
             } else {
                 $company_id = $data['company_id'];
                 $module_id  = $data['module_id'];
@@ -1754,41 +1605,35 @@ class templates_controller extends BaseController
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
-                    $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
-                        $login_key_verify_pass = $userData[0]['id'];
-                    }                               
-                }
-            }
-            else
-            {
-                $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
-            } 
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
 
-            if($login_key_verify_pass != '')
-            {
+                if (!empty($user_login_key)) {
+                    $user_login_whereConditions = [
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
+                        $login_key_verify_pass = $userData[0]['id'];
+                    }
+                }
+            } else {
+                $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+            }
+
+            if ($login_key_verify_pass != '') {
                 $company_feature_log_whereConditions = [
                     'company_id' => $company_id,
-                    'module_id' => $module_id,                                   
+                    'module_id' => $module_id,
                 ];
-        
+
                 $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count, start_month, end_month', $company_feature_log_whereConditions);
 
                 return $this->response->setJSON([
@@ -1798,9 +1643,7 @@ class templates_controller extends BaseController
                     'start_month' => $company_feature_log_check[0]['start_month'],
                     'end_month' => $company_feature_log_check[0]['end_month'],
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'actual_value' => '',
@@ -1808,20 +1651,19 @@ class templates_controller extends BaseController
                     'start_month' => "",
                     'end_month' => "",
                 ]);
-            } 
-        }catch(\Exception $e){
+            }
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_count_get', $e->getMessage());
             return redirect()->route('global_catch_error');
-        }           
-    }  
+        }
+    }
     //Number Of Count Get Code End   
-    
+
     //Number Of Count Get Laravel Code Start  
     public function number_of_count_get_laravel()
     {
-        try
-        {
+        try {
             $data_get = $this->request->getPost();
 
             $jsonKey = key($data_get); // Get the key of the JSON string
@@ -1830,8 +1672,7 @@ class templates_controller extends BaseController
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
                 $module_id  = $data['module_id'];
-                $login_key  = $data['login_key'];            
-            
+                $login_key  = $data['login_key'];
             } else {
                 $company_id = $data['company_id'];
                 $module_id  = $data['module_id'];
@@ -1839,41 +1680,35 @@ class templates_controller extends BaseController
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
-                    $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
-                        $login_key_verify_pass = $userData[0]['id'];
-                    }                               
-                }
-            }
-            else
-            {
-                $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
-            } 
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
 
-            if($login_key_verify_pass != '')
-            {
+                if (!empty($user_login_key)) {
+                    $user_login_whereConditions = [
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
+                        $login_key_verify_pass = $userData[0]['id'];
+                    }
+                }
+            } else {
+                $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
+            }
+
+            if ($login_key_verify_pass != '') {
                 $company_feature_log_whereConditions = [
                     'company_id' => $company_id,
-                    'module_id' => $module_id,                                   
+                    'module_id' => $module_id,
                 ];
-        
+
                 $company_feature_log_check = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value, user_add_count, start_month, end_month', $company_feature_log_whereConditions);
 
                 return $this->response->setJSON([
@@ -1883,9 +1718,7 @@ class templates_controller extends BaseController
                     'start_month' => $company_feature_log_check[0]['start_month'],
                     'end_month' => $company_feature_log_check[0]['end_month']
                 ]);
-            }
-            else
-            {
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
                     'actual_value' => '',
@@ -1893,20 +1726,19 @@ class templates_controller extends BaseController
                     'start_month' => '',
                     'end_month' => ''
                 ]);
-            }   
-        }catch(\Exception $e){
+            }
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'number_of_count_get_laravel', $e->getMessage());
             return redirect()->route('global_catch_error');
-        }         
-    }  
+        }
+    }
     //Number Of Count Get Laravel Code End 
 
     //Company Page Access Log Get Laravel Code Start
     public function company_page_access_log_laravel()
     {
-        try
-        {
+        try {
             $data_get = $this->request->getPost();
 
             $jsonKey = key($data_get); // Get the key of the JSON string
@@ -1914,98 +1746,84 @@ class templates_controller extends BaseController
 
             if (isset($data['company_id']) && isset($data['login_key'])) {
                 $company_id = $data['company_id'];
-                $module_id  = $data['module_id'];            
-                $login_key  = $data['login_key'];            
-            
+                $module_id  = $data['module_id'];
+                $login_key  = $data['login_key'];
             } else {
                 $company_id = $data['company_id'];
-                $module_id  = $data['module_id'];            
+                $module_id  = $data['module_id'];
                 $login_key  = '';
             }
 
             $login_key_verify_pass = '';
-            if($login_key != '')
-            {
+            if ($login_key != '') {
                 $login_key_whereConditions = [
-                    'login_key' => $login_key,                            
+                    'login_key' => $login_key,
                 ];
 
-                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ','user_id,key_expiry_time',$login_key_whereConditions);
-                
-                if(!empty($user_login_key))
-                {
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
+
+                if (!empty($user_login_key)) {
                     $user_login_whereConditions = [
-                        'id' => $user_login_key[0]['user_id'], 
-                        'status' => 'active',          
-                    ];           
-                    
-                    $userData = $this->templates_model->GetTableValue('users','*',$user_login_whereConditions);
-                    
-                    if(!empty($userData))
-                    {
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
                         $login_key_verify_pass = $userData[0]['id'];
-                    }                               
+                    }
                 }
-            }
-            else
-            {
+            } else {
                 $login_key_verify_pass = $data['company_id']; //Bulk Import Data Logic Set
             }
 
-            if($login_key_verify_pass != '')
-            {
+            if ($login_key_verify_pass != '') {
                 $company_page_access_log_whereConditions = [
                     'company_id' => $company_id,
-                    'module_id' => $module_id,                
-                    'status' => 'Y'                                 
+                    'module_id' => $module_id,
+                    'status' => 'Y'
                 ];
-        
+
                 $company_page_access_check = $this->templates_model->GetTableValue('tbl_company_page_access_log', 'subscription_plan_value', $company_page_access_log_whereConditions);
 
-                if(!empty($company_page_access_check))
-                {
+                if (!empty($company_page_access_check)) {
                     return $this->response->setJSON([
                         'status' => 'success',
-                        'subscription_plan_value' => $company_page_access_check[0]['subscription_plan_value']              
+                        'subscription_plan_value' => $company_page_access_check[0]['subscription_plan_value']
                     ]);
-                }
-                else
-                {
+                } else {
                     return $this->response->setJSON([
                         'status' => 'failed',
-                        'subscription_plan_value' => '',                
+                        'subscription_plan_value' => '',
                     ]);
-                }            
-            }
-            else
-            {
+                }
+            } else {
                 return $this->response->setJSON([
                     'status' => 'failed',
-                    'subscription_plan_value' => '',                
+                    'subscription_plan_value' => '',
                 ]);
-            }      
-        }catch(\Exception $e){
+            }
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'company_page_access_log_laravel', $e->getMessage());
             return redirect()->route('global_catch_error');
-        }        
+        }
     }
     //Company Page Access Log Get Laravel Code End
 
     //Mysql Error Message Send Code Start
     public function mysql_error_alert_send_email()
     {
-        try
-        {
+        try {
             $mysql_error_alert_check = $this->templates_model->mysql_error_alert_check();
-        
-            if(!empty($mysql_error_alert_check))
-            {
+
+            if (!empty($mysql_error_alert_check)) {
                 $formattedData = [];
-                $i=1;
+                $i = 1;
                 foreach ($mysql_error_alert_check as $item) {
 
-                    $utcTime = $item["utc_created_at"]; 
+                    $utcTime = $item["utc_created_at"];
                     $utcTimezone = new DateTimeZone('UTC');
                     $kolkataTimezone = new DateTimeZone('Asia/Kolkata');
 
@@ -2013,24 +1831,24 @@ class templates_controller extends BaseController
                     $dateTime = new DateTime($utcTime, $utcTimezone);
 
                     // Convert to Asia/Kolkata timezone
-                    $dateTime->setTimezone($kolkataTimezone);           
-            
+                    $dateTime->setTimezone($kolkataTimezone);
+
                     $formattedData[] = [
                         "Error Number" => $i,
-                        "Table Row ID"=> $item['id'],
+                        "Table Row ID" => $item['id'],
                         "Data Base" => 'MySQL',
                         "Module Name" => $item["module_name"],
                         "Current Url" => $item["current_url"],
                         "Function Name" => $item["function_name"],
                         "Error Message" => $item["error_msg"],
-                        "UTC created at" => $item["utc_created_at"], 
-                        "local created at" => $dateTime->format('Y-m-d H:i:s'), 
-                    ]; 
-                    
-                    $i++;
-                }                      
+                        "UTC created at" => $item["utc_created_at"],
+                        "local created at" => $dateTime->format('Y-m-d H:i:s'),
+                    ];
 
-                $message = json_encode($formattedData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);                  
+                    $i++;
+                }
+
+                $message = json_encode($formattedData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
                 ses_secret_manager::getCredentials();
                 $email = \Config\Services::email();
 
@@ -2042,41 +1860,222 @@ class templates_controller extends BaseController
                 if ($email->send()) {
 
                     $mail_status_whereConditions = [
-                        'mail_status' => 0,                                                        
+                        'mail_status' => 0,
                     ];
 
-                    $data = [           
-                        'mail_status' => 1,               
-                    ];  
+                    $data = [
+                        'mail_status' => 1,
+                    ];
 
-                    $this->templates_model->updateData('error_exception_log',$mail_status_whereConditions, $data);
+                    $this->templates_model->updateData('error_exception_log', $mail_status_whereConditions, $data);
                     return true;
                 } else {
                     return false;
                     // return $email->printDebugger(['headers']);
                 }
-            }     
-        }catch(\Exception $e){
+            }
+        } catch (\Exception $e) {
             $currentURL = current_url();
             $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'mysql_error_alert_send_email', $e->getMessage());
             return redirect()->route('global_catch_error');
-        }    
+        }
     }
     //Mysql Error Message Send Code End   
-    
-    //Random UID Gen
-    function generateRandomUid() {
 
-        try{
+    //Random UID Gen
+    function generateRandomUid()
+    {
+
+        try {
 
             $uuid = Uuid::uuid4();
-            $randomId = str_replace('-', '',$uuid->toString());
+            $randomId = str_replace('-', '', $uuid->toString());
             return $randomId;
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'generateRandomUid', $e->getMessage(), CODE_ERROR);
+            return redirect()->route('global_catch_error');
+        }
+    }
 
-        } catch(\Exception $e){
-            $currentURL = current_url();            
-            $this->error_log->error_exception_log('global_templates\templates_controller',$currentURL,'generateRandomUid',$e->getMessage(), CODE_ERROR);
-            return redirect()->route('global_catch_error');  
+
+
+    // for updating the count of nodes
+    public function node_count_update()
+    {
+        try {
+            $data_get = $this->request->getPost();
+            $jsonKey = key($data_get); // Get the key of the JSON string
+            $data = json_decode($jsonKey, true); // Decode the JSON string into an array     
+            if (isset($data['company_id']) && isset($data['login_key'])) {
+                $company_id = $data['company_id'];
+                $module_id  = $data['module_id'];
+                $login_key  = $data['login_key'];
+            } else {
+                $company_id = $data['company_id'];
+                $module_id  = $data['module_id'];
+                $login_key  = '';
+            }
+
+            $login_key_verify_pass = '';
+            if ($login_key != '') {
+                $login_key_whereConditions = [
+                    'login_key' => $login_key,
+                ];
+
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
+
+                if (!empty($user_login_key)) {
+                    $user_login_whereConditions = [
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+
+                    if (!empty($userData)) {
+                        $login_key_verify_pass = $userData[0]['id'];
+                    }
+                }
+            } else {
+                $login_key_verify_pass = $data['company_id'];
+            }
+
+            if ($login_key_verify_pass != '') {
+                $company_feature_log_whereConditions = [
+                    'company_id' => $company_id,
+                    'module_id' => $module_id,
+                ];
+
+                $current_plan_node_count = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value', $company_feature_log_whereConditions);
+
+
+                if ($current_plan_node_count != '') {
+                    $company_node_whereConditions = [
+                        'company_id' => $company_id,
+                        'status' => 'active'
+                    ];
+                    $nodecount = $this->templates_model->GetTableValueDbTwo('tbl_nodes', 'node_name', $company_node_whereConditions);
+                }
+
+                $existing_node_count = ['user_add_count' => count($nodecount)];
+
+                $company_feature_log_update_whereConditions = [
+                    'company_id' => $company_id,
+                    'module_id' => $module_id,
+                ];
+
+                $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $existing_node_count);
+
+                $used_nodes = $this->templates_model->GetTableValue('tbl_company_feature_log', 'user_add_count', $company_feature_log_update_whereConditions);
+
+                if (!empty($current_plan_node_count)) {
+                    return $this->response->setJSON([
+                        'status' => 'success',
+                        'current_node_count' => $used_nodes,
+                        'total_node_count' => $current_plan_node_count
+                    ]);
+                } else {
+                    return $this->response->setJSON([
+                        'status' => 'failed',
+                        'current_node_count' => '',
+                        'total_node_count' => ''
+                    ]);
+                }
+            } else {
+                return $this->response->setJSON([
+                    'status' => 'failed',
+                    'current_node_count' => '',
+                    'total_node_count' => ''
+                ]);
+            }
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'node_count_update', $e->getMessage());
+            return redirect()->route('global_catch_error');
+        }
+    }
+
+    // for updating the count of calc_expressions
+    public function calc_expression_count_update()
+    {
+        try {
+            $data_get = $this->request->getPost();
+            $jsonKey = key($data_get); // Get the key of the JSON string
+            $data = json_decode($jsonKey, true); // Decode the JSON string into an array     
+            if (isset($data['company_id']) && isset($data['login_key'])) {
+                $company_id = $data['company_id'];
+                $module_id  = $data['module_id'];
+                $login_key  = $data['login_key'];
+            } else {
+                $company_id = $data['company_id'];
+                $module_id  = $data['module_id'];
+                $login_key  = '';
+            }
+            $login_key_verify_pass = '';
+            if ($login_key != '') {
+                $login_key_whereConditions = [
+                    'login_key' => $login_key,
+                ];
+                $user_login_key =  $this->templates_model->GetTableValue('user_login_history ', 'user_id,key_expiry_time', $login_key_whereConditions);
+                if (!empty($user_login_key)) {
+                    $user_login_whereConditions = [
+                        'id' => $user_login_key[0]['user_id'],
+                        'status' => 'active',
+                    ];
+                    $userData = $this->templates_model->GetTableValue('users', '*', $user_login_whereConditions);
+                    if (!empty($userData)) {
+                        $login_key_verify_pass = $userData[0]['id'];
+                    }
+                }
+            } else {
+                $login_key_verify_pass = $data['company_id'];
+            }
+            if ($login_key_verify_pass != '') {
+                $company_feature_log_whereConditions = [
+                    'company_id' => $company_id,
+                    'module_id' => $module_id,
+                ];
+                $current_plan_calc_expression_count = $this->templates_model->GetTableValue('tbl_company_feature_log', 'actual_value', $company_feature_log_whereConditions);
+                if ($current_plan_calc_expression_count != '') {
+                    $company_node_whereConditions = [
+                        'scheduler_id' => $company_id,
+                        'status' => 'active'
+                    ];
+                    $calc_expression_count = $this->templates_model->GetTableValueDbTwo('tbl_function_expression', 'expression', $company_node_whereConditions);
+                }
+                $calc_expression_count = ['user_add_count' => count($calc_expression_count)];
+                // $calc_expression_count = ['user_add_count' => 2000];
+                $company_feature_log_update_whereConditions = [
+                    'company_id' => $company_id,
+                    'module_id' => $module_id,
+                ];
+                $this->templates_model->updateData('tbl_company_feature_log', $company_feature_log_update_whereConditions, $calc_expression_count);
+                $used_calc_expression_count = $this->templates_model->GetTableValue('tbl_company_feature_log', 'user_add_count', $company_feature_log_update_whereConditions);
+                if (!empty($current_plan_calc_expression_count)) {
+                    return $this->response->setJSON([
+                        'status' => 'success',
+                        'current_calc_expression_count' => $used_calc_expression_count,
+                        'total_calc_expression_count' => $current_plan_calc_expression_count
+                    ]);
+                } else {
+                    return $this->response->setJSON([
+                        'status' => 'failed',
+                        'current_calc_expression_count' => "",
+                        'total_calc_expression_count' => ""
+                    ]);
+                }
+            } else {
+                return $this->response->setJSON([
+                    'status' => 'failed',
+                    'current_calc_expression_count' => "",
+                    'total_calc_expression_count' => ""
+                ]);
+            }
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_controller', $currentURL, 'calc_expression_count_update', $e->getMessage());
+            return redirect()->route('global_catch_error');
         }
     }
 }

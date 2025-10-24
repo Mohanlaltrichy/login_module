@@ -50,5 +50,8 @@ $routes->group('api', ['namespace' => '\Modules\global_templates\Controllers'], 
 	$routes->post('company_page_access_log_laravel', 'templates_controller::company_page_access_log_laravel', ['as' => 'company_page_access_log_laravel']);
 	$routes->post('number_of_ai_template_update', 'templates_controller::number_of_ai_template_update', ['as' => 'number_of_ai_template_update']);
 	$routes->post('number_of_ai_prediction_update', 'templates_controller::number_of_ai_prediction_update', ['as' => 'number_of_ai_prediction_update']);
+	// for node count updates
+	$routes->post('node_count_update', 'templates_controller::node_count_update', ['as' => 'node_count_update']);
+	$routes->post('calc_expression_count_update', 'templates_controller::calc_expression_count_update', ['as' => 'calc_expression_count_update']);
 });
 ?>

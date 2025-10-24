@@ -1,5 +1,7 @@
 <?php
+
 namespace Modules\global_templates\Models;
+
 use App\Libraries\customlibraries;
 
 use CodeIgniter\Model;
@@ -8,6 +10,7 @@ class templates_model extends Model
 {
     public $mysqldb;
     public $pgdb;
+    public $mysqldb2;
     protected $error_log;
 
     public function __construct()
@@ -15,37 +18,36 @@ class templates_model extends Model
         parent::__construct();
         $this->mysqldb = \Config\Database::connect('mysqldb');
         $this->pgdb = \Config\Database::connect('default');
-        $this->error_log = new customlibraries(); 
+        $this->error_log = new customlibraries();
+        $this->mysqldb2 = \Config\Database::connect('mysqldb2');
     }
 
     //get notification Last 1 Hour Data
     public function get_notification($last_date_time = '')
     {
-        try{   
+        try {
 
             $company_id = session('Taguser_company');
             $user_id = session('Taguser_id');
 
             $notification_user_ids_whereConditions = [
-                'login_user_id' => $user_id,   
+                'login_user_id' => $user_id,
                 'login_user' =>  1,
                 'active' => 'yes',
                 'notify_sms' => 'active'
-            ];            
-            $notification_user_ids = $this->GetTableValue('tbl_notification_users', 'id', $notification_user_ids_whereConditions,'','','','id','desc');
+            ];
+            $notification_user_ids = $this->GetTableValue('tbl_notification_users', 'id', $notification_user_ids_whereConditions, '', '', '', 'id', 'desc');
 
-            if(!empty($notification_user_ids))
-            {
+            if (!empty($notification_user_ids)) {
                 $user_group_id_whereConditions = [
                     'active' => 1,
                     'user_id' => $notification_user_ids[0]['id']
-                ];          
-    
-                $user_group_id = $this->GetTableValue('tbl_notification_user_mapping', 'grpid', $user_group_id_whereConditions,'','','','id','desc');
-           
-    
-                if(!empty($user_group_id))
-                {
+                ];
+
+                $user_group_id = $this->GetTableValue('tbl_notification_user_mapping', 'grpid', $user_group_id_whereConditions, '', '', '', 'id', 'desc');
+
+
+                if (!empty($user_group_id)) {
                     $alert_notification_whereConditions = [
                         'customer_id' => $company_id,
                         'acknowledge' => 0,
@@ -54,40 +56,29 @@ class templates_model extends Model
                         'parameter_name !=' => ''
                     ];
 
-                    
 
-                    if(session('company_admin') != 1)
-                    {
+
+                    if (session('company_admin') != 1) {
                         $grp_id = [];
-                        foreach($user_group_id as $grpid)
-                        {
+                        foreach ($user_group_id as $grpid) {
                             $grp_id[] = $grpid['grpid'];
                         }
-        
-                        $data = $this->GetTableValue_whereIn_pgsql('alert_notification', '*', $alert_notification_whereConditions,'user_group_id',$grp_id,'trigger_time','asc');
-                       
+
+                        $data = $this->GetTableValue_whereIn_pgsql('alert_notification', '*', $alert_notification_whereConditions, 'user_group_id', $grp_id, 'trigger_time', 'asc');
+                    } else {
+                        $data = $this->GetTableValue_whereIn_pgsql('alert_notification', '*', $alert_notification_whereConditions, '', '', 'trigger_time', 'asc');
                     }
-                    else
-                    {
-                        $data = $this->GetTableValue_whereIn_pgsql('alert_notification', '*', $alert_notification_whereConditions,'','','trigger_time','asc');
-                    }                   
-                    
-                }
-                else
-                {
+                } else {
                     $data = array();
-                } 
-            }
-            else
-            {
+                }
+            } else {
                 $data = array();
-            } 
+            }
 
-            return $data; 
-
-        } catch(\Exception $e){
-            $currentURL = current_url();   
-            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'get_notification',$e->getMessage(), CODE_ERROR);
+            return $data;
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'get_notification', $e->getMessage(), CODE_ERROR);
         }
     }
 
@@ -96,232 +87,209 @@ class templates_model extends Model
         try {
             $last_minutes = date('Y-m-d H:i:s', strtotime(ERROR_LAST_MINUTES));
             $builder = $this->mysqldb->table('error_exception_log');
-            $builder->select('id,module_name,current_url,function_name,error_msg,utc_created_at');      
-            $builder->where('mail_status',0);  
-            $builder->whereIn('module_name',array('shutdown_fatal','uncaught_throwable'));
+            $builder->select('id,module_name,current_url,function_name,error_msg,utc_created_at');
+            $builder->where('mail_status', 0);
+            $builder->whereIn('module_name', array('shutdown_fatal', 'uncaught_throwable'));
             $builder->where('utc_created_at >=', $last_minutes);
-            $builder->orderBy('id','desc');
+            $builder->orderBy('id', 'desc');
             $result = $builder->get()->getResultArray();
             return $result;
-
-       } catch (\Exception $e) {            
-            $currentURL = current_url();            
-            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'mysql_error_alert_check',$e->getMessage());                       
-       }
-    }    
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'mysql_error_alert_check', $e->getMessage());
+        }
+    }
 
     //GetTableValuewithjoin
-    public function getsearchvaluewithjoin($from_table = '', $from_table_id = '', $select_column = '', $to_table = '', $to_table_id = '', $whereConditions = array(), $order_col = '', $filter = '', $like = '', $limit ='', $offset = '')
+    public function getsearchvaluewithjoin($from_table = '', $from_table_id = '', $select_column = '', $to_table = '', $to_table_id = '', $whereConditions = array(), $order_col = '', $filter = '', $like = '', $limit = '', $offset = '')
     {
-        try{
+        try {
             $this->mysqldb->transException(true)->transStart();
 
-                $builder = $this->mysqldb->table($from_table);
-                $builder->join($to_table, ''.$from_table.'.'.$from_table_id.' = '.$to_table.'.'.$to_table_id.'', 'left');
-                $builder->select($select_column);
+            $builder = $this->mysqldb->table($from_table);
+            $builder->join($to_table, '' . $from_table . '.' . $from_table_id . ' = ' . $to_table . '.' . $to_table_id . '', 'left');
+            $builder->select($select_column);
 
-                if($whereConditions != '')
-                {
-                    $builder->where($whereConditions);
-                }
+            if ($whereConditions != '') {
+                $builder->where($whereConditions);
+            }
 
-                if($like != '')
-                {
-                    $builder->like($like);
-                }
+            if ($like != '') {
+                $builder->like($like);
+            }
 
-                if($limit != '')
-                {
-                    $builder->limit($limit);
-                }
+            if ($limit != '') {
+                $builder->limit($limit);
+            }
 
-                if($offset != '')
-                {
-                    $builder->offset($offset);
-                }                
+            if ($offset != '') {
+                $builder->offset($offset);
+            }
 
-                if($order_col != '')
-                {
-                    $builder->orderBy($order_col, $filter);
-                }
-                            
-                $result = $builder->get()->getResultArray();
+            if ($order_col != '') {
+                $builder->orderBy($order_col, $filter);
+            }
+
+            $result = $builder->get()->getResultArray();
 
             $this->mysqldb->transComplete();
 
-            return $result; 
-        } catch(\Exception $e){
-            $currentURL = current_url();            
-            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'getsearchvaluewithjoin',$e->getMessage());
+            return $result;
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'getsearchvaluewithjoin', $e->getMessage());
         }
     }
 
     //GetTableValue
-    public function GetTableValue($table = '', $select_column = '', $whereConditions = array(), $or_whereConditions = array(), $groupBy = array(), $having = array(), $order_col = '', $filter = '', $limit ='', $other = '')
+    public function GetTableValue($table = '', $select_column = '', $whereConditions = array(), $or_whereConditions = array(), $groupBy = array(), $having = array(), $order_col = '', $filter = '', $limit = '', $other = '')
     {
-        try{
-            $this->mysqldb->transException(true)->transStart();
-
-                $builder = $this->mysqldb->table($table);
-                $builder->select($select_column);
-
-                if($other == 'distinct')
-                {
-                    $builder->distinct();
-                }
-
-                if($whereConditions != '')
-                {
-                    $builder->where($whereConditions);
-                }
-
-                if($or_whereConditions != '')
-                {
-                    $builder->orWhere($or_whereConditions);
-                }
-
-                if($groupBy != '')
-                {
-                    $builder->groupBy($groupBy);
-                }
-
-                if($having != '')
-                {
-                    $builder->having($having);
-                }
-                
-                if($limit != '')
-                {
-                    $builder->limit($limit, $other);
-                }
-
-                if($order_col != '')
-                {
-                    $builder->orderBy($order_col, $filter);
-                }
-                            
-                $result = $builder->get()->getResultArray();
-
-            $this->mysqldb->transComplete();
-
-            return $result; 
-        } catch(\Exception $e){
-            $currentURL = current_url();   
-            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'GetTableValue',$e->getMessage());
-        }
-    }
-
-    
-    //Get Table Wherein Condition
-    public function GetTableValue_whereIn($table = '', $select_column = '', $whereConditions = array(), $whereINConditions_column = '', $whereINConditions_value = array(), $order_col = '', $filter = '', $groupBy = array(), $having = array())
-    {
-        
-       try {
-            
+        try {
             $this->mysqldb->transException(true)->transStart();
 
             $builder = $this->mysqldb->table($table);
             $builder->select($select_column);
-          
-            if($whereConditions != '')
-            {
+
+            if ($other == 'distinct') {
+                $builder->distinct();
+            }
+
+            if ($whereConditions != '') {
                 $builder->where($whereConditions);
             }
 
-            if($whereINConditions_column != '')
-            {
-                $builder->whereIn($whereINConditions_column,$whereINConditions_value);
-            }           
-
-            if($order_col != '')
-            {
-                $builder->orderBy($order_col, $filter);
+            if ($or_whereConditions != '') {
+                $builder->orWhere($or_whereConditions);
             }
 
-            if($groupBy != '')
-            {
+            if ($groupBy != '') {
                 $builder->groupBy($groupBy);
             }
 
-            if($having != '')
-            {
+            if ($having != '') {
                 $builder->having($having);
             }
-                        
+
+            if ($limit != '') {
+                $builder->limit($limit, $other);
+            }
+
+            if ($order_col != '') {
+                $builder->orderBy($order_col, $filter);
+            }
+
             $result = $builder->get()->getResultArray();
 
             $this->mysqldb->transComplete();
 
-            return $result; 
-       } catch (\Exception $e) {            
-            $currentURL = current_url();            
-            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'GetTableValue_whereIn',$e->getMessage());                       
-       }
+            return $result;
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'GetTableValue', $e->getMessage());
+        }
+    }
+
+
+    //Get Table Wherein Condition
+    public function GetTableValue_whereIn($table = '', $select_column = '', $whereConditions = array(), $whereINConditions_column = '', $whereINConditions_value = array(), $order_col = '', $filter = '', $groupBy = array(), $having = array())
+    {
+
+        try {
+
+            $this->mysqldb->transException(true)->transStart();
+
+            $builder = $this->mysqldb->table($table);
+            $builder->select($select_column);
+
+            if ($whereConditions != '') {
+                $builder->where($whereConditions);
+            }
+
+            if ($whereINConditions_column != '') {
+                $builder->whereIn($whereINConditions_column, $whereINConditions_value);
+            }
+
+            if ($order_col != '') {
+                $builder->orderBy($order_col, $filter);
+            }
+
+            if ($groupBy != '') {
+                $builder->groupBy($groupBy);
+            }
+
+            if ($having != '') {
+                $builder->having($having);
+            }
+
+            $result = $builder->get()->getResultArray();
+
+            $this->mysqldb->transComplete();
+
+            return $result;
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'GetTableValue_whereIn', $e->getMessage());
+        }
     }
 
     //Get Table Wherein Condition
     public function GetTableValue_whereIn_pgsql($table = '', $select_column = '', $whereConditions = array(), $whereINConditions_column = '', $whereINConditions_value = array(), $order_col = '', $filter = '', $groupBy = array(), $having = array())
     {
-        
-       try {
-            
+
+        try {
+
             $this->pgdb->transException(true)->transStart();
 
             $builder = $this->pgdb->table($table);
             $builder->select($select_column);
-          
-            if($whereConditions != '')
-            {
+
+            if ($whereConditions != '') {
                 $builder->where($whereConditions);
             }
 
-            if($whereINConditions_column != '')
-            {
-                $builder->whereIn($whereINConditions_column,$whereINConditions_value);
-            }           
+            if ($whereINConditions_column != '') {
+                $builder->whereIn($whereINConditions_column, $whereINConditions_value);
+            }
 
-            if($order_col != '')
-            {
+            if ($order_col != '') {
                 $builder->orderBy($order_col, $filter);
             }
 
-            if($groupBy != '')
-            {
+            if ($groupBy != '') {
                 $builder->groupBy($groupBy);
             }
 
-            if($having != '')
-            {
+            if ($having != '') {
                 $builder->having($having);
             }
-                        
+
             $result = $builder->get()->getResultArray();
 
             $this->pgdb->transComplete();
 
-            return $result; 
-       } catch (\Exception $e) {            
-            $currentURL = current_url();            
-            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'GetTableValue_whereIn_pgsql',$e->getMessage(), POSTGRESQL_ERROR);                       
-       }
+            return $result;
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'GetTableValue_whereIn_pgsql', $e->getMessage(), POSTGRESQL_ERROR);
+        }
     }
 
     //Update Table Value
-    public function updateData_whereIn($table = '',$column_name = '',$update_whereInValue = array(), $data = array())
+    public function updateData_whereIn($table = '', $column_name = '', $update_whereInValue = array(), $data = array())
     {
-         try {
-             $this->pgdb->transException(true)->transStart();
-             $builder = $this->pgdb->table($table);
-             $builder->whereIn($column_name,$update_whereInValue);
-             $builder->update($data);
-             $this->pgdb->transComplete();
-         } catch (\Exception $e) {            
-             $currentURL = current_url();            
-             $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'updateData_whereIn',$e->getMessage());                      
-         }
-     }
+        try {
+            $this->pgdb->transException(true)->transStart();
+            $builder = $this->pgdb->table($table);
+            $builder->whereIn($column_name, $update_whereInValue);
+            $builder->update($data);
+            $this->pgdb->transComplete();
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'updateData_whereIn', $e->getMessage());
+        }
+    }
 
-     //Insert Table Value
+    //Insert Table Value
     public function insertData($table = '', $data = array())
     {
         try {
@@ -330,9 +298,9 @@ class templates_model extends Model
             $result = $builder->insert($data);
             $this->mysqldb->transComplete();
             return $this->mysqldb->insertID();
-        } catch (\Exception $e) { 
-            $currentURL = current_url();            
-            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'insertData',$e->getMessage());            
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'insertData', $e->getMessage());
         }
     }
 
@@ -340,34 +308,34 @@ class templates_model extends Model
     public function insert_data_postgresql($table = '', $data = array())
     {
         try {
-             $this->pgdb->transException(true)->transStart();
-             $builder = $this->pgdb->table($table);
-             $result = $builder->insert($data);
-             $this->pgdb->transComplete();
-             return $this->pgdb->insertID();
-        } catch (\Exception $e) { 
-            $currentURL = current_url();            
-            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'insert_data_postgresql',$e->getMessage(),POSTGRESQL_ERROR);            
+            $this->pgdb->transException(true)->transStart();
+            $builder = $this->pgdb->table($table);
+            $result = $builder->insert($data);
+            $this->pgdb->transComplete();
+            return $this->pgdb->insertID();
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'insert_data_postgresql', $e->getMessage(), POSTGRESQL_ERROR);
         }
     }
 
     //Update Table Value
-    public function updateData($table = '',$update_whereConditions = array(), $data = array())
+    public function updateData($table = '', $update_whereConditions = array(), $data = array())
     {
-         try {
-             $this->mysqldb->transException(true)->transStart();
-             $builder = $this->mysqldb->table($table);
-             $builder->where($update_whereConditions);
-             $builder->update($data);
-             $this->mysqldb->transComplete();
-         } catch (\Exception $e) {            
-             $currentURL = current_url();            
-             $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'updateData',$e->getMessage());                      
-         }
-     }
+        try {
+            $this->mysqldb->transException(true)->transStart();
+            $builder = $this->mysqldb->table($table);
+            $builder->where($update_whereConditions);
+            $builder->update($data);
+            $this->mysqldb->transComplete();
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'updateData', $e->getMessage());
+        }
+    }
 
-     //Update Table Value
-    public function pgsql_updateData($table = '',$update_whereConditions = array(), $data = array())
+    //Update Table Value
+    public function pgsql_updateData($table = '', $update_whereConditions = array(), $data = array())
     {
         try {
             $this->pgdb->transException(true)->transStart();
@@ -375,11 +343,57 @@ class templates_model extends Model
             $builder->where($update_whereConditions);
             $builder->update($data);
             $this->pgdb->transComplete();
-        } catch (\Exception $e) {            
-            $currentURL = current_url();            
-            $this->error_log->error_exception_log('global_templates\templates_model',$currentURL,'pgsql_updateData',$e->getMessage(), POSTGRESQL_ERROR);                      
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'pgsql_updateData', $e->getMessage(), POSTGRESQL_ERROR);
+        }
+    }
+
+    // functions for mysql db 2 (scapeinfotech)
+    public function GetTableValueDbTwo($table = '', $select_column = '', $whereConditions = array(), $or_whereConditions = array(), $groupBy = array(), $having = array(), $order_col = '', $filter = '', $limit = '', $other = '')
+    {
+        try {
+            $this->mysqldb2->transException(true)->transStart();
+
+            $builder = $this->mysqldb2->table($table);
+            $builder->select($select_column);
+
+            if ($other == 'distinct') {
+                $builder->distinct();
+            }
+
+            if ($whereConditions != '') {
+                $builder->where($whereConditions);
+            }
+
+            if ($or_whereConditions != '') {
+                $builder->orWhere($or_whereConditions);
+            }
+
+            if ($groupBy != '') {
+                $builder->groupBy($groupBy);
+            }
+
+            if ($having != '') {
+                $builder->having($having);
+            }
+
+            if ($limit != '') {
+                $builder->limit($limit, $other);
+            }
+
+            if ($order_col != '') {
+                $builder->orderBy($order_col, $filter);
+            }
+
+            $result = $builder->get()->getResultArray();
+
+            $this->mysqldb->transComplete();
+
+            return $result;
+        } catch (\Exception $e) {
+            $currentURL = current_url();
+            $this->error_log->error_exception_log('global_templates\templates_model', $currentURL, 'GetTableValueDbTwo', $e->getMessage());
         }
     }
 }
-
-?>

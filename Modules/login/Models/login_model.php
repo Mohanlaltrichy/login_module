@@ -62,7 +62,7 @@ class login_model extends Model
             $builder->select('feature_list,subscription_plan_value');      
             $builder->where('company_id',$company_id);   
             $builder->where('status','Y');       
-            $builder->whereIn('feature_list',array('Cloud Connector','Reports','Dashboards','Alert and Notification','AI Prediction'));     
+            $builder->whereIn('feature_list',array('Cloud Connector','Reports','Dashboards','Alert and Notification','AI Prediction','Model Builder'));     
             $result = $builder->get()->getResultArray();
             return $result;
 

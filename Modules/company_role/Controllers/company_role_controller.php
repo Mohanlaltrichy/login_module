@@ -118,9 +118,90 @@ class company_role_controller extends BaseController
 
             $groups_module_data = $this->company_role_model->get_page_details($groups_module_like);
 
+            // from here model bulder code starts
+                $model_builder_dataroot_like=[
+                    'tcp.page_name' => 'dataroot'
+                ];
+                $model_builder_dataroot_data = $this->company_role_model->get_page_details($model_builder_dataroot_like);
+
+                $model_builder_project_like =[
+                    'tcp.page_name' => 'project'
+                ];
+                $model_builder_project_data = $this->company_role_model->get_page_details($model_builder_project_like);
+
+                $model_builder_node_like =[
+                    'tcp.page_name' => 'node(s)'
+                ];
+                $model_builder_node_data = $this->company_role_model->get_page_details($model_builder_node_like);
+
+                $model_builder_node_parameter_like=[
+                    'tcp.page_name' => 'node_parameter'
+                ];
+                $model_builder_node_parameter_data = $this->company_role_model->get_page_details($model_builder_node_parameter_like);
+
+                $model_builder_node_calculation_like=[
+                    'tcp.page_name' => 'node_calculation'
+                ];
+                $model_builder_node_calculation_data = $this->company_role_model->get_page_details($model_builder_node_calculation_like);
+
+                 $model_builder_node_expression_like=[
+                    'tcp.page_name' => 'node_expression'
+                ];
+                $model_builder_node_expression_data = $this->company_role_model->get_page_details($model_builder_node_expression_like);
+
+                $model_builder_search_like=[
+                    'tcp.page_name' => 'model_builder_search'
+                ];
+                $model_builder_search = $this->company_role_model->get_page_details($model_builder_search_like);
+
+                $model_builder_template_like=[
+                    'tcp.page_name' => 'template(s)'
+                ];
+                $model_builder_template = $this->company_role_model->get_page_details($model_builder_template_like);
+
+                $model_builder_template_parameter_like=[
+                    'tcp.page_name' => 'template_parameter'
+                ];
+                $model_builder_template_parameter_data =$this->company_role_model->get_page_details($model_builder_template_parameter_like);
+
+                $model_builder_template_calculation_like = [
+                    'tcp.page_name' => 'template_calculation'
+                ];
+                $model_builder_template_calculation_data =$this->company_role_model->get_page_details($model_builder_template_calculation_like);
+
+                $model_builder_template_expression_like = [
+                    'tcp.page_name' => 'tmp_expression'
+                ];
+                $model_builder_template_expression_data =$this->company_role_model->get_page_details($model_builder_template_expression_like);
+
+                $model_builder_template_mapped_node_like = [
+                    'tcp.page_name' => 'model_builder_template_mapped_node'
+                ];
+                $model_builder_template_mapped_node_data = $this->company_role_model->get_page_details($model_builder_template_mapped_node_like);
+
+                $model_builder_tag_like = [
+                    'tcp.page_name' => 'model_builder_tag'
+                ];
+                $model_builder_tag_data =$this->company_role_model->get_page_details($model_builder_tag_like);
+
+                 $model_builder_uom_category_like = [
+                    'tcp.page_name' => 'model_builder_uom_category'
+                ];
+                $model_builder_uom_category_data =$this->company_role_model->get_page_details($model_builder_uom_category_like);
+
+                $model_builder_uom_conversion_like = [
+                    'tcp.page_name' => 'model_builder_uom_conversion'
+                ];
+                $model_builder_uom_conversion_data =$this->company_role_model->get_page_details($model_builder_uom_conversion_like);
+
+                $model_builder_group_like =[
+                    'tcp.page_name' => 'model_builder_group'
+                ];
+                $model_builder_group_data =$this->company_role_model->get_page_details($model_builder_group_like);
+                // from here model bulder code starts
 
             $subscription_roles_page_data = $this->company_role_model->get_subscription_page_details();       
-                    
+              
             $data = array(
                 'roles_module_data' => $roles_module_data,
                 'users_module_data' => $users_module_data,
@@ -136,9 +217,28 @@ class company_role_controller extends BaseController
                 'subscription_module_data' => $subscription_module_data,
                 'ai_prediction_module_data' => $ai_prediction_module_data,
                 'groups_module_data' => $groups_module_data,
-                'subscription_roles_page_data' => $subscription_roles_page_data                                          
+                'subscription_roles_page_data' => $subscription_roles_page_data,
+                // 
+                'model_builder_dataroot_page_data'=>$model_builder_dataroot_data,                                    
+                'model_builder_project_page_data'=>$model_builder_project_data,                                     
+                'model_builder_node_page_data'=>$model_builder_node_data,
+                'model_builder_node_parameter_data'=>$model_builder_node_parameter_data,
+                'model_builder_node_calculation_data'=>$model_builder_node_calculation_data,
+                'model_builder_node_expression_data'=>$model_builder_node_expression_data,
+                'model_builder_search'=>$model_builder_search,
+                'model_builder_template_data'=>$model_builder_template,
+                'model_builder_template_parameter_data'=>$model_builder_template_parameter_data,
+                'model_builder_template_calculation_data'=>$model_builder_template_calculation_data,
+                'model_builder_template_expression_page_data'=>$model_builder_template_expression_data,
+                'model_builder_template_mapped_node_data' => $model_builder_template_mapped_node_data,
+                'model_builder_tag_page_data'=>$model_builder_tag_data,
+                'model_builder_uom_category_page_data'=>$model_builder_uom_category_data,
+                'model_builder_uom_conversions_page_data'=>$model_builder_uom_conversion_data,
+                'model_builder_group_page_data'=>$model_builder_group_data,
+                // 
             );
 
+            // print_r($data['model_builder_page_data']);exit;
             return view("\Modules\company_role\Views\company_role",$data);
 
         } catch (\Exception $e) {
@@ -229,6 +329,138 @@ class company_role_controller extends BaseController
                 $ai_prediction_checkbox_edit = $this->request->getPost("ai_prediction_checkbox_edit");            
                 $ai_prediction_checkbox_delete = $this->request->getPost("ai_prediction_checkbox_delete");
 
+                // model builder code starts here
+                // data root code starts here
+                $mb_dataroot_checkbox_id = $this->request->getPost("model_builder_dataroot_checkbox_id");
+                $mb_dataroot_all_checkbox_value = $this->request->getPost("model_builder_all_dataroot_checkbox_value");
+                $mb_dataroot_checkbox_view = $this->request->getPost("model_builder_dataroot_checkbox_view");
+                $mb_dataroot_checkbox_edit = $this->request->getPost("model_builder_dataroot_checkbox_edit");
+                $mb_dataroot_checkbox_delete = $this->request->getPost("model_builder_dataroot_checkbox_delete");
+                // data root code ends here
+
+                // project code starts here
+                $mb_project_checkbox_id = $this->request->getPost("model_builder_project_checkbox_id");
+                $mb_project_all_checkbox_value = $this->request->getPost("model_builder_all_project_checkbox_value");
+                $mb_project_checkbox_view = $this->request->getPost("model_builder_project_checkbox_view");
+                $mb_project_checkbox_edit = $this->request->getPost("model_builder_project_checkbox_edit");
+                $mb_project_checkbox_delete = $this->request->getPost("model_builder_project_checkbox_delete");
+                // project code ends here
+
+                // node code starts here
+                $mb_node_checkbox_id = $this->request->getPost("model_builder_node_checkbox_id");
+                $mb_node_all_checkbox_value = $this->request->getPost("model_builder_all_node_checkbox_value");
+                $mb_node_checkbox_view = $this->request->getPost("model_builder_node_checkbox_view");
+                $mb_node_checkbox_edit = $this->request->getPost("model_builder_node_checkbox_edit");
+                $mb_node_checkbox_delete = $this->request->getPost("model_builder_node_checkbox_delete");
+                // node code ends here
+
+                // node parameter code starts here
+                $mb_node_parameter_checkbox_id = $this->request->getPost("model_builder_node_parameter_checkbox_id");
+                $mb_node_parameter_all_checkbox_value = $this->request->getPost("model_builder_all_node_parameter_checkbox_value");
+                $mb_node_parameter_checkbox_view = $this->request->getPost("model_builder_node_parameter_checkbox_view");
+                $mb_node_parameter_checkbox_edit = $this->request->getPost("model_builder_node_parameter_checkbox_edit");
+                $mb_node_parameter_checkbox_delete = $this->request->getPost("model_builder_node_parameter_checkbox_delete");
+                // node parameter code ends here
+
+                // node calculation code starts here
+                $mb_node_calculation_checkbox_id = $this->request->getPost("model_builder_node_calculation_checkbox_id");
+                $mb_node_calculation_all_checkbox_value = $this->request->getPost("model_builder_all_node_calculation_checkbox_value");
+                $mb_node_calculation_checkbox_view = $this->request->getPost("model_builder_node_calculation_checkbox_view");
+                $mb_node_calculation_checkbox_edit = $this->request->getPost("model_builder_node_calculation_checkbox_edit");
+                $mb_node_calculation_checkbox_delete = $this->request->getPost("model_builder_node_calculation_checkbox_delete");
+                // node calculation code ends here
+
+                // node expression code starts here
+                $mb_node_expression_checkbox_id = $this->request->getPost("model_builder_node_expression_checkbox_id");
+                $mb_node_expression_all_checkbox_value = $this->request->getPost("model_builder_all_node_expression_checkbox_value");
+                $mb_node_expression_checkbox_view = $this->request->getPost("model_builder_node_expression_checkbox_view");
+                $mb_node_expression_checkbox_edit = $this->request->getPost("model_builder_node_expression_checkbox_edit");
+                $mb_node_expression_checkbox_delete = $this->request->getPost("model_builder_node_expression_checkbox_delete");
+                // node expression code ends here
+
+                // search
+                $mb_search_checkbox_id = $this->request->getPost("model_builder_search_checkbox_id");
+                $mb_search_all_checkbox_value = $this->request->getPost("model_builder_all_search_checkbox_value");
+                $mb_search_checkbox_view = $this->request->getPost("model_builder_search_checkbox_view");
+                $mb_search_checkbox_edit = $this->request->getPost("model_builder_search_checkbox_edit");
+                $mb_search_checkbox_delete = $this->request->getPost("model_builder_search_checkbox_delete");
+                // search
+
+                // template
+                $mb_template_checkbox_id = $this->request->getPost("model_builder_template_checkbox_id");
+                $mb_template_all_checkbox_value = $this->request->getPost("model_builder_all_template_checkbox_value");
+                $mb_template_checkbox_view = $this->request->getPost("model_builder_template_checkbox_view");
+                $mb_template_checkbox_edit = $this->request->getPost("model_builder_template_checkbox_edit");
+                $mb_template_checkbox_delete = $this->request->getPost("model_builder_template_checkbox_delete");
+                // template
+
+                // template parameter
+                $mb_template_param_checkbox_id = $this->request->getPost("model_builder_template_parameter_checkbox_id");
+                $mb_template_param_all_checkbox_value = $this->request->getPost("model_builder_all_template_parameter_checkbox_value");
+                $mb_template_param_checkbox_view = $this->request->getPost("model_builder_template_parameter_checkbox_view");
+                $mb_template_param_checkbox_edit = $this->request->getPost("model_builder_template_parameter_checkbox_edit");
+                $mb_template_param_checkbox_delete = $this->request->getPost("model_builder_template_parameter_checkbox_delete");
+                // template parameter
+
+                // template calculation 
+                $mb_template_calc_checkbox_id = $this->request->getPost("model_builder_template_calculation_checkbox_id");
+                $mb_template_calc_all_checkbox_value = $this->request->getPost("model_builder_all_template_calculation_checkbox_value");
+                $mb_template_calc_checkbox_view = $this->request->getPost("model_builder_template_calculation_checkbox_view");
+                $mb_template_calc_checkbox_edit = $this->request->getPost("model_builder_template_calculation_checkbox_edit");
+                $mb_template_calc_checkbox_delete = $this->request->getPost("model_builder_template_calculation_checkbox_delete");
+                // template calculation 
+
+                // template expression
+                $mb_template_expr_checkbox_id = $this->request->getPost("model_builder_template_expression_checkbox_id");
+                $mb_template_expr_all_checkbox_value = $this->request->getPost("model_builder_all_template_expression_checkbox_value");
+                $mb_template_expr_checkbox_view = $this->request->getPost("model_builder_template_expression_checkbox_view");
+                $mb_template_expr_checkbox_edit = $this->request->getPost("model_builder_template_expression_checkbox_edit");
+                $mb_template_expr_checkbox_delete = $this->request->getPost("model_builder_template_expression_checkbox_delete");
+                // template expression
+
+                // template mapped node
+                $mb_template_mapped_node_checkbox_id = $this->request->getPost("model_builder_template_mapped_node_checkbox_id");
+                $mb_template_mapped_node_all_checkbox_value = $this->request->getPost("model_builder_all_template_mapped_node_checkbox_value");
+                $mb_template_mapped_node_checkbox_view = $this->request->getPost("model_builder_template_mapped_node_checkbox_view");
+                $mb_template_mapped_node_checkbox_edit = $this->request->getPost("model_builder_template_mapped_node_checkbox_edit");
+                // $mb_template_mapped_node_checkbox_delete = $this->request->getPost("model_builder_template_mapped_node_checkbox_delete");
+                
+
+                // template mapped node
+
+                // tag
+                $mb_tag_checkbox_id = $this->request->getPost("model_builder_tag_checkbox_id");
+                $mb_tag_all_checkbox_value = $this->request->getPost("model_builder_all_tag_checkbox_value");
+                $mb_tag_checkbox_view = $this->request->getPost("model_builder_tag_checkbox_view");
+                $mb_tag_checkbox_edit = $this->request->getPost("model_builder_tag_checkbox_edit");
+                $mb_tag_checkbox_delete = $this->request->getPost("model_builder_tag_checkbox_delete");
+                // tag
+
+                // uom categories
+                $mb_uom_category_checkbox_id = $this->request->getPost("model_builder_uom_category_checkbox_id");
+                $mb_uom_category_all_checkbox_value = $this->request->getPost("model_builder_all_uom_category_checkbox_value");
+                $mb_uom_category_checkbox_view = $this->request->getPost("model_builder_uom_category_checkbox_view");
+                $mb_uom_category_checkbox_edit = $this->request->getPost("model_builder_uom_category_checkbox_edit");
+                $mb_uom_category_checkbox_delete = $this->request->getPost("model_builder_uom_category_checkbox_delete"); 
+                // uom categories
+
+                // uom conversion
+                $mb_uom_conversions_checkbox_id = $this->request->getPost("model_builder_uom_conversions_checkbox_id");
+                $mb_uom_conversions_all_checkbox_value = $this->request->getPost("model_builder_all_uom_conversions_checkbox_value");
+                $mb_uom_conversions_checkbox_view = $this->request->getPost("model_builder_uom_conversions_checkbox_view");
+                $mb_uom_conversions_checkbox_edit = $this->request->getPost("model_builder_uom_conversions_checkbox_edit");
+                $mb_uom_conversions_checkbox_delete = $this->request->getPost("model_builder_uom_conversions_checkbox_delete");
+                // uom conversion
+
+                // group
+                $mb_group_checkbox_id = $this->request->getPost("model_builder_group_checkbox_id");
+                $mb_group_all_checkbox_value = $this->request->getPost("model_builder_all_group_checkbox_value");
+                $mb_group_checkbox_view = $this->request->getPost("model_builder_group_checkbox_view");
+                $mb_group_checkbox_edit = $this->request->getPost("model_builder_group_checkbox_edit");
+                $mb_group_checkbox_delete = $this->request->getPost("model_builder_group_checkbox_delete");
+                // group
+                // model builder code ends here
+
                 $role_data_whereConditions = [
                     'role_name' => $role_name,                    
                     'company_id' => $this->customer_id,                                    
@@ -238,7 +470,7 @@ class company_role_controller extends BaseController
 
                 if(empty($result) && $role_name != COMPANY_ADMIN_ROLE_NAME)
                 {
-                    $roles_add = $this->company_role_model->add_page_roles_details($role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $groups_checkbox_id, $groups_all_checkbox_value, $groups_checkbox_view, $groups_checkbox_edit, $groups_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $aggregation_checkbox_id, $aggregation_all_checkbox_value, $aggregation_checkbox_view, $aggregation_checkbox_edit, $aggregation_checkbox_delete, $mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete, $reports_checkbox_id, $reports_all_checkbox_value, $reports_checkbox_view, $reports_checkbox_edit, $reports_checkbox_delete, $notification_checkbox_id, $notification_all_checkbox_value, $notification_checkbox_view, $notification_checkbox_edit, $notification_checkbox_delete, $subscription_checkbox_id, $subscription_all_checkbox_value, $subscription_checkbox_view, $subscription_checkbox_edit, $subscription_checkbox_delete, $ai_prediction_checkbox_id, $ai_prediction_all_checkbox_value, $ai_prediction_checkbox_view, $ai_prediction_checkbox_edit, $ai_prediction_checkbox_delete);
+                    $roles_add = $this->company_role_model->add_page_roles_details($role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $groups_checkbox_id, $groups_all_checkbox_value, $groups_checkbox_view, $groups_checkbox_edit, $groups_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $aggregation_checkbox_id, $aggregation_all_checkbox_value, $aggregation_checkbox_view, $aggregation_checkbox_edit, $aggregation_checkbox_delete, $mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete, $reports_checkbox_id, $reports_all_checkbox_value, $reports_checkbox_view, $reports_checkbox_edit, $reports_checkbox_delete, $notification_checkbox_id, $notification_all_checkbox_value, $notification_checkbox_view, $notification_checkbox_edit, $notification_checkbox_delete, $subscription_checkbox_id, $subscription_all_checkbox_value, $subscription_checkbox_view, $subscription_checkbox_edit, $subscription_checkbox_delete, $ai_prediction_checkbox_id, $ai_prediction_all_checkbox_value, $ai_prediction_checkbox_view, $ai_prediction_checkbox_edit, $ai_prediction_checkbox_delete,$mb_dataroot_checkbox_id,$mb_dataroot_all_checkbox_value,$mb_dataroot_checkbox_view,$mb_dataroot_checkbox_edit,$mb_dataroot_checkbox_delete,$mb_project_checkbox_id,$mb_project_all_checkbox_value,$mb_project_checkbox_view,$mb_project_checkbox_edit,$mb_project_checkbox_delete,$mb_node_checkbox_id,$mb_node_all_checkbox_value,$mb_node_checkbox_view,$mb_node_checkbox_edit,$mb_node_checkbox_delete,$mb_node_parameter_checkbox_id,$mb_node_parameter_all_checkbox_value,$mb_node_parameter_checkbox_view,$mb_node_parameter_checkbox_edit,$mb_node_parameter_checkbox_delete,$mb_node_calculation_checkbox_id,$mb_node_calculation_all_checkbox_value,$mb_node_calculation_checkbox_view,$mb_node_calculation_checkbox_edit,$mb_node_calculation_checkbox_delete,$mb_node_expression_checkbox_id,$mb_node_expression_all_checkbox_value,$mb_node_expression_checkbox_view,$mb_node_expression_checkbox_edit,$mb_node_expression_checkbox_delete,$mb_search_checkbox_id,$mb_search_all_checkbox_value,$mb_search_checkbox_view,$mb_search_checkbox_edit,$mb_search_checkbox_delete,$mb_template_checkbox_id,$mb_template_all_checkbox_value,$mb_template_checkbox_view,$mb_template_checkbox_edit,$mb_template_checkbox_delete,$mb_template_param_checkbox_id,$mb_template_param_all_checkbox_value,$mb_template_param_checkbox_view,$mb_template_param_checkbox_edit,$mb_template_param_checkbox_delete,$mb_template_calc_checkbox_id,$mb_template_calc_all_checkbox_value,$mb_template_calc_checkbox_view,$mb_template_calc_checkbox_edit,$mb_template_calc_checkbox_delete,$mb_template_expr_checkbox_id,$mb_template_expr_all_checkbox_value,$mb_template_expr_checkbox_view,$mb_template_expr_checkbox_edit,$mb_template_expr_checkbox_delete,$mb_tag_checkbox_id,$mb_tag_all_checkbox_value,$mb_tag_checkbox_view,$mb_tag_checkbox_edit,$mb_tag_checkbox_delete,$mb_uom_category_checkbox_id,$mb_uom_category_all_checkbox_value,$mb_uom_category_checkbox_view,$mb_uom_category_checkbox_edit,$mb_uom_category_checkbox_delete,$mb_uom_conversions_checkbox_id,$mb_uom_conversions_all_checkbox_value,$mb_uom_conversions_checkbox_view,$mb_uom_conversions_checkbox_edit,$mb_uom_conversions_checkbox_delete,$mb_group_checkbox_id,$mb_group_all_checkbox_value,$mb_group_checkbox_view,$mb_group_checkbox_edit,$mb_group_checkbox_delete,$mb_template_mapped_node_checkbox_id,$mb_template_mapped_node_all_checkbox_value,$mb_template_mapped_node_checkbox_view,$mb_template_mapped_node_checkbox_edit);
 
                     if($roles_add)
                     {
@@ -341,7 +573,7 @@ class company_role_controller extends BaseController
                 'company_id' => $this->customer_id,                                        
             ];
 
-            $roles_details = $this->company_role_model->GetTableValue('tbl_roles', 'id,role_name,description,roles_all_pages,users_all_pages,groups_all_pages,opc_all_pages,mqtt_all_pages,http_all_pages,tag_all_pages, data_aggregation_all_pages, bulk_import_status_all_pages,dashboard_status_all_pages,reports_status_all_pages,notify_all_checkbox_value,subscription_all_pages,ai_prediction_all_pages,status', $role_data_whereConditions);
+            $roles_details = $this->company_role_model->GetTableValue('tbl_roles', 'id,role_name,description,roles_all_pages,users_all_pages,groups_all_pages,opc_all_pages,mqtt_all_pages,http_all_pages,tag_all_pages, data_aggregation_all_pages, bulk_import_status_all_pages,dashboard_status_all_pages,reports_status_all_pages,notify_all_checkbox_value,subscription_all_pages,ai_prediction_all_pages,mb_dataroot_all_pages,mb_project_all_pages,mb_node_all_pages,mb_node_parameter_all_pages,mb_node_calculation_all_pages,mb_node_expression_all_pages,mb_search_all_pages,mb_template_all_pages,mb_template_parameter_all_pages,mb_template_calculation_all_pages,mb_template_expression_all_pages,mb_tag_all_pages,mb_uom_categories_all_pages,mb_uom_conversions_all_pages,mb_group_all_pages,status,mb_template_mapped_node_all_pages', $role_data_whereConditions);
 
             if(empty($roles_details))
             {
@@ -430,6 +662,89 @@ class company_role_controller extends BaseController
                 'tcp.page_name' => 'groups'
             ];
 
+            // from here model bulder code starts
+            $model_builder_dataroot_like = [
+                'tcp.page_name' => 'dataroot'
+            ];
+            $model_builder_dataroot_data = $this->company_role_model->get_page_details($model_builder_dataroot_like);
+
+            $model_builder_project_like = [
+                'tcp.page_name' => 'project'
+            ];
+            $model_builder_project_data = $this->company_role_model->get_page_details($model_builder_project_like);
+
+            $model_builder_node_like = [
+                'tcp.page_name' => 'node(s)'
+            ];
+            $model_builder_node_data = $this->company_role_model->get_page_details($model_builder_node_like);
+
+            $model_builder_node_parameter_like = [
+                'tcp.page_name' => 'node_parameter'
+            ];
+            $model_builder_node_parameter_data = $this->company_role_model->get_page_details($model_builder_node_parameter_like);
+
+            $model_builder_node_calculation_like = [
+                'tcp.page_name' => 'node_calculation'
+            ];
+            $model_builder_node_calculation_data = $this->company_role_model->get_page_details($model_builder_node_calculation_like);
+
+            $model_builder_node_expression_like = [
+                'tcp.page_name' => 'node_expression'
+            ];
+            $model_builder_node_expression_data = $this->company_role_model->get_page_details($model_builder_node_expression_like);
+
+            $model_builder_search_like = [
+                'tcp.page_name' => 'model_builder_search'
+            ];
+            $model_builder_search = $this->company_role_model->get_page_details($model_builder_search_like);
+
+            $model_builder_template_like = [
+                'tcp.page_name' => 'template(s)'
+            ];
+            $model_builder_template = $this->company_role_model->get_page_details($model_builder_template_like);
+
+            $model_builder_template_parameter_like = [
+                'tcp.page_name' => 'template_parameter'
+            ];
+            $model_builder_template_parameter_data = $this->company_role_model->get_page_details($model_builder_template_parameter_like);
+
+            $model_builder_template_calculation_like = [
+                'tcp.page_name' => 'template_calculation'
+            ];
+            $model_builder_template_calculation_data = $this->company_role_model->get_page_details($model_builder_template_calculation_like);
+
+            $model_builder_template_expression_like = [
+                'tcp.page_name' => 'tmp_expression'
+            ];
+            $model_builder_template_expression_data = $this->company_role_model->get_page_details($model_builder_template_expression_like);
+
+            $model_builder_template_mapped_node_like = [
+                'tcp.page_name' => 'model_builder_template_mapped_node'
+            ];
+            $model_builder_template_mapped_node_data = $this->company_role_model->get_page_details($model_builder_template_mapped_node_like);
+
+            $model_builder_tag_like = [
+                'tcp.page_name' => 'model_builder_tag'
+            ];
+            $model_builder_tag_data = $this->company_role_model->get_page_details($model_builder_tag_like);
+
+            $model_builder_uom_category_like = [
+                'tcp.page_name' => 'model_builder_uom_category'
+            ];
+            $model_builder_uom_category_data = $this->company_role_model->get_page_details($model_builder_uom_category_like);
+
+            $model_builder_uom_conversion_like = [
+                'tcp.page_name' => 'model_builder_uom_conversion'
+            ];
+            $model_builder_uom_conversion_data = $this->company_role_model->get_page_details($model_builder_uom_conversion_like);
+
+            $model_builder_group_like = [
+                'tcp.page_name' => 'model_builder_group'
+            ];
+            $model_builder_group_data = $this->company_role_model->get_page_details($model_builder_group_like);
+            // from here model bulder code starts
+
+
             $groups_module_data = $this->company_role_model->get_page_details($groups_module_like);
 
             $subscription_roles_page_data = $this->company_role_model->get_subscription_page_details(); 
@@ -450,9 +765,27 @@ class company_role_controller extends BaseController
                 'subscription_module_data' => $subscription_module_data,
                 'ai_prediction_module_data' => $ai_prediction_module_data,
                 'groups_module_data' => $groups_module_data,
-                'subscription_roles_page_data' => $subscription_roles_page_data
+                'subscription_roles_page_data' => $subscription_roles_page_data,
+                // 
+                'model_builder_dataroot_page_data' => $model_builder_dataroot_data,
+                'model_builder_project_page_data' => $model_builder_project_data,
+                'model_builder_node_page_data' => $model_builder_node_data,
+                'model_builder_node_parameter_data' => $model_builder_node_parameter_data,
+                'model_builder_node_calculation_data' => $model_builder_node_calculation_data,
+                'model_builder_node_expression_data' => $model_builder_node_expression_data,
+                'model_builder_search' => $model_builder_search,
+                'model_builder_template_data' => $model_builder_template,
+                'model_builder_template_parameter_data' => $model_builder_template_parameter_data,
+                'model_builder_template_calculation_data' => $model_builder_template_calculation_data,
+                'model_builder_template_expression_page_data' => $model_builder_template_expression_data,
+                'model_builder_template_mapped_node_data' => $model_builder_template_mapped_node_data,
+                'model_builder_tag_page_data' => $model_builder_tag_data,
+                'model_builder_uom_category_page_data' => $model_builder_uom_category_data,
+                'model_builder_uom_conversions_page_data' => $model_builder_uom_conversion_data,
+                'model_builder_group_page_data' => $model_builder_group_data,
+                // 
             );
-
+            // print_r($data["model_builder_template_mapped_node_data"]);exit;
             return view("\Modules\company_role\Views\company_role_edit",$data);
 
         }catch(\Exception $e){
@@ -544,6 +877,136 @@ class company_role_controller extends BaseController
                 $ai_prediction_checkbox_edit = $this->request->getPost("ai_prediction_checkbox_edit");            
                 $ai_prediction_checkbox_delete = $this->request->getPost("ai_prediction_checkbox_delete");
 
+                // model builder code starts here
+                // data root code starts here
+                $mb_dataroot_checkbox_id = $this->request->getPost("model_builder_dataroot_checkbox_id");
+                $mb_dataroot_all_checkbox_value = $this->request->getPost("model_builder_all_dataroot_checkbox_value");
+                $mb_dataroot_checkbox_view = $this->request->getPost("model_builder_dataroot_checkbox_view");
+                $mb_dataroot_checkbox_edit = $this->request->getPost("model_builder_dataroot_checkbox_edit");
+                $mb_dataroot_checkbox_delete = $this->request->getPost("model_builder_dataroot_checkbox_delete");
+                // data root code ends here
+
+                // project code starts here
+                $mb_project_checkbox_id = $this->request->getPost("model_builder_project_checkbox_id");
+                $mb_project_all_checkbox_value = $this->request->getPost("model_builder_all_project_checkbox_value");
+                $mb_project_checkbox_view = $this->request->getPost("model_builder_project_checkbox_view");
+                $mb_project_checkbox_edit = $this->request->getPost("model_builder_project_checkbox_edit");
+                $mb_project_checkbox_delete = $this->request->getPost("model_builder_project_checkbox_delete");
+                // project code ends here
+
+                // node code starts here
+                $mb_node_checkbox_id = $this->request->getPost("model_builder_node_checkbox_id");
+                $mb_node_all_checkbox_value = $this->request->getPost("model_builder_all_node_checkbox_value");
+                $mb_node_checkbox_view = $this->request->getPost("model_builder_node_checkbox_view");
+                $mb_node_checkbox_edit = $this->request->getPost("model_builder_node_checkbox_edit");
+                $mb_node_checkbox_delete = $this->request->getPost("model_builder_node_checkbox_delete");
+                // node code ends here
+
+                // node parameter code starts here
+                $mb_node_parameter_checkbox_id = $this->request->getPost("model_builder_node_parameter_checkbox_id");
+                $mb_node_parameter_all_checkbox_value = $this->request->getPost("model_builder_all_node_parameter_checkbox_value");
+                $mb_node_parameter_checkbox_view = $this->request->getPost("model_builder_node_parameter_checkbox_view");
+                $mb_node_parameter_checkbox_edit = $this->request->getPost("model_builder_node_parameter_checkbox_edit");
+                $mb_node_parameter_checkbox_delete = $this->request->getPost("model_builder_node_parameter_checkbox_delete");
+                // node parameter code ends here
+
+                // node calculation code starts here
+                $mb_node_calculation_checkbox_id = $this->request->getPost("model_builder_node_calculation_checkbox_id");
+                $mb_node_calculation_all_checkbox_value = $this->request->getPost("model_builder_all_node_calculation_checkbox_value");
+                $mb_node_calculation_checkbox_view = $this->request->getPost("model_builder_node_calculation_checkbox_view");
+                $mb_node_calculation_checkbox_edit = $this->request->getPost("model_builder_node_calculation_checkbox_edit");
+                $mb_node_calculation_checkbox_delete = $this->request->getPost("model_builder_node_calculation_checkbox_delete");
+                // node calculation code ends here
+
+                // node expression code starts here
+                $mb_node_expression_checkbox_id = $this->request->getPost("model_builder_node_expression_checkbox_id");
+                $mb_node_expression_all_checkbox_value = $this->request->getPost("model_builder_all_node_expression_checkbox_value");
+                $mb_node_expression_checkbox_view = $this->request->getPost("model_builder_node_expression_checkbox_view");
+                $mb_node_expression_checkbox_edit = $this->request->getPost("model_builder_node_expression_checkbox_edit");
+                $mb_node_expression_checkbox_delete = $this->request->getPost("model_builder_node_expression_checkbox_delete");
+                // node expression code ends here
+
+                // search
+                $mb_search_checkbox_id = $this->request->getPost("model_builder_search_checkbox_id");
+                $mb_search_all_checkbox_value = $this->request->getPost("model_builder_all_search_checkbox_value");
+                $mb_search_checkbox_view = $this->request->getPost("model_builder_search_checkbox_view");
+                $mb_search_checkbox_edit = $this->request->getPost("model_builder_search_checkbox_edit");
+                $mb_search_checkbox_delete = $this->request->getPost("model_builder_search_checkbox_delete");
+                // search
+
+                // template
+                $mb_template_checkbox_id = $this->request->getPost("model_builder_template_checkbox_id");
+                $mb_template_all_checkbox_value = $this->request->getPost("model_builder_all_template_checkbox_value");
+                $mb_template_checkbox_view = $this->request->getPost("model_builder_template_checkbox_view");
+                $mb_template_checkbox_edit = $this->request->getPost("model_builder_template_checkbox_edit");
+                $mb_template_checkbox_delete = $this->request->getPost("model_builder_template_checkbox_delete");
+                // template
+
+                // template parameter
+                $mb_template_param_checkbox_id = $this->request->getPost("model_builder_template_parameter_checkbox_id");
+                $mb_template_param_all_checkbox_value = $this->request->getPost("model_builder_all_template_parameter_checkbox_value");
+                $mb_template_param_checkbox_view = $this->request->getPost("model_builder_template_parameter_checkbox_view");
+                $mb_template_param_checkbox_edit = $this->request->getPost("model_builder_template_parameter_checkbox_edit");
+                $mb_template_param_checkbox_delete = $this->request->getPost("model_builder_template_parameter_checkbox_delete");
+                // template parameter
+
+                // template calculation 
+                $mb_template_calc_checkbox_id = $this->request->getPost("model_builder_template_calculation_checkbox_id");
+                $mb_template_calc_all_checkbox_value = $this->request->getPost("model_builder_all_template_calculation_checkbox_value");
+                $mb_template_calc_checkbox_view = $this->request->getPost("model_builder_template_calculation_checkbox_view");
+                $mb_template_calc_checkbox_edit = $this->request->getPost("model_builder_template_calculation_checkbox_edit");
+                $mb_template_calc_checkbox_delete = $this->request->getPost("model_builder_template_calculation_checkbox_delete");
+                // template calculation 
+
+                // template expression
+                $mb_template_expr_checkbox_id = $this->request->getPost("model_builder_template_expression_checkbox_id");
+                $mb_template_expr_all_checkbox_value = $this->request->getPost("model_builder_all_template_expression_checkbox_value");
+                $mb_template_expr_checkbox_view = $this->request->getPost("model_builder_template_expression_checkbox_view");
+                $mb_template_expr_checkbox_edit = $this->request->getPost("model_builder_template_expression_checkbox_edit");
+                $mb_template_expr_checkbox_delete = $this->request->getPost("model_builder_template_expression_checkbox_delete");
+                // template expression
+
+                // template mapped node
+                $mb_template_mapped_node_checkbox_id = $this->request->getPost("model_builder_template_mapped_node_checkbox_id");
+                $mb_template_mapped_node_all_checkbox_value = $this->request->getPost("model_builder_all_template_mapped_node_checkbox_value");
+                $mb_template_mapped_node_checkbox_view = $this->request->getPost("model_builder_template_mapped_node_checkbox_view");
+                $mb_template_mapped_node_checkbox_edit = $this->request->getPost("model_builder_template_mapped_node_checkbox_edit");
+                // $mb_template_mapped_node_checkbox_delete = $this->request->getPost("model_builder_template_mapped_node_checkbox_delete");
+                // template mapped node
+
+                // tag
+                $mb_tag_checkbox_id = $this->request->getPost("model_builder_tag_checkbox_id");
+                $mb_tag_all_checkbox_value = $this->request->getPost("model_builder_all_tag_checkbox_value");
+                $mb_tag_checkbox_view = $this->request->getPost("model_builder_tag_checkbox_view");
+                $mb_tag_checkbox_edit = $this->request->getPost("model_builder_tag_checkbox_edit");
+                $mb_tag_checkbox_delete = $this->request->getPost("model_builder_tag_checkbox_delete");
+                // tag
+
+                // uom categories
+                $mb_uom_category_checkbox_id = $this->request->getPost("model_builder_uom_category_checkbox_id");
+                $mb_uom_category_all_checkbox_value = $this->request->getPost("model_builder_all_uom_category_checkbox_value");
+                $mb_uom_category_checkbox_view = $this->request->getPost("model_builder_uom_category_checkbox_view");
+                $mb_uom_category_checkbox_edit = $this->request->getPost("model_builder_uom_category_checkbox_edit");
+                $mb_uom_category_checkbox_delete = $this->request->getPost("model_builder_uom_category_checkbox_delete"); 
+                // uom categories
+
+                // uom conversion
+                $mb_uom_conversions_checkbox_id = $this->request->getPost("model_builder_uom_conversions_checkbox_id");
+                $mb_uom_conversions_all_checkbox_value = $this->request->getPost("model_builder_all_uom_conversions_checkbox_value");
+                $mb_uom_conversions_checkbox_view = $this->request->getPost("model_builder_uom_conversions_checkbox_view");
+                $mb_uom_conversions_checkbox_edit = $this->request->getPost("model_builder_uom_conversions_checkbox_edit");
+                $mb_uom_conversions_checkbox_delete = $this->request->getPost("model_builder_uom_conversions_checkbox_delete");
+                // uom conversion
+
+                // group
+                $mb_group_checkbox_id = $this->request->getPost("model_builder_group_checkbox_id");
+                $mb_group_all_checkbox_value = $this->request->getPost("model_builder_all_group_checkbox_value");
+                $mb_group_checkbox_view = $this->request->getPost("model_builder_group_checkbox_view");
+                $mb_group_checkbox_edit = $this->request->getPost("model_builder_group_checkbox_edit");
+                $mb_group_checkbox_delete = $this->request->getPost("model_builder_group_checkbox_delete");
+                // group
+                // model builder code ends here
+
                 $role_data_whereConditions = [
                     'id' => $role_id,
                     'role_name' => $role_name,                    
@@ -554,7 +1017,7 @@ class company_role_controller extends BaseController
 
                 if(!empty($result))
                 {
-                    $roles_update = $this->company_role_model->update_page_roles_details($role_id, $role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $groups_checkbox_id, $groups_all_checkbox_value, $groups_checkbox_view, $groups_checkbox_edit, $groups_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $aggregation_checkbox_id, $aggregation_all_checkbox_value, $aggregation_checkbox_view, $aggregation_checkbox_edit, $aggregation_checkbox_delete,$mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete, $reports_checkbox_id, $reports_all_checkbox_value, $reports_checkbox_view, $reports_checkbox_edit, $reports_checkbox_delete, $notification_checkbox_id, $notification_all_checkbox_value, $notification_checkbox_view, $notification_checkbox_edit, $notification_checkbox_delete, $subscription_checkbox_id, $subscription_all_checkbox_value, $subscription_checkbox_view, $subscription_checkbox_edit, $subscription_checkbox_delete, $ai_prediction_checkbox_id, $ai_prediction_all_checkbox_value, $ai_prediction_checkbox_view, $ai_prediction_checkbox_edit, $ai_prediction_checkbox_delete);
+                    $roles_update = $this->company_role_model->update_page_roles_details($role_id, $role_name, $description, $status,  $roles_checkbox_id, $roles_all_checkbox_value, $roles_checkbox_view, $roles_checkbox_edit, $roles_checkbox_delete, $users_checkbox_id, $users_all_checkbox_value, $users_checkbox_view, $users_checkbox_edit, $users_checkbox_delete, $groups_checkbox_id, $groups_all_checkbox_value, $groups_checkbox_view, $groups_checkbox_edit, $groups_checkbox_delete, $opc_checkbox_id, $opc_all_checkbox_value, $opc_checkbox_view, $opc_checkbox_edit, $opc_checkbox_delete, $tag_checkbox_id, $tag_all_checkbox_value, $tag_checkbox_view, $tag_checkbox_edit, $tag_checkbox_delete, $aggregation_checkbox_id, $aggregation_all_checkbox_value, $aggregation_checkbox_view, $aggregation_checkbox_edit, $aggregation_checkbox_delete,$mqtt_checkbox_id, $mqtt_all_checkbox_value, $mqtt_checkbox_view, $mqtt_checkbox_edit, $mqtt_checkbox_delete, $http_checkbox_id, $http_all_checkbox_value, $http_checkbox_view, $http_checkbox_edit, $http_checkbox_delete, $bulk_checkbox_id, $bulk_all_checkbox_value, $bulk_checkbox_view, $bulk_checkbox_edit, $bulk_checkbox_delete, $dashboard_checkbox_id,$dashboard_all_checkbox_value, $dashboard_checkbox_view, $dashboard_checkbox_edit, $dashboard_checkbox_delete, $reports_checkbox_id, $reports_all_checkbox_value, $reports_checkbox_view, $reports_checkbox_edit, $reports_checkbox_delete, $notification_checkbox_id, $notification_all_checkbox_value, $notification_checkbox_view, $notification_checkbox_edit, $notification_checkbox_delete, $subscription_checkbox_id, $subscription_all_checkbox_value, $subscription_checkbox_view, $subscription_checkbox_edit, $subscription_checkbox_delete, $ai_prediction_checkbox_id, $ai_prediction_all_checkbox_value, $ai_prediction_checkbox_view, $ai_prediction_checkbox_edit, $ai_prediction_checkbox_delete,$mb_dataroot_checkbox_id,$mb_dataroot_all_checkbox_value,$mb_dataroot_checkbox_view,$mb_dataroot_checkbox_edit,$mb_dataroot_checkbox_delete,$mb_project_checkbox_id,$mb_project_all_checkbox_value,$mb_project_checkbox_view,$mb_project_checkbox_edit,$mb_project_checkbox_delete,$mb_node_checkbox_id,$mb_node_all_checkbox_value,$mb_node_checkbox_view,$mb_node_checkbox_edit,$mb_node_checkbox_delete,$mb_node_parameter_checkbox_id,$mb_node_parameter_all_checkbox_value,$mb_node_parameter_checkbox_view,$mb_node_parameter_checkbox_edit,$mb_node_parameter_checkbox_delete,$mb_node_calculation_checkbox_id,$mb_node_calculation_all_checkbox_value,$mb_node_calculation_checkbox_view,$mb_node_calculation_checkbox_edit,$mb_node_calculation_checkbox_delete,$mb_node_expression_checkbox_id,$mb_node_expression_all_checkbox_value,$mb_node_expression_checkbox_view,$mb_node_expression_checkbox_edit,$mb_node_expression_checkbox_delete,$mb_search_checkbox_id,$mb_search_all_checkbox_value,$mb_search_checkbox_view,$mb_search_checkbox_edit,$mb_search_checkbox_delete,$mb_template_checkbox_id,$mb_template_all_checkbox_value,$mb_template_checkbox_view,$mb_template_checkbox_edit,$mb_template_checkbox_delete,$mb_template_param_checkbox_id,$mb_template_param_all_checkbox_value,$mb_template_param_checkbox_view,$mb_template_param_checkbox_edit,$mb_template_param_checkbox_delete,$mb_template_calc_checkbox_id,$mb_template_calc_all_checkbox_value,$mb_template_calc_checkbox_view,$mb_template_calc_checkbox_edit,$mb_template_calc_checkbox_delete,$mb_template_expr_checkbox_id,$mb_template_expr_all_checkbox_value,$mb_template_expr_checkbox_view,$mb_template_expr_checkbox_edit,$mb_template_expr_checkbox_delete,$mb_tag_checkbox_id,$mb_tag_all_checkbox_value,$mb_tag_checkbox_view,$mb_tag_checkbox_edit,$mb_tag_checkbox_delete,$mb_uom_category_checkbox_id,$mb_uom_category_all_checkbox_value,$mb_uom_category_checkbox_view,$mb_uom_category_checkbox_edit,$mb_uom_category_checkbox_delete,$mb_uom_conversions_checkbox_id,$mb_uom_conversions_all_checkbox_value,$mb_uom_conversions_checkbox_view,$mb_uom_conversions_checkbox_edit,$mb_uom_conversions_checkbox_delete,$mb_group_checkbox_id,$mb_group_all_checkbox_value,$mb_group_checkbox_view,$mb_group_checkbox_edit,$mb_group_checkbox_delete,$mb_template_mapped_node_checkbox_id,$mb_template_mapped_node_all_checkbox_value,$mb_template_mapped_node_checkbox_view,$mb_template_mapped_node_checkbox_edit);
                 
                     session()->setFlashdata('success', 'Roles Successfully Updated.');             
                 }

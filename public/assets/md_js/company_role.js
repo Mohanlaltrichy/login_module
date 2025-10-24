@@ -248,7 +248,252 @@
         }
     });
 
-    $('.roles_checkbox, .users_checkbox, .groups_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .aggregation_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox, .subscription_checkbox, .ai_prediction_checkbox').change(function()
+    // codes for model builder starts here
+    // dataroot code starts here
+    $('#model_builder_all_dataroot_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked == true) {
+            $('.model_builder_dataroot_checkbox').prop("checked", true);
+            $('#model_builder_all_dataroot_checkbox_value').val('1');
+            $('.model_builder_dataroot_checkbox_value').val('1');
+        }
+        else {
+            $('.model_builder_dataroot_checkbox').prop("checked", false);
+            $('#model_builder_all_dataroot_checkbox_value').val('0');
+            $('.model_builder_dataroot_checkbox_value').val('0');
+        }
+    });
+    // dataroot code ends here
+
+    // project code starts here
+    $('#model_builder_all_project_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_project_checkbox').prop("checked", true);
+            $('#model_builder_all_project_checkbox_value').val('1');
+            $('.model_builder_project_checkbox_value').val('1');
+        } else {
+            $('.model_builder_project_checkbox').prop("checked", false);
+            $('#model_builder_all_project_checkbox_value').val('0');
+            $('.model_builder_project_checkbox_value').val('0');
+        }
+    });
+    // project code ends here
+
+    // node code starts here
+     $('#model_builder_all_node_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_node_checkbox').prop("checked", true);
+            $('#model_builder_all_node_checkbox_value').val('1');
+            $('.model_builder_node_checkbox_value').val('1');
+        } else {
+            $('.model_builder_node_checkbox').prop("checked", false);
+            $('#model_builder_all_node_checkbox_value').val('0');
+            $('.model_builder_node_checkbox_value').val('0');
+        }
+    });
+    // node code ends here
+
+    // node paaremeter code starts here
+    $('#model_builder_all_node_parameter_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_node_parameter_checkbox').prop("checked", true);
+            $('#model_builder_all_node_parameter_checkbox_value').val('1');
+            $('.model_builder_node_parameter_checkbox_value').val('1');
+        } else {
+            $('.model_builder_node_parameter_checkbox').prop("checked", false);
+            $('#model_builder_all_node_parameter_checkbox_value').val('0');
+            $('.model_builder_node_parameter_checkbox_value').val('0');
+        }
+    });
+    // node paaremeter code ends here
+
+    // node calculation starts here
+    $('#model_builder_all_node_calculation_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_node_calculation_checkbox').prop("checked", true);
+            $('#model_builder_all_node_calculation_checkbox_value').val('1');
+            $('.model_builder_node_calculation_checkbox_value').val('1');
+        } else {
+            $('.model_builder_node_calculation_checkbox').prop("checked", false);
+            $('#model_builder_all_node_calculation_checkbox_value').val('0');
+            $('.model_builder_node_calculation_checkbox_value').val('0');
+        }
+    });
+    // node calculation starts here
+
+    // node expression code starts here
+    $('#model_builder_all_node_expression_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_node_expression_checkbox').prop("checked", true);
+            $('#model_builder_all_node_expression_checkbox_value').val('1');
+            $('.model_builder_node_expression_checkbox_value').val('1');
+        } else {
+            $('.model_builder_node_expression_checkbox').prop("checked", false);
+            $('#model_builder_all_node_expression_checkbox_value').val('0');
+            $('.model_builder_node_expression_checkbox_value').val('0');
+        }
+    });
+    // node expression code ends here
+
+    // search code starts here
+    $('#model_builder_all_search_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_search_checkbox').prop("checked", true);
+            $('#model_builder_all_search_checkbox_value').val('1');
+            $('.model_builder_search_checkbox_value').val('1');
+        } else {
+            $('.model_builder_search_checkbox').prop("checked", false);
+            $('#model_builder_all_search_checkbox_value').val('0');
+            $('.model_builder_search_checkbox_value').val('0');
+        }
+    });
+    // search code ends here
+
+    // template code starts here
+    $('#model_builder_all_template_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_template_checkbox').prop("checked", true);
+            $('#model_builder_all_template_checkbox_value').val('1');
+            $('.model_builder_template_checkbox_value').val('1');
+        } else {
+            $('.model_builder_template_checkbox').prop("checked", false);
+            $('#model_builder_all_template_checkbox_value').val('0');
+            $('.model_builder_template_checkbox_value').val('0');
+        }
+    });
+    // template code ends here
+
+    // template parameter code starts here
+    $('#model_builder_all_template_parameter_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_template_parameter_checkbox').prop("checked", true);
+            $('#model_builder_all_template_parameter_checkbox_value').val('1');
+            $('.model_builder_template_parameter_checkbox_value').val('1');
+        } else {
+            $('.model_builder_template_parameter_checkbox').prop("checked", false);
+            $('#model_builder_all_template_parameter_checkbox_value').val('0');
+            $('.model_builder_template_parameter_checkbox_value').val('0');
+        }
+    });
+    // template parameter code ends here
+
+    // template calculation code starts here
+    // Handle "Select All" checkbox for Template Calculation
+    $('#model_builder_all_template_calculation_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_template_calculation_checkbox').prop("checked", true);
+            $('#model_builder_all_template_calculation_checkbox_value').val('1');
+            $('.model_builder_template_calculation_checkbox_value').val('1');
+        } else {
+            $('.model_builder_template_calculation_checkbox').prop("checked", false);
+            $('#model_builder_all_template_calculation_checkbox_value').val('0');
+            $('.model_builder_template_calculation_checkbox_value').val('0');
+        }
+    });
+    // template calculation code ends here
+
+    // template expression code starts here
+    $('#model_builder_all_template_expression_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_template_expression_checkbox').prop("checked", true);
+            $('#model_builder_all_template_expression_checkbox_value').val('1');
+            $('.model_builder_template_expression_checkbox_value').val('1');
+        } else {
+            $('.model_builder_template_expression_checkbox').prop("checked", false);
+            $('#model_builder_all_template_expression_checkbox_value').val('0');
+            $('.model_builder_template_expression_checkbox_value').val('0');
+        }
+    });
+    // template expression code ends here
+
+    // tag code starts here
+    $('#model_builder_all_tag_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_tag_checkbox').prop("checked", true);
+            $('#model_builder_all_tag_checkbox_value').val('1');
+            $('.model_builder_tag_checkbox_value').val('1');
+        } else {
+            $('.model_builder_tag_checkbox').prop("checked", false);
+            $('#model_builder_all_tag_checkbox_value').val('0');
+            $('.model_builder_tag_checkbox_value').val('0');
+        }
+    });
+    // tag code ends here
+
+    // uom categories code starts here
+    $('#model_builder_all_uom_category_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_uom_category_checkbox').prop("checked", true);
+            $('#model_builder_all_uom_category_checkbox_value').val('1');
+            $('.model_builder_uom_category_checkbox_value').val('1');
+        } else {
+            $('.model_builder_uom_category_checkbox').prop("checked", false);
+            $('#model_builder_all_uom_category_checkbox_value').val('0');
+            $('.model_builder_uom_category_checkbox_value').val('0');
+        }
+    });
+    // uom categories code ends here
+
+    // uom conversion code starts here
+    $('#model_builder_all_uom_conversions_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_uom_conversions_checkbox').prop("checked", true);
+            $('#model_builder_all_uom_conversions_checkbox_value').val('1');
+            $('.model_builder_uom_conversions_checkbox_value').val('1');
+        } else {
+            $('.model_builder_uom_conversions_checkbox').prop("checked", false);
+            $('#model_builder_all_uom_conversions_checkbox_value').val('0');
+            $('.model_builder_uom_conversions_checkbox_value').val('0');
+        }
+    });
+    // uom conversion code ends here
+
+    // group code starts here
+    $('#model_builder_all_group_checkbox').change(function () {
+        var isChecked = $(this).prop("checked");
+        if (isChecked) {
+            $('.model_builder_group_checkbox').prop("checked", true);
+            $('#model_builder_all_group_checkbox_value').val('1');
+            $('.model_builder_group_checkbox_value').val('1');
+        } else {
+            $('.model_builder_group_checkbox').prop("checked", false);
+            $('#model_builder_all_group_checkbox_value').val('0');
+            $('.model_builder_group_checkbox_value').val('0');
+        }
+    });
+    // group code ends here
+
+    // template mapped node
+     $('#model_builder_all_template_mapped_node_checkbox').change(function () {
+     var isChecked = $(this).prop("checked");
+     if (isChecked) {
+         $('.model_builder_template_mapped_node_checkbox').prop("checked", true);
+         $('#model_builder_all_template_mapped_node_checkbox_value').val('1');
+         $('.model_builder_template_mapped_node_checkbox_value').val('1');
+     } else {
+         $('.model_builder_template_mapped_node_checkbox').prop("checked", false);
+         $('#model_builder_all_template_mapped_node_checkbox_value').val('0');
+         $('.model_builder_template_mapped_node_checkbox_value').val('0');
+     }
+     });
+    // template mapped node
+
+    // codes for model builder ends here
+
+    $('.roles_checkbox, .users_checkbox, .groups_checkbox, .opc_checkbox, .mqtt_checkbox, .http_checkbox, .tag_checkbox, .aggregation_checkbox, .bulk_checkbox, .dashboard_checkbox, .reports_checkbox, .notification_checkbox, .subscription_checkbox, .ai_prediction_checkbox, .model_builder_dataroot_checkbox,.model_builder_project_checkbox,.model_builder_node_checkbox,.model_builder_node_parameter_checkbox,.model_builder_node_calculation_checkbox,.model_builder_node_expression_checkbox,.model_builder_search_checkbox,.model_builder_template_checkbox,.model_builder_template_parameter_checkbox,.model_builder_template_calculation_checkbox,.model_builder_template_expression_checkbox,.model_builder_tag_checkbox,.model_builder_uom_category_checkbox,.model_builder_uom_conversions_checkbox,.model_builder_group_checkbox,.model_builder_template_mapped_node_checkbox').change(function()
     {
         var isChecked = $(this).prop("checked"); 
         var data_name = $(this).data('name');
@@ -551,6 +796,301 @@
                 $('#ai_prediction_all_checkbox_value').val('0');
             }
         }
+
+        // model builder code starts here
+        // dataroot code starts here 
+        else if ($(this).hasClass('model_builder_dataroot_checkbox')) {
+            var dataroot_checkboxes = document.querySelectorAll('.model_builder_dataroot_checkbox_div input[type="checkbox"]');
+
+            var dataroot_allChecked = Array.from(dataroot_checkboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (dataroot_allChecked == true) {
+                $('#model_builder_all_dataroot_checkbox').prop("checked", true);
+                $('#model_builder_all_dataroot_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_dataroot_checkbox').prop("checked", false);
+                $('#model_builder_all_dataroot_checkbox_value').val('0');
+            }
+        }
+
+        // dataroot code ends here 
+
+        // for project
+        else if ($(this).hasClass('model_builder_project_checkbox')) {
+            var project_checkboxes = document.querySelectorAll('.model_builder_project_checkbox_div input[type="checkbox"]');
+
+            var project_allChecked = Array.from(project_checkboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (project_allChecked == true) {
+                $('#model_builder_all_project_checkbox').prop("checked", true);
+                $('#model_builder_all_project_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_project_checkbox').prop("checked", false);
+                $('#model_builder_all_project_checkbox_value').val('0');
+            }
+        }
+
+        // for project
+
+        // for node
+        else if ($(this).hasClass('model_builder_node_checkbox')) {
+            var node_checkboxes = document.querySelectorAll('.model_builder_node_checkbox_div input[type="checkbox"]');
+
+            var node_allChecked = Array.from(node_checkboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (node_allChecked == true) {
+                $('#model_builder_all_node_checkbox').prop("checked", true);
+                $('#model_builder_all_node_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_node_checkbox').prop("checked", false);
+                $('#model_builder_all_node_checkbox_value').val('0');
+            }
+        }
+
+        // for node
+
+        // for node parameter
+        else if ($(this).hasClass('model_builder_node_parameter_checkbox')) {
+            var model_builder_node_parameter_checkboxes = document.querySelectorAll('.model_builder_node_parameter_checkbox_div input[type="checkbox"]');
+
+            var node_parameter_allChecked = Array.from(model_builder_node_parameter_checkboxes).every(function (nodeParameterBox) {
+                return nodeParameterBox.checked;
+            });
+
+            if (node_parameter_allChecked === true) {
+                $('#model_builder_all_node_parameter_checkbox').prop("checked", true);
+                $('#model_builder_all_node_parameter_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_node_parameter_checkbox').prop("checked", false);
+                $('#model_builder_all_node_parameter_checkbox_value').val('0');
+            }
+        }
+       
+        // for node parameter
+
+        // node calculation code starts here
+        else if ($(this).hasClass('model_builder_node_calculation_checkbox')) {
+            var checkboxes = document.querySelectorAll('.model_builder_node_calculation_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(checkboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked === true) {
+                $('#model_builder_all_node_calculation_checkbox').prop("checked", true);
+                $('#model_builder_all_node_calculation_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_node_calculation_checkbox').prop("checked", false);
+                $('#model_builder_all_node_calculation_checkbox_value').val('0');
+            }
+        }
+        // node calculation code starts here
+
+        // node expression code starts here
+        else if ($(this).hasClass('model_builder_node_expression_checkbox')) {
+            var checkboxes = document.querySelectorAll('.model_builder_node_expression_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(checkboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked === true) {
+                $('#model_builder_all_node_expression_checkbox').prop("checked", true);
+                $('#model_builder_all_node_expression_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_node_expression_checkbox').prop("checked", false);
+                $('#model_builder_all_node_expression_checkbox_value').val('0');
+            }
+        }
+        // node expression code ends here
+
+        // seacrh code starts here
+        else if ($(this).hasClass('model_builder_search_checkbox')) {
+            var checkboxes = document.querySelectorAll('.model_builder_search_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(checkboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked === true) {
+                $('#model_builder_all_search_checkbox').prop("checked", true);
+                $('#model_builder_all_search_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_search_checkbox').prop("checked", false);
+                $('#model_builder_all_search_checkbox_value').val('0');
+            }
+        }
+        // seacrh code ends here
+
+        //template code starts here
+        else if ($(this).hasClass('model_builder_template_checkbox')) {
+            var templateCheckboxes = document.querySelectorAll('.model_builder_template_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(templateCheckboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked === true) {
+                $('#model_builder_all_template_checkbox').prop("checked", true);
+                $('#model_builder_all_template_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_template_checkbox').prop("checked", false);
+                $('#model_builder_all_template_checkbox_value').val('0');
+            }
+        }
+        //template code ends here
+
+        // template parameter code starts here
+        else if ($(this).hasClass('model_builder_template_parameter_checkbox')) {
+            var checkboxes = document.querySelectorAll('.model_builder_template_parameter_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(checkboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked) {
+                $('#model_builder_all_template_parameter_checkbox').prop("checked", true);
+                $('#model_builder_all_template_parameter_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_template_parameter_checkbox').prop("checked", false);
+                $('#model_builder_all_template_parameter_checkbox_value').val('0');
+            }
+        }
+        // template parameter code ends here
+
+        // template calculation code starts here
+        else if ($(this).hasClass('model_builder_template_calculation_checkbox')) {
+            var calculationCheckboxes = document.querySelectorAll('.model_builder_template_calculation_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(calculationCheckboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked) {
+                $('#model_builder_all_template_calculation_checkbox').prop("checked", true);
+                $('#model_builder_all_template_calculation_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_template_calculation_checkbox').prop("checked", false);
+                $('#model_builder_all_template_calculation_checkbox_value').val('0');
+            }
+        }
+        // template calculation code ends here
+
+        // template expression code starts here
+        else if ($(this).hasClass('model_builder_template_expression_checkbox')) {
+            var expressionCheckboxes = document.querySelectorAll('.model_builder_template_expression_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(expressionCheckboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked) {
+                $('#model_builder_all_template_expression_checkbox').prop("checked", true);
+                $('#model_builder_all_template_expression_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_template_expression_checkbox').prop("checked", false);
+                $('#model_builder_all_template_expression_checkbox_value').val('0');
+            }
+        }
+        // template expression code ends here
+
+        // template mapped node code starts here
+          else if ($(this).hasClass('model_builder_template_mapped_node_checkbox')) {
+            var mappedNodeCheckboxes = document.querySelectorAll('.model_builder_template_mapped_node_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(mappedNodeCheckboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked) {
+                $('#model_builder_all_template_mapped_node_checkbox').prop("checked", true);
+                $('#model_builder_all_template_mapped_node_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_template_mapped_node_checkbox').prop("checked", false);
+                $('#model_builder_all_template_mapped_node_checkbox_value').val('0');
+            }
+        }
+        // template mapped node code starts ends
+
+
+        // tag code starts here
+        else if ($(this).hasClass('model_builder_tag_checkbox')) {
+            var tagCheckboxes = document.querySelectorAll('.model_builder_tag_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(tagCheckboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked) {
+                $('#model_builder_all_tag_checkbox').prop("checked", true);
+                $('#model_builder_all_tag_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_tag_checkbox').prop("checked", false);
+                $('#model_builder_all_tag_checkbox_value').val('0');
+            }
+        }
+        // tag code ends here 
+        
+        // uom categories code starts here
+        else if ($(this).hasClass('model_builder_uom_category_checkbox')) {
+            var uomCategoryCheckboxes = document.querySelectorAll('.model_builder_uom_category_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(uomCategoryCheckboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked) {
+                $('#model_builder_all_uom_category_checkbox').prop("checked", true);
+                $('#model_builder_all_uom_category_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_uom_category_checkbox').prop("checked", false);
+                $('#model_builder_all_uom_category_checkbox_value').val('0');
+            }
+        }
+        // uom categories code ends here
+
+        // uom conversions code starts here
+        else if ($(this).hasClass('model_builder_uom_conversions_checkbox')) {
+            var uomConversionsCheckboxes = document.querySelectorAll('.model_builder_uom_conversions_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(uomConversionsCheckboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked) {
+                $('#model_builder_all_uom_conversions_checkbox').prop("checked", true);
+                $('#model_builder_all_uom_conversions_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_uom_conversions_checkbox').prop("checked", false);
+                $('#model_builder_all_uom_conversions_checkbox_value').val('0');
+            }
+        }
+        // uom conversions code ends here
+
+        // group code starts here
+        else if ($(this).hasClass('model_builder_group_checkbox')) {
+            var groupCheckboxes = document.querySelectorAll('.model_builder_group_checkbox_div input[type="checkbox"]');
+
+            var allChecked = Array.from(groupCheckboxes).every(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (allChecked) {
+                $('#model_builder_all_group_checkbox').prop("checked", true);
+                $('#model_builder_all_group_checkbox_value').val('1');
+            } else {
+                $('#model_builder_all_group_checkbox').prop("checked", false);
+                $('#model_builder_all_group_checkbox_value').val('0');
+            }
+        }
+        // group code ends here
+        // model builder code ends here
 
     });
 
