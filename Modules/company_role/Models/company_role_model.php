@@ -1829,7 +1829,7 @@ class company_role_model extends Model
             $mb_template_mapped_node_data_insert_data = [];
             if (!empty($mb_template_mapped_node_checkbox_id)) {
                 for ($i = 0; $i < count($mb_template_mapped_node_checkbox_id); $i++) {
-                    $this->roles_permission_update_audit_trail( $role_id,$mb_template_mapped_node_checkbox_id[$i],$mb_template_mapped_node_checkbox_view[$i],$mb_template_mapped_node_checkbox_edit[$i],$role_update_audit_data);
+                    $this->roles_permission_update_audit_trail( $role_id,$mb_template_mapped_node_checkbox_id[$i],$mb_template_mapped_node_checkbox_view[$i],$mb_template_mapped_node_checkbox_edit[$i],'',$role_update_audit_data);
                     $mb_template_mapped_node_data_insert_data[] = array(
                         'company_id' => $this->customer_id,
                         'role_id' => $role_id,
