@@ -163,12 +163,12 @@ $base_url = rtrim(base_url(), '/');
                                                         id="api_key" 
                                                         readonly
                                                         style="font-size: 1rem; width: 70ch;">
-                                                    <button class="btn btn-outline-primary" type="button" onclick="copyApiKey()">Copy</button>
+                                                    <button class="btn btn-outline-success" type="button" onclick="copyApiKey()">Copy</button>
                                                     <input type="text" name="api_key" class="form-control form-control-custom dis_none" value="" id="api_key_new">
                                                 </div>
 
                                                 <!-- Regenerate button -->
-                                                <button class="btn btn-warning ml-2" type="button" onclick="regenerateApiKey()">Regenerate</button>
+                                                <button class="btn info_sky waves-effect waves-light ml-2" type="button" onclick="regenerateApiKey()">Regenerate</button>
 
                                                 <!-- Success message -->
                                                 <span id="actionMsg" class="ml-2" style="color: green; display: none;"></span>
@@ -393,11 +393,24 @@ function showMessage(message) {
 
 function copyApiKey() {
     const apiInput = document.getElementById('api_key');
+
     apiInput.select();
     apiInput.setSelectionRange(0, 99999); // For mobile
     document.execCommand('copy');
-    showMessage('API Key copied!');
+
+    //Thin light green border (subtle effect)
+    apiInput.style.border = "1px solid #8fd19e";  
+    apiInput.style.boxShadow = "none";           
+
+    showMessage("API Key copied!");
+
+    // Remove border after 2 seconds
+    setTimeout(() => {
+        apiInput.style.border = "";   // Reset border after 3 seconds
+    }, 3000);
 }
+
+
 
 // Convert ArrayBuffer → hex string
 function bufferToHex(buffer) {
