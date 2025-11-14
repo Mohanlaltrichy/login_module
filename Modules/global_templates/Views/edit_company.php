@@ -175,7 +175,7 @@ $base_url = rtrim(base_url(), '/');
                                             </div>
                                         </div>
 
-                                        <h3 class="m-b-30">User Details*</h3>
+                                        <h3 class="m-b-30">User Details</h3>
                                         <div class="form-group row">                                        
                                         <label class="col-sm-1 control-label">First Name<span>*</span></label>
                                             <div class="col-sm-3 mb-3">
