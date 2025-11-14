@@ -542,6 +542,7 @@ class templates_controller extends BaseController
                 if(trim($old_api_key) != trim($api_key))
                 {
                     $company_data['api_key'] = $api_key;
+                    $company_data['api_key_status'] = 'active';
                 }
 
                 $randomUid = $this->generateRandomUid();
