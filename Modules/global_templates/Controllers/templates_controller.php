@@ -300,8 +300,8 @@ class templates_controller extends BaseController
     public function update_company()
     {
         try {
-
-            if ($this->request->getMethod() == "POST") {
+            
+            if ($this->request->getMethod() == "post") {
 
                 $session = session();
 
@@ -323,6 +323,7 @@ class templates_controller extends BaseController
                 $mobile = $this->request->getPost("mobile");
                 $old_mobile = $this->request->getPost("old_mobile");
                 $logo = $this->request->getFile('logo');
+                $api_key = $this->request->getPost('api_key');
 
                 $validation = \Config\Services::validation();
                 $rules = [
@@ -458,6 +459,7 @@ class templates_controller extends BaseController
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => session('Taguser_id'),
                 ];
+                
 
                 $set_companyname = [
                     'company_name'     => $company_name,
@@ -497,7 +499,7 @@ class templates_controller extends BaseController
 
 
                 //Update Audit Trail Code Start
-                $old_comp_data = $this->templates_model->GetTableValue('tbl_companies', 'company_name, first_name, middle_name, last_name, company_address, city, state, country, time_zone, zipcode, company_email, company_phone, contact_mobile, company_website, gstn, company_logo', $comp_update_where);
+                $old_comp_data = $this->templates_model->GetTableValue('tbl_companies', 'company_name, first_name, middle_name, last_name, company_address, city, state, country, time_zone, zipcode, company_email, company_phone, contact_mobile, company_website, gstn, company_logo, api_key', $comp_update_where);
 
                 if (!empty($old_comp_data)) {
                     $old_company_name = ($old_comp_data[0]['company_name']) ? $old_comp_data[0]['company_name'] : null;
@@ -516,6 +518,7 @@ class templates_controller extends BaseController
                     $old_company_website = $old_comp_data[0]['company_website'];
                     $old_gstn = ($old_comp_data[0]['gstn']) ? $old_comp_data[0]['gstn'] : null;
                     $old_company_logo = ($old_comp_data[0]['company_logo']) ? $old_comp_data[0]['company_logo'] : null;
+                    $old_api_key = ($old_comp_data[0]['api_key']) ? $old_comp_data[0]['api_key'] : null;
                 } else {
                     $old_company_name = '';
                     $old_first_name = '';
@@ -533,6 +536,12 @@ class templates_controller extends BaseController
                     $old_company_website = '';
                     $old_gstn = '';
                     $old_company_logo = '';
+                     $old_api_key = '';
+                }
+
+                if(trim($old_api_key) != trim($api_key))
+                {
+                    $company_data['api_key'] = $api_key;
                 }
 
                 $randomUid = $this->generateRandomUid();
@@ -657,6 +666,15 @@ class templates_controller extends BaseController
                     $company_update_audit_data['update_field'] = 'company_logo';
                     $company_update_audit_data['old_value'] = ($old_company_logo) ? $old_company_logo : null;
                     $company_update_audit_data['new_value'] = ($company_logo_path) ? $company_logo_path : null;
+                    $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
+                }
+
+                if(trim($old_api_key) != trim($api_key))
+                {
+                    $company_data['api_key'] = $api_key;
+                    $company_update_audit_data['update_field'] = 'api_key';
+                    $company_update_audit_data['old_value'] = ($old_api_key) ? $old_api_key : null;
+                    $company_update_audit_data['new_value'] = ($api_key) ? $api_key : null;
                     $this->templates_model->insert_data_postgresql('update_audit_trail', $company_update_audit_data);
                 }
                 //Update Audit Trail Code End

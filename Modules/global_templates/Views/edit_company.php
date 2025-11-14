@@ -149,6 +149,32 @@ $base_url = rtrim(base_url(), '/');
                                                 <input type="file" name="logo" accept=".jpg, .png" class="form-control form-control-custom" id="logo">
                                             </div>
                                         </div>
+
+                                        <h3 class="m-b-30">API Details</h3>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-sm-1 control-label">API Key<span>*</span></label>
+
+                                            <div class="col-auto d-flex align-items-center">
+                                                <!-- Input group with Copy button inside -->
+                                                <div class="input-group" style="width: auto;">
+                                                    <input type="text" 
+                                                        class="form-control form-control-custom" 
+                                                        value="<?= $comp_data[0]['api_key']; ?>" 
+                                                        id="api_key" 
+                                                        readonly
+                                                        style="font-size: 1rem; width: 70ch;">
+                                                    <button class="btn btn-outline-primary" type="button" onclick="copyApiKey()">Copy</button>
+                                                    <input type="text" name="api_key" class="form-control form-control-custom dis_none" value="" id="api_key_new">
+                                                </div>
+
+                                                <!-- Regenerate button -->
+                                                <button class="btn btn-warning ml-2" type="button" onclick="regenerateApiKey()">Regenerate</button>
+
+                                                <!-- Success message -->
+                                                <span id="actionMsg" class="ml-2" style="color: green; display: none;"></span>
+                                            </div>
+                                        </div>
+
                                         <h3 class="m-b-30">User Details*</h3>
                                         <div class="form-group row">                                        
                                         <label class="col-sm-1 control-label">First Name<span>*</span></label>
@@ -353,6 +379,73 @@ echo view('\Modules\global_templates\Views\global_footer'); // Footer File Inclu
     });
 
         </script>
+
+
+<script>
+function showMessage(message) {
+    const msg = document.getElementById('actionMsg');
+    msg.textContent = message;
+    msg.style.display = 'inline'; // Show
+    setTimeout(() => {
+        msg.style.display = 'none'; // Hide after 3 seconds
+    }, 3000);
+}
+
+function copyApiKey() {
+    const apiInput = document.getElementById('api_key');
+    apiInput.select();
+    apiInput.setSelectionRange(0, 99999); // For mobile
+    document.execCommand('copy');
+    showMessage('API Key copied!');
+}
+
+// Convert ArrayBuffer → hex string
+function bufferToHex(buffer) {
+    const bytes = new Uint8Array(buffer);
+    return Array.from(bytes)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+
+// Generate API Key
+async function generateApiKey(companyId) {
+
+    // 256-bit random like random_bytes(32)
+    const randomBytes = new Uint8Array(32);
+    crypto.getRandomValues(randomBytes);
+    const randomHex = Array.from(randomBytes)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+
+    // Timestamp like microtime(true)
+    const timestamp = Date.now() / 1000; // seconds with decimals
+
+    // Combine base string
+    const base = `${companyId}|${randomHex}|${timestamp}`;
+
+    // SHA-256 hash same as hash('sha256', $base)
+    const encoder = new TextEncoder();
+    const data = encoder.encode(base);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    let apiKey = bufferToHex(hashBuffer);
+
+    // API key all upper case set
+    apiKey = apiKey.toUpperCase();
+
+    return apiKey;
+}
+
+// Regenerate Key
+async function regenerateApiKey() {
+    const companyId = "<?= $comp_data[0]['customerId'] ?>"; 
+    const newKey = await generateApiKey(companyId);
+    
+    document.getElementById('api_key').value = newKey;
+    document.getElementById('api_key_new').value = newKey;
+
+    showMessage("API Key regenerated!");
+}
+</script>
 
 <!-- Form Validation Code Plugin Start -->
 <script src="<?php echo base_url(); ?>assets/plugins/parsleyjs/parsley.min.js"></script>
